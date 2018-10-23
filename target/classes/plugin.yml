@@ -1,0 +1,22 @@
+name: NoirLeveling
+version: 1.0
+author: Libor
+main: NoirLeveling.Main
+api-version: 1.13
+softdepend: [Essentials]
+
+commands:
+  noir:
+    description: Noir profession commands
+    usage: |
+      /noir level - overall level
+      /noir level top - top 10 players
+      /noir class <class> - level for a class
+      /noir class <class> top - top 10 players in this class
+    permission: NoirLeveling.default
+    permission-message: You don't have permission to use this command.
+  nbal:
+    description: Average balance
+    usage: /bal avg
+    permission: NoirLeveling.op
+    permission-message: You don't have permission to use this command.
