@@ -9,6 +9,7 @@ import NoirLeveling.Helpers.PlayerClassConverter;
 import NoirLeveling.Main;
 import NoirLeveling.SQLProcedures.SQLProcedures;
 import org.bukkit.ChatColor;
+import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -21,6 +22,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.Crops;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.xml.crypto.Data;
@@ -60,7 +62,6 @@ public class BlockEvents implements Listener {
         if (resultSet.size() == 0) {
             return;
         }
-
         int reqLevel = (int) resultSet.get(0).get("levelToBreak");
         PlayerClass playerClass;
         int playerXp;
@@ -89,22 +90,34 @@ public class BlockEvents implements Listener {
             return;
         }
 
+        Crops crops = ((Crops)(event.getBlock().getState().getData()));
+        boolean isCrop = false;
+        if (crops != null) {
+            if (crops.getState() == CropState.RIPE) {
+                isCrop = true;
+            }
+        }
+
+        int breakXp = (int) resultSet.get(0).get("breakXp");
         if (BlockCallbacks.hasBlockGivenXp(location)) {
             try {
                 Database.executeSQLUpdateDelete(SQLProcedures.deleteFromBlockDataTable(location));
+                if (!isCrop) {
+                    breakXp = 0;
+                }
             }
             catch (SQLException e) {
                 e.printStackTrace();
             }
-            return;
-        }
 
-        int breakXp = (int) resultSet.get(0).get("breakXp");
+        }
 
 
         String playerId = event.getPlayer().getUniqueId().toString();
 
         PlayerCallbacks.xpGained(playerId, playerClass, breakXp);
+
+
 
 
     }

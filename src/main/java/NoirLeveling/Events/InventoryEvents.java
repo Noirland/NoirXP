@@ -23,9 +23,4 @@ import javax.lang.model.element.ElementVisitor;
 
 public class InventoryEvents implements Listener {
 
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-
-    }
-
 }
