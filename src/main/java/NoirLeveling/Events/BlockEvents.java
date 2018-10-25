@@ -90,13 +90,15 @@ public class BlockEvents implements Listener {
             return;
         }
 
-        Crops crops = ((Crops)(event.getBlock().getState().getData()));
+
         boolean isCrop = false;
-        if (crops != null) {
+        if (event.getBlock().getState().getData() instanceof Crops) {
+            Crops crops = (Crops)(event.getBlock().getState().getData());
             if (crops.getState() == CropState.RIPE) {
                 isCrop = true;
             }
         }
+
 
         int breakXp = (int) resultSet.get(0).get("breakXp");
         if (BlockCallbacks.hasBlockGivenXp(location)) {

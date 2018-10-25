@@ -10,9 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8c30154d-986c-4a23-a07b-7dce54cfc4fd" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/NoirLeveling/Events/BlockEvents.java" afterPath="$PROJECT_DIR$/src/main/java/NoirLeveling/Events/BlockEvents.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/NoirLeveling/Events/InventoryEvents.java" afterPath="$PROJECT_DIR$/src/main/java/NoirLeveling/Events/InventoryEvents.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -39,8 +37,8 @@
       <file leaf-file-name="BlockEvents.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/NoirLeveling/Events/BlockEvents.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="105" column="32" lean-forward="true" selection-start-line="105" selection-start-column="32" selection-end-line="105" selection-end-column="32" />
+            <state relative-caret-position="242">
+              <caret line="97" column="30" lean-forward="true" selection-start-line="97" selection-start-column="30" selection-end-line="97" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -577,12 +575,12 @@
       <workItem from="1540171262435" duration="6081000" />
       <workItem from="1540267435155" duration="10141000" />
       <workItem from="1540330439141" duration="1476000" />
-      <workItem from="1540424114610" duration="6950000" />
+      <workItem from="1540424114610" duration="7348000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="279280000" />
+    <option name="totallyTimeSpent" value="279678000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -1029,8 +1027,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/NoirLeveling/Events/BlockEvents.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="105" column="32" lean-forward="true" selection-start-line="105" selection-start-column="32" selection-end-line="105" selection-end-column="32" />
+        <state relative-caret-position="242">
+          <caret line="97" column="30" lean-forward="true" selection-start-line="97" selection-start-column="30" selection-end-line="97" selection-end-column="30" />
           <folding />
         </state>
       </provider>
