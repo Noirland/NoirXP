@@ -8,12 +8,15 @@ import NoirLeveling.Helpers.Datamaps;
 import NoirLeveling.Helpers.PlayerClassConverter;
 import NoirLeveling.SQLProcedures.SQLProcedures;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.Wood;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,32 +40,10 @@ public class CraftEvents implements Listener {
 
         Player player = (Player) event.getWhoClicked();
         ItemMeta itemMeta = itemStack.getItemMeta();
-        String blockName = itemStack.getType().toString();;
-        if (itemMeta != null)
-            if (itemMeta.hasDisplayName()) {
-                blockName = ChatColor.stripColor(itemMeta.getDisplayName());
-            }
-
-            if (!itemMeta.hasLore()) {
-                String sql = SQLProcedures.getCustomBlock(blockName);
-
-                List<HashMap> resultSet = Database.executeSQLGet(sql);
-                if (resultSet == null || resultSet.size() == 0) {
-                    return;
-                }
-                String playerClassFormatted = PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.valueOf((String) resultSet.get(0).get("playerClass")));
-                List<String> loreList = new ArrayList<String>();
-                loreList.add(playerClassFormatted);
-                if (Datamaps.armourItems.contains(itemStack.getType())) {
-                    int durability = (int) (itemStack.getType().getMaxDurability() * ITEM_CONSTANTS.GOLDEN_DURABILITY_MODIFIER);
-                    String durabilityLore = String.format("%1$d/%1$d", durability);
-                    loreList.add(durabilityLore);
-                }
-
-                itemMeta.setLore(loreList);
-                itemStack.setItemMeta(itemMeta);
-                event.setCurrentItem(itemStack);
-            }
+        String blockName = itemStack.getType().toString();
+        if (itemMeta.hasDisplayName()) {
+            blockName = ChatColor.stripColor(itemMeta.getDisplayName());
+        }
         else {
             blockName = itemStack.getType().toString();
         }
@@ -107,5 +88,43 @@ public class CraftEvents implements Listener {
 
 
 
+    }
+
+    @EventHandler
+    public void onPrepareCraft(PrepareItemCraftEvent event) {
+        if (event.getInventory().getResult() == null) {
+            return;
+        }
+        ItemStack itemStack = event.getInventory().getResult();
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        String blockName = itemStack.getType().toString();
+        if (itemMeta != null) {
+            if (itemMeta.hasDisplayName()) {
+                blockName = ChatColor.stripColor(itemMeta.getDisplayName());
+            }
+        }
+        else {
+            return;
+        }
+        if (!itemMeta.hasLore()) {
+            String sql = SQLProcedures.getCustomBlock(blockName);
+
+            List<HashMap> resultSet = Database.executeSQLGet(sql);
+            if (resultSet == null || resultSet.size() == 0) {
+                return;
+            }
+            String playerClassFormatted = PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.valueOf((String) resultSet.get(0).get("playerClass")));
+            List<String> loreList = new ArrayList<String>();
+            loreList.add(playerClassFormatted);
+            if (Datamaps.armourItems.contains(itemStack.getType())) {
+                int durability = (int) (itemStack.getType().getMaxDurability() * ITEM_CONSTANTS.GOLDEN_DURABILITY_MODIFIER);
+                String durabilityLore = String.format("%1$d/%1$d", durability);
+                loreList.add(durabilityLore);
+            }
+
+            itemMeta.setLore(loreList);
+            itemStack.setItemMeta(itemMeta);
+            event.getInventory().setResult(itemStack);
+        }
     }
 }
