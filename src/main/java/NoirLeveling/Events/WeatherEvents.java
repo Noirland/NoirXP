@@ -18,8 +18,8 @@ public class WeatherEvents implements Listener {
         if (event.toWeatherState()) {
             List<Location> locationsToRemove = new ArrayList<>();
             for (Location location : Datamaps.torchSet) {
-                if (location.getWorld().getHighestBlockAt(location).getLocation().equals(location)) {
-                    if (location.getBlock().getType() == Material.TORCH) {
+                if (location.getWorld().getHighestBlockYAt(location) == location.getBlockY()) {
+                    if (location.getBlock().getType() == Material.TORCH || location.getBlock().getType() == Material.WALL_TORCH) {
                         location.getBlock().breakNaturally();
                         locationsToRemove.add(location);
                     }

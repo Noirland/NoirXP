@@ -37,7 +37,7 @@ public class CraftEvents implements Listener {
         if (itemStack == null) {
             return;
         }
-
+        
         Player player = (Player) event.getWhoClicked();
         ItemMeta itemMeta = itemStack.getItemMeta();
         String blockName = itemStack.getType().toString();

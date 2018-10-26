@@ -132,26 +132,31 @@ public class BlockEvents implements Listener {
         }
         Location location = event.getBlockPlaced().getLocation();
         BlockCallbacks.addBlockLocationToLogTable(location);
-        if (event.getBlock().getType() == Material.TORCH) {
+        if (event.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
+            Datamaps.torchSet.add(location);
             if (event.getBlockReplacedState().getType() == Material.SNOW) {
                 event.getBlockPlaced().breakNaturally();
+                Datamaps.torchSet.remove(location);
                 return;
             }
             if (event.getPlayer().getWorld().hasStorm()) {
-                event.getBlockPlaced().breakNaturally();
+                if (location.getWorld().getHighestBlockYAt(location) == location.getBlockY()) {
+                    if (location.getBlock().getType() == Material.TORCH || location.getBlock().getType() == Material.WALL_TORCH) {
+                        location.getBlock().breakNaturally();
+                        Datamaps.torchSet.remove(location);
+                    }
+                }
                 return;
             }
-            Datamaps.torchSet.add(location);
             if (snowBiomes.contains(event.getBlockAgainst().getBiome())) {
                 new BukkitRunnable() {
 
                     @Override
                     public void run() {
-                        if (location.getBlock().getType() == Material.TORCH) {
-                            if (Datamaps.torchSet.contains(location)) {
-                                location.getBlock().breakNaturally();
-                                Datamaps.torchSet.remove(location);
-                            }
+                        if (location.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
+                            location.getBlock().breakNaturally();
+                            Datamaps.torchSet.remove(location);
+
                         }
                     }
 
@@ -162,11 +167,9 @@ public class BlockEvents implements Listener {
 
                     @Override
                     public void run() {
-                        if (location.getBlock().getType() == Material.TORCH) {
-                            if (Datamaps.torchSet.contains(location)) {
-                                location.getBlock().breakNaturally();
-                                Datamaps.torchSet.remove(location);
-                            }
+                        if (location.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
+                            location.getBlock().breakNaturally();
+                            Datamaps.torchSet.remove(location);
                         }
                     }
 
