@@ -17,6 +17,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -42,7 +43,7 @@ public class BlockEvents implements Listener {
         snowBiomes.add(Biome.SNOWY_TAIGA_MOUNTAINS);
         snowBiomes.add(Biome.SNOWY_TUNDRA);
     }
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void OnBlockBreak(BlockBreakEvent event) {
 
         if (!PlayerCallbacks.isPlayerLevelingEnabled(event.getPlayer())) {
@@ -124,7 +125,7 @@ public class BlockEvents implements Listener {
 
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void OnBlockPlace(BlockPlaceEvent event) {
 
         if (!PlayerCallbacks.isPlayerLevelingEnabled(event.getPlayer())) {

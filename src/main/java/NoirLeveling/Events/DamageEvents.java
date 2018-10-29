@@ -19,7 +19,7 @@ import java.util.List;
 
 public class DamageEvents implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerItemDamage(PlayerItemDamageEvent event) {
         ItemStack itemStack = event.getItem();
         int damage = event.getDamage();

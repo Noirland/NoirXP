@@ -26,7 +26,7 @@ import java.util.List;
 
 public class PickupEvents implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onItemPickup(EntityPickupItemEvent event) {
 
         ItemStack stack = event.getItem().getItemStack();

@@ -1,3 +1,4 @@
+NoirLeveling\Events\TameBreedEvents$2.class
 NoirLeveling\CustomItems\ChainLeggings.class
 NoirLeveling\CustomItems\SpaceHelmet.class
 NoirLeveling\Constants\PlayerPermissionTypes.class
@@ -15,6 +16,7 @@ NoirLeveling\Commands\XpTabCompleter.class
 NoirLeveling\Commands\XpTabCompleter$1.class
 NoirLeveling\CustomItems\ItemCreator.class
 NoirLeveling\Callbacks\PlayerCallbacks$1.class
+NoirLeveling\Events\TameBreedEvents$3.class
 NoirLeveling\CustomItems\ChainHelmet.class
 NoirLeveling\Constants\PlayerClass.class
 NoirLeveling\Events\InventoryEvents.class
@@ -29,6 +31,7 @@ NoirLeveling\SQLProcedures\SQLProcedures$1.class
 NoirLeveling\CustomItems\DiamondHorseArmour.class
 NoirLeveling\CustomItems\SpacePants.class
 NoirLeveling\Database\Database.class
+NoirLeveling\Events\TameBreedEvents$4.class
 NoirLeveling\CustomItems\Lead.class
 NoirLeveling\Events\BlockEvents$1.class
 NoirLeveling\CustomItems\ChainBoots.class
@@ -48,3 +51,4 @@ NoirLeveling\Events\CraftEvents.class
 NoirLeveling\Structs\PlayerXpClassPair.class
 NoirLeveling\Commands\BalanceCommand.class
 NoirLeveling\Main$1.class
+NoirLeveling\Events\TameBreedEvents$1.class

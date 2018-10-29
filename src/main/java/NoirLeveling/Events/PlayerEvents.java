@@ -22,7 +22,7 @@ import java.sql.SQLException;
 
 public class PlayerEvents implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void playerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (!Main.players.containsKey(player.getUniqueId().toString())) {
@@ -59,7 +59,7 @@ public class PlayerEvents implements Listener {
 
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerMove(PlayerMoveEvent event) {
         Player player = event.getPlayer();
         if (!player.getWorld().getName().equalsIgnoreCase("space")) {

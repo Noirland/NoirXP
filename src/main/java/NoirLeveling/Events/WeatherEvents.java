@@ -13,7 +13,7 @@ import java.util.List;
 
 public class WeatherEvents implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onWeatherChange(WeatherChangeEvent event) {
         if (event.toWeatherState()) {
             List<Location> locationsToRemove = new ArrayList<>();

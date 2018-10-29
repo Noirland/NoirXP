@@ -32,13 +32,14 @@ public class SQLProcedures {
                 ") ENGINE=InnoDB DEFAULT CHARSET=latin1;\n";
     }
     public static String createCustomBlockTable() {
-        return"CREATE TABLE IF NOT EXISTS `CustomBlocks` (\n" +
+        return "CREATE TABLE IF NOT EXISTS `CustomBlocks` (\n" +
                 "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
                 "  `name` varchar(128) DEFAULT NULL,\n" +
                 "  `baseBlockName` varchar(128) DEFAULT NULL,\n" +
                 "  `levelToBreak` int(11) DEFAULT '0',\n" +
                 "  `levelToPlace` int(11) DEFAULT '0',\n" +
                 "  `levelToCreate` int(11) DEFAULT '0',\n" +
+                "  `levelToUse` int(11) DEFAULT '0',\n" +
                 "  `placeXp` int(11) DEFAULT '0',\n" +
                 "  `breakXp` int(11) DEFAULT '0',\n" +
                 "  `createXp` int(11) DEFAULT '0',\n" +
@@ -46,7 +47,7 @@ public class SQLProcedures {
                 "  PRIMARY KEY (`id`),\n" +
                 "  UNIQUE KEY `id_UNIQUE` (`id`),\n" +
                 "  UNIQUE KEY `name_UNIQUE` (`name`)\n" +
-                ") ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=latin1;\n";
+                ") ENGINE=InnoDB AUTO_INCREMENT=760 DEFAULT CHARSET=latin1;\n";
     }
 
     public static String createPlayerTable() {

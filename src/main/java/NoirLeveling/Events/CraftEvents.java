@@ -24,7 +24,7 @@ import java.util.List;
 
 public class CraftEvents implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onItemCraft(CraftItemEvent event) {
 
         if (event.getWhoClicked() instanceof Player) {
@@ -90,7 +90,7 @@ public class CraftEvents implements Listener {
 
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPrepareCraft(PrepareItemCraftEvent event) {
         if (event.getInventory().getResult() == null) {
             return;

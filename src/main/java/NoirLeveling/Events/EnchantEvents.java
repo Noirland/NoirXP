@@ -17,7 +17,7 @@ import java.util.Collections;
 
 public class EnchantEvents implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPrepareEnchant(PrepareItemEnchantEvent event) {
         NoirPlayer noirPlayer = Main.players.get(event.getEnchanter().getUniqueId().toString());
         if (noirPlayer.alchemy.getLevel() < 20) {
@@ -51,7 +51,7 @@ public class EnchantEvents implements Listener {
 
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onItemEnchant(EnchantItemEvent event) {
         int highestLevel = Collections.max(event.getEnchantsToAdd().values());
         NoirPlayer noirPlayer = Main.players.get(event.getEnchanter().getUniqueId().toString());
