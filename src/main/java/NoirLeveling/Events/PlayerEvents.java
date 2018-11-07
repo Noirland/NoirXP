@@ -6,6 +6,7 @@ import NoirLeveling.Classes.NoirPlayer;
 import NoirLeveling.Database.Database;
 import NoirLeveling.Main;
 import NoirLeveling.SQLProcedures.SQLProcedures;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,12 +14,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
 
 public class PlayerEvents implements Listener {
 
@@ -67,6 +71,38 @@ public class PlayerEvents implements Listener {
                 player.teleport(Main.plugin.getServer().getWorld("space").getSpawnLocation());
             }
         }
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (!event.hasItem()) {
+            return;
+        }
+
+        NoirPlayer player = Main.players.get(event.getPlayer().getUniqueId().toString());
+
+        String blockName;
+
+        if (event.getItem().getItemMeta().hasDisplayName()) {
+            blockName = ChatColor.stripColor(event.getItem().getItemMeta().getDisplayName());
+        }
+        else {
+             blockName = event.getItem().getType().toString();
+        }
+        String sql = SQLProcedures.getCustomBlock(blockName);
+        List<HashMap> resultSet = Database.executeSQLGet(sql);
+        if (resultSet.size() == 0) {
+            return;
+        }
+
+        int levelToUse = (int) resultSet.get(0).get("levelToUse");
+
+        if (player.getLevel() < levelToUse) {
+            event.getPlayer().sendMessage("Level " + levelToUse + " required to use.");
+            event.setCancelled(true);
+        }
+
+
     }
 
 }
