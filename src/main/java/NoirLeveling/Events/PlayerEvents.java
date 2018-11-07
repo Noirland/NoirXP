@@ -79,9 +79,6 @@ public class PlayerEvents implements Listener {
         if (!event.hasItem()) {
             return;
         }
-        if (event.getAction() != Action.LEFT_CLICK_AIR || event.getAction() != Action.LEFT_CLICK_BLOCK) {
-            return;
-        }
 
         NoirPlayer player = Main.players.get(event.getPlayer().getUniqueId().toString());
 

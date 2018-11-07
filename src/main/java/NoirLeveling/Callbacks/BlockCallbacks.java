@@ -69,7 +69,7 @@ public class BlockCallbacks {
         }
 
         Player bukkitPlayer = player.getBukkitPlayer();
-        bukkitPlayer.sendMessage(command + bukkitPlayer.getName() + ChatColor.WHITE);
+        bukkitPlayer.setDisplayName(command + bukkitPlayer.getName() + ChatColor.WHITE);
 
 
     }

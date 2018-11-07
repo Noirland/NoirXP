@@ -6,6 +6,7 @@ import NoirLeveling.Constants.PlayerClass;
 import NoirLeveling.Database.Database;
 import NoirLeveling.Helpers.Datamaps;
 import NoirLeveling.Helpers.PlayerClassConverter;
+import NoirLeveling.Main;
 import NoirLeveling.SQLProcedures.SQLProcedures;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,8 +16,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Wood;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,7 +86,6 @@ public class CraftEvents implements Listener {
         }
 
         int createXp = (int) resultSet.get(0).get("createXp");
-
         PlayerCallbacks.xpGained(player.getUniqueId().toString(), playerClass, createXp * itemStack.getAmount());
 
 
@@ -119,8 +121,8 @@ public class CraftEvents implements Listener {
             String playerClassFormatted = PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.valueOf(playerClassName));
             List<String> loreList = new ArrayList<String>();
             loreList.add(playerClassFormatted);
-            if (Datamaps.armourItems.contains(itemStack.getType())) {
-                int durability = (int) (itemStack.getType().getMaxDurability() * ITEM_CONSTANTS.GOLDEN_DURABILITY_MODIFIER);
+            if (Datamaps.armourItems.containsKey(itemStack.getType())) {
+                int durability = (int) (Datamaps.armourItems.get(itemStack.getType()));
                 String durabilityLore = String.format("%1$d/%1$d", durability);
                 loreList.add(durabilityLore);
             }
