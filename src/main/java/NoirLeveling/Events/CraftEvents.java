@@ -110,10 +110,14 @@ public class CraftEvents implements Listener {
             String sql = SQLProcedures.getCustomBlock(blockName);
 
             List<HashMap> resultSet = Database.executeSQLGet(sql);
+            String playerClassName;
             if (resultSet == null || resultSet.size() == 0) {
-                return;
+                playerClassName = PlayerClass.GENERAL.toString();
             }
-            String playerClassFormatted = PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.valueOf((String) resultSet.get(0).get("playerClass")));
+            else {
+                playerClassName = (String) resultSet.get(0).get("playerClass");
+            }
+            String playerClassFormatted = PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.valueOf(playerClassName));
             List<String> loreList = new ArrayList<String>();
             loreList.add(playerClassFormatted);
             if (Datamaps.armourItems.contains(itemStack.getType())) {

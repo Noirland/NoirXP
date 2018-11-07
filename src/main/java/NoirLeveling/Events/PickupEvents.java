@@ -29,10 +29,7 @@ public class PickupEvents implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onItemPickup(EntityPickupItemEvent event) {
-
         ItemStack stack = event.getItem().getItemStack();
         LoreHelper.addLoreToItem(stack);
-
-
     }
 }
