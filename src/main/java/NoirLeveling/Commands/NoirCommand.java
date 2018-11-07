@@ -1,6 +1,7 @@
 package NoirLeveling.Commands;
 
 import NoirLeveling.Callbacks.CommandCallbacks;
+import NoirLeveling.Callbacks.InventoryCallbacks;
 import NoirLeveling.Callbacks.PlayerCallbacks;
 import NoirLeveling.Classes.NoirPlayer;
 import NoirLeveling.Constants.PlayerClass;
@@ -60,6 +61,9 @@ public class NoirCommand implements CommandExecutor {
                     }
                     CommandCallbacks.resetAllXp(noirPlayer.getUniqueId());
                     bukkitPlayer.sendMessage("Success!");
+                    return true;
+                case "convert":
+                    InventoryCallbacks.addTagsToPlayerInventory(bukkitPlayer);
                     return true;
                 default:
                     return false;
