@@ -84,8 +84,7 @@ public class CraftEvents implements Listener {
 
         int createXp = (int) resultSet.get(0).get("createXp");
 
-        PlayerCallbacks.xpGained(player.getUniqueId().toString(), playerClass, createXp);
-
+        PlayerCallbacks.xpGained(player.getUniqueId().toString(), playerClass, createXp * itemStack.getAmount());
 
 
     }

@@ -155,6 +155,7 @@ public class Main extends JavaPlugin{
         getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
         getServer().getPluginManager().registerEvents(new EnchantEvents(), this);
         getServer().getPluginManager().registerEvents(new TameBreedEvents(), this);
+        getServer().getPluginManager().registerEvents(new FurnaceEvents(), this);
     }
 
 }
