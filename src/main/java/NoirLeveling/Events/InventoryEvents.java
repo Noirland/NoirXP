@@ -7,12 +7,10 @@ import NoirLeveling.Constants.PlayerPermissionTypes;
 import NoirLeveling.Helpers.LoreHelper;
 import NoirLeveling.Main;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.BrewEvent;
-import org.bukkit.event.inventory.BrewingStandFuelEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -27,6 +25,12 @@ public class InventoryEvents implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onInventoryMoveItem(InventoryMoveItemEvent event) {
         ItemStack itemStack = event.getItem();
+        LoreHelper.addLoreToItem(itemStack);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onInventoryPickupItem(InventoryPickupItemEvent event) {
+        ItemStack itemStack = event.getItem().getItemStack();
         LoreHelper.addLoreToItem(itemStack);
     }
 }
