@@ -3,6 +3,7 @@ package NoirLeveling.Callbacks;
 import NoirLeveling.Classes.NoirPlayer;
 import NoirLeveling.Main;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +28,30 @@ public class CommandCallbacks {
             message = "Leveling has been ENABLED.";
         }
         noirPlayer.getBukkitPlayer().sendMessage(message);
+    }
+
+    public static void enablePlayerVerbose(Player player) {
+        File file = new File(Main.userdataFilePath);
+        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+        configuration.getConfigurationSection(player.getUniqueId().toString()).set("verbose", true);
+        try {
+            configuration.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        player.sendMessage("Verbose mode ENABLED.");
+    }
+
+    public static void disablePlayerVerbose(Player player) {
+        File file = new File(Main.userdataFilePath);
+        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+        configuration.getConfigurationSection(player.getUniqueId().toString()).set("verbose", false);
+        try {
+            configuration.save(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        player.sendMessage("Verbose mode DISABLED.");
     }
 
     public static void resetAllXp(String playerId) {

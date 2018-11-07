@@ -9,6 +9,7 @@ import NoirLeveling.SQLProcedures.SQLProcedures;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -51,10 +52,19 @@ public class PlayerEvents implements Listener {
         File file = new File(Main.userdataFilePath);
 
         YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-        if (configuration.contains(player.getUniqueId().toString())) {
-            return;
+        ConfigurationSection section;
+        if (!configuration.contains(player.getUniqueId().toString())) {
+            section = configuration.createSection(player.getUniqueId().toString());
         }
-        configuration.createSection(player.getUniqueId().toString()).set("leveling", true);
+        else {
+            section = configuration.getConfigurationSection(player.getUniqueId().toString());
+        }
+        if (!section.isSet("leveling")) {
+            section.set("leveling", true);
+        }
+        if (!section.isSet("verbose")) {
+            section.set("verbose", false);
+        }
         try {
             configuration.save(file);
         } catch (IOException e) {

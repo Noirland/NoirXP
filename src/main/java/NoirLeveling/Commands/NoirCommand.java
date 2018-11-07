@@ -65,6 +65,12 @@ public class NoirCommand implements CommandExecutor {
                 case "convert":
                     InventoryCallbacks.addTagsToPlayerInventory(bukkitPlayer);
                     return true;
+                case "show":
+                    CommandCallbacks.enablePlayerVerbose(bukkitPlayer);
+                    return true;
+                case "hide":
+                    CommandCallbacks.disablePlayerVerbose(bukkitPlayer);
+                    return true;
                 default:
                     return false;
             }

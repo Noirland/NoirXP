@@ -212,6 +212,11 @@ public final class PlayerCallbacks {
                 case GENERAL:
                     break;
             }
+
+            if (isPlayerVerboseEnabled(player.getBukkitPlayer())) {
+                player.getBukkitPlayer().sendMessage("+" + xpGained + " " + PlayerClassConverter.PlayerClassToString(playerClass));
+            }
+
             if (playerClass != PlayerClass.GENERAL) {
                 if (player.isLevelUp(currentClassXp, newClassXp)) {
                     player.getBukkitPlayer().sendMessage("Your " + PlayerClassConverter.PlayerClassToString(playerClass) + " level just " +
@@ -219,8 +224,6 @@ public final class PlayerCallbacks {
                 }
             }
         }
-
-
         int currentLevel = player.getLevel();
 
         if (currentLevel < 50) {
@@ -244,6 +247,17 @@ public final class PlayerCallbacks {
         }
 
         return true;
+    }
+
+    public static boolean isPlayerVerboseEnabled(Player player) {
+        File file = new File(Main.userdataFilePath);
+        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+        ConfigurationSection section = configuration.getConfigurationSection(player.getUniqueId().toString());
+        if (section.getBoolean("verbose") == true) {
+            return true;
+        }
+
+        return false;
     }
 
     public static void addPlayersToMap() {
