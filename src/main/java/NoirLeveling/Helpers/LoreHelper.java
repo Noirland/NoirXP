@@ -3,6 +3,7 @@ package NoirLeveling.Helpers;
 import NoirLeveling.Constants.PlayerClass;
 import NoirLeveling.Database.Database;
 import NoirLeveling.SQLProcedures.SQLProcedures;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,7 +22,14 @@ public class LoreHelper {
             return;
         }
 
-        String blockName = item.getType().toString();
+        String blockName;
+
+        if (itemMeta.hasDisplayName()) {
+            blockName = ChatColor.stripColor(itemMeta.getDisplayName());
+        }
+        else {
+            blockName = item.getType().toString();
+        }
         String sql = SQLProcedures.getCustomBlock(blockName);
 
         String playerClassName;
@@ -39,9 +47,5 @@ public class LoreHelper {
         loreList.add(playerClassFormatted);
         itemMeta.setLore(loreList);
         item.setItemMeta(itemMeta);
-
-
-
-
     }
 }
