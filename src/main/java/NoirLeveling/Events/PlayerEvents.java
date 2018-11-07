@@ -22,7 +22,7 @@ import java.sql.SQLException;
 
 public class PlayerEvents implements Listener {
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void playerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (!Main.players.containsKey(player.getUniqueId().toString())) {

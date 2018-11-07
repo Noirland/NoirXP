@@ -4,6 +4,7 @@ import NoirLeveling.Classes.LevelRequirementStats;
 import NoirLeveling.Classes.NoirPlayer;
 import NoirLeveling.Constants.POTION_TYPES;
 import NoirLeveling.Constants.PlayerPermissionTypes;
+import NoirLeveling.Helpers.LoreHelper;
 import NoirLeveling.Main;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,4 +24,9 @@ import javax.lang.model.element.ElementVisitor;
 
 public class InventoryEvents implements Listener {
 
+    @EventHandler(ignoreCancelled = true)
+    public void onInventoryMoveItem(InventoryMoveItemEvent event) {
+        ItemStack itemStack = event.getItem();
+        LoreHelper.addLoreToItem(itemStack);
+    }
 }
