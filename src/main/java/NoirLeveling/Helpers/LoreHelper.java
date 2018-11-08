@@ -14,7 +14,7 @@ import java.util.List;
 
 public class LoreHelper {
     public static void addLoreToItem(ItemStack item) {
-        if (item.getType() == Material.AIR) {
+        if (item == null || item.getType() == Material.AIR) {
             return;
         }
         ItemMeta itemMeta = item.getItemMeta();
