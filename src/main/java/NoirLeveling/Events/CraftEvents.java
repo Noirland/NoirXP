@@ -1,5 +1,6 @@
 package NoirLeveling.Events;
 
+import NoirLeveling.Callbacks.CraftCallbacks;
 import NoirLeveling.Callbacks.PlayerCallbacks;
 import NoirLeveling.Constants.ITEM_CONSTANTS;
 import NoirLeveling.Constants.PlayerClass;
@@ -13,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
@@ -40,7 +42,6 @@ public class CraftEvents implements Listener {
         if (itemStack == null) {
             return;
         }
-        
         Player player = (Player) event.getWhoClicked();
         ItemMeta itemMeta = itemStack.getItemMeta();
         String blockName = itemStack.getType().toString();
@@ -86,9 +87,30 @@ public class CraftEvents implements Listener {
         }
 
         int createXp = (int) resultSet.get(0).get("createXp");
-        PlayerCallbacks.xpGained(player.getUniqueId().toString(), playerClass, createXp * itemStack.getAmount());
+        int currentAmount = 0;
+        ItemStack[] currentItems = player.getInventory().getContents();
+        for (ItemStack item : currentItems) {
+            if (CraftCallbacks.isItemStackEqual(item, itemStack)) {
+                currentAmount += item.getAmount();
+            }
+        }
 
+        PlayerClass finalPlayerClass = playerClass;
+        int finalCurrentAmount = currentAmount;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                int newAmount = 0;
+                ItemStack[] currentItems = player.getInventory().getContents();
+                for (ItemStack item : currentItems) {
+                    if (CraftCallbacks.isItemStackEqual(item, itemStack)) {
+                        newAmount += item.getAmount();
+                    }
+                }
+                PlayerCallbacks.xpGained(player.getUniqueId().toString(), finalPlayerClass, createXp * (newAmount - finalCurrentAmount));
 
+            }
+        }.runTaskLater(Main.plugin, 20 * 1);
     }
 
     @EventHandler(ignoreCancelled = true)
