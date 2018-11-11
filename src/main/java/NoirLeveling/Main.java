@@ -6,6 +6,7 @@ import NoirLeveling.Callbacks.PlayerCallbacks;
 import NoirLeveling.Classes.NoirPlayer;
 import NoirLeveling.Commands.BalanceCommand;
 import NoirLeveling.Commands.NoirCommand;
+import NoirLeveling.Commands.XpTabCompleter;
 import NoirLeveling.CustomItems.*;
 import NoirLeveling.Database.Database;
 import NoirLeveling.Events.*;
@@ -142,6 +143,7 @@ public class Main extends JavaPlugin{
 
     private void enableCommandHooks() {
         getCommand("noir").setExecutor(new NoirCommand());
+        getCommand("noir").setTabCompleter(new XpTabCompleter());
         getCommand("nbal").setExecutor(new BalanceCommand());
     }
 

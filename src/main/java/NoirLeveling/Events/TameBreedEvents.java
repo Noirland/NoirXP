@@ -6,6 +6,7 @@ import NoirLeveling.Classes.TameBreedEntity;
 import NoirLeveling.Constants.PlayerClass;
 import NoirLeveling.Helpers.Datamaps;
 import NoirLeveling.Main;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 
 public class TameBreedEvents implements Listener {
+    private Set<LivingEntity> currentlyBreeding = new HashSet<>();
     @EventHandler(ignoreCancelled = true)
     public void onTame(EntityTameEvent event) {
         if (!(event.getOwner() instanceof Player)) {
@@ -47,7 +49,16 @@ public class TameBreedEvents implements Listener {
             NoirPlayer noirPlayer = Main.players.get(player.getUniqueId().toString());
 
             if (noirPlayer.farming.getLevel() < entity.getLevelToBreed()) {
-                player.sendMessage("Level " + entity.getLevelToBreed() + " farming required.");
+                if (!currentlyBreeding.contains(event.getFather()) && !currentlyBreeding.contains(event.getMother())) {
+                    player.sendMessage("Level " + entity.getLevelToBreed() + " farming required.");
+                    currentlyBreeding.add(event.getFather());
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            currentlyBreeding.remove(event.getFather());
+                        }
+                    }.runTaskLater(Main.plugin, 20 * 20);
+                }
                 event.setCancelled(true);
             }
             else {
