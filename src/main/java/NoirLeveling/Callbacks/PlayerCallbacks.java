@@ -80,9 +80,6 @@ public final class PlayerCallbacks {
         }
         int levelCounter = 2;
         double result = 0;
-
-
-
         while (true) {
             result = (8 * Math.pow(levelCounter, 3)) / 3 + (8 * Math.pow(levelCounter, 2)) - ((32 * levelCounter) / 3);
             if (result > xp) {
@@ -90,7 +87,6 @@ public final class PlayerCallbacks {
             }
             levelCounter++;
         }
-
         return levelCounter - 1;
     }
 
