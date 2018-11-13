@@ -20,6 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BlockCallbacks {
+    /**
+     * Sets a players username based on their highest xp profession.
+     * @param player The player to set.
+     */
     public static void setPlayerChatColor(NoirPlayer player) {
         ChatColor command = ChatColor.WHITE;
         int alchemyXp = player.alchemy.getXp();
@@ -74,6 +78,11 @@ public class BlockCallbacks {
 
     }
 
+    /**
+     * Checks if a block in a specific location has been placed by a player already.
+     * @param location The blocks location.
+     * @return True if the block has already been placed. False otherwise.
+     */
     public static boolean hasBlockGivenXp(Location location) {
         String locationSql = SQLProcedures.getBlockDataLog(location);
         List<HashMap> result = Database.executeSQLGet(locationSql);
@@ -85,6 +94,11 @@ public class BlockCallbacks {
         }
     }
 
+    /**
+     * Adds a location to the block location table in the database.
+     * @param location The location to add.
+     * @return True if the location was added successfully, false otherwise.
+     */
     public static boolean addBlockLocationToLogTable(Location location) {
         String sql = SQLProcedures.insertIntoBlockDataLogTable(location);
         try {
@@ -96,6 +110,9 @@ public class BlockCallbacks {
         }
     }
 
+    /**
+     * Sets the torch data hashmap with values from the database.
+     */
     public static void addTorchDataToMap() {
         String sql = SQLProcedures.getTorchData();
 
@@ -114,6 +131,9 @@ public class BlockCallbacks {
         }
     }
 
+    /**
+     * Updates the torch placed data in the database with the new hashmap values.
+     */
     public static void replaceTorchDataTable() {
         try {
             Database.executeSQLUpdateDelete(SQLProcedures.deleteTorchData());
@@ -138,6 +158,11 @@ public class BlockCallbacks {
         }
     }
 
+    /**
+     * Gets a custom block from the database with the given name.
+     * @param blockName The name of the custom block in the database.
+     * @return The custom block.
+     */
     public static List<HashMap> getCustomBlock(String blockName) {
         String sql = SQLProcedures.getCustomBlock(blockName);
 

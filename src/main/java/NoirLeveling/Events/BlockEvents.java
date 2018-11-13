@@ -82,7 +82,7 @@ public class BlockEvents implements Listener {
         if (playerLevel < reqLevel) {
             event.setCancelled(true);
             player.sendMessage("Level " + reqLevel + ChatColor.WHITE + " " +
-                    PlayerClassConverter.PlayerClassToString(playerClass) + " required.");
+                    PlayerClassConverter.playerClassToString(playerClass) + " required.");
             return;
         }
 
@@ -214,7 +214,7 @@ public class BlockEvents implements Listener {
         if (playerLevel < reqLevel) {
             event.setCancelled(true);
             player.sendMessage("Level " + reqLevel + ChatColor.WHITE + " " +
-                    PlayerClassConverter.PlayerClassToString(playerClass) + " required.");
+                    PlayerClassConverter.playerClassToString(playerClass) + " required.");
             return;
         }
 

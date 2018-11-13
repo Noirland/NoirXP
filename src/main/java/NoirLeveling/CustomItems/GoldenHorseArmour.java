@@ -18,7 +18,7 @@ public class GoldenHorseArmour implements ICustomItem {
         ItemStack item = new ItemStack(Material.GOLDEN_HORSE_ARMOR, 1);
         ItemMeta meta = item.getItemMeta();
         List<String> loreList = new ArrayList<>();
-        loreList.add(PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.FARMING));
+        loreList.add(PlayerClassConverter.playerClassToCapitalString(PlayerClass.FARMING));
         meta.setLore(loreList);
         item.setItemMeta(meta);
 

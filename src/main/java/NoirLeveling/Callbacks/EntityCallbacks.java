@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class EntityCallbacks {
+    /**
+     * Adds the taming/breeding data from the database to a memory map
+     */
     public static void addTameBreedDataToMap() {
         String sql = SQLProcedures.getAllTameBreedEntities();
 

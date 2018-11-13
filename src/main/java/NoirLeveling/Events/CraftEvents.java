@@ -77,7 +77,7 @@ public class CraftEvents implements Listener {
         if (playerLevel < reqLevel) {
             event.setCancelled(true);
             player.sendMessage("Level " + reqLevel + ChatColor.WHITE + " " +
-            PlayerClassConverter.PlayerClassToString(playerClass) + " required.");
+            PlayerClassConverter.playerClassToString(playerClass) + " required.");
             return;
         }
 
@@ -135,7 +135,7 @@ public class CraftEvents implements Listener {
             else {
                 playerClassName = (String) resultSet.get(0).get("playerClass");
             }
-            String playerClassFormatted = PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.valueOf(playerClassName));
+            String playerClassFormatted = PlayerClassConverter.playerClassToCapitalString(PlayerClass.valueOf(playerClassName));
             List<String> loreList = new ArrayList<String>();
             loreList.add(playerClassFormatted);
             if (Datamaps.armourItems.containsKey(itemStack.getType())) {

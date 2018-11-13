@@ -3,7 +3,6 @@ package NoirLeveling.CustomItems;
 import NoirLeveling.Constants.PlayerClass;
 import NoirLeveling.Helpers.PlayerClassConverter;
 import NoirLeveling.Main;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -19,7 +18,7 @@ public class Lead implements ICustomItem {
         ItemStack item = new ItemStack(Material.LEAD, 1);
         ItemMeta meta = item.getItemMeta();
         List<String> loreList = new ArrayList<String>();
-        loreList.add(PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.FARMING));
+        loreList.add(PlayerClassConverter.playerClassToCapitalString(PlayerClass.FARMING));
 
         meta.setLore(loreList);
         item.setItemMeta(meta);

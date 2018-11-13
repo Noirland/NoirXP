@@ -19,7 +19,7 @@ public class SpacePants implements ICustomItem {
         ItemStack item = new ItemStack(Material.IRON_LEGGINGS, 1);
         ItemMeta meta = item.getItemMeta();
         List<String> loreList = new ArrayList<>();
-        loreList.add(PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.GENERAL));
+        loreList.add(PlayerClassConverter.playerClassToCapitalString(PlayerClass.GENERAL));
         loreList.add("and space shorts");
         meta.setDisplayName(ChatColor.DARK_BLUE + "SPACE PANTS");
         meta.setLore(loreList);

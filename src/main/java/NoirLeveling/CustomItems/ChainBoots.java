@@ -18,7 +18,7 @@ public class ChainBoots implements ICustomItem {
         ItemStack item = new ItemStack(Material.CHAINMAIL_BOOTS, 1);
         ItemMeta meta = item.getItemMeta();
         List<String> loreList = new ArrayList<>();
-        loreList.add(PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.GENERAL));
+        loreList.add(PlayerClassConverter.playerClassToCapitalString(PlayerClass.GENERAL));
         loreList.add("331/331");
 
         meta.setLore(loreList);

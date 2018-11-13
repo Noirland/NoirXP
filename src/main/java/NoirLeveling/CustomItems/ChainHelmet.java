@@ -18,7 +18,7 @@ public class ChainHelmet implements ICustomItem {
         ItemStack item = new ItemStack(Material.CHAINMAIL_HELMET, 1);
         ItemMeta meta = item.getItemMeta();
         List<String> loreList = new ArrayList<>();
-        loreList.add(PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.GENERAL));
+        loreList.add(PlayerClassConverter.playerClassToCapitalString(PlayerClass.GENERAL));
         loreList.add("280/280");
 
         meta.setLore(loreList);

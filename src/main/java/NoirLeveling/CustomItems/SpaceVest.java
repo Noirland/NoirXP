@@ -19,7 +19,7 @@ public class SpaceVest implements ICustomItem {
         ItemStack item = new ItemStack(Material.IRON_CHESTPLATE, 1);
         ItemMeta meta = item.getItemMeta();
         List<String> loreList = new ArrayList<>();
-        loreList.add(PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.GENERAL));
+        loreList.add(PlayerClassConverter.playerClassToCapitalString(PlayerClass.GENERAL));
         loreList.add("For spacious encounters");
         meta.setDisplayName(ChatColor.DARK_BLUE + "Space Vest");
         meta.setLore(loreList);

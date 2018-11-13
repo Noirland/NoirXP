@@ -9,6 +9,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class CommandCallbacks {
+    /**
+     * Disables the leveling aspect of the plugin.
+     * @param playerId The player UUID to disable.
+     */
     public static void disablePlayerLeveling(String playerId) {
         NoirPlayer noirPlayer = Main.players.get(playerId);
         File file = new File(Main.userdataFilePath);
@@ -30,6 +34,10 @@ public class CommandCallbacks {
         noirPlayer.getBukkitPlayer().sendMessage(message);
     }
 
+    /**
+     * Enables verbose mode, which shows xp gained messages in chat.
+     * @param player The player to enable it for.
+     */
     public static void enablePlayerVerbose(Player player) {
         File file = new File(Main.userdataFilePath);
         YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
@@ -42,6 +50,10 @@ public class CommandCallbacks {
         player.sendMessage("Verbose mode ENABLED.");
     }
 
+    /**
+     * Disables verbose mode, which shows xp gained messages in chat.
+     * @param player The player to enable it for.
+     */
     public static void disablePlayerVerbose(Player player) {
         File file = new File(Main.userdataFilePath);
         YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
@@ -54,6 +66,10 @@ public class CommandCallbacks {
         player.sendMessage("Verbose mode DISABLED.");
     }
 
+    /**
+     * Sets total xp and xp for all classes to 0.
+     * @param playerId The player UUID to reset.
+     */
     public static void resetAllXp(String playerId) {
         NoirPlayer player = Main.players.get(playerId);
         player.setXp(0);

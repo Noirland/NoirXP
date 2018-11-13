@@ -4,7 +4,12 @@ import NoirLeveling.Constants.PlayerClass;
 import org.bukkit.ChatColor;
 
 public final class PlayerClassConverter {
-    public static String PlayerClassToTitle(PlayerClass playerClass) {
+    /**
+     * Formats a profession to its title
+     * @param playerClass The profession to format
+     * @return A chatcolour-formatted profession title
+     */
+    public static String playerClassToTitle(PlayerClass playerClass) {
         switch (playerClass) {
             case GATHERING:
                 return ChatColor.DARK_GREEN + "Gatherer" + ChatColor.WHITE;
@@ -35,7 +40,12 @@ public final class PlayerClassConverter {
         }
     }
 
-    public static String PlayerClassToString(PlayerClass playerClass) {
+    /**
+     * Formats a profession to its lowercase description
+     * @param playerClass The profession to format
+     * @return A chatcolour-formatted lowercase profession description
+     */
+    public static String playerClassToString(PlayerClass playerClass) {
         switch (playerClass) {
             case GATHERING:
                 return ChatColor.DARK_GREEN + "gathering" + ChatColor.WHITE;
@@ -66,7 +76,12 @@ public final class PlayerClassConverter {
         }
     }
 
-    public static String PlayerClassToCapitalString(PlayerClass playerClass) {
+    /**
+     * Formats a profession to its first-letter uppercase description
+     * @param playerClass The profession to format
+     * @return A chatcolour-formatted first-letter uppercase profession description
+     */
+    public static String playerClassToCapitalString(PlayerClass playerClass) {
         switch (playerClass) {
             case GATHERING:
                 return ChatColor.DARK_GREEN + "Gathering" + ChatColor.WHITE;

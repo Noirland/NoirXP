@@ -42,7 +42,7 @@ public class LoreHelper {
             playerClassName = (String) resultSet.get(0).get("playerClass");
         }
 
-        String playerClassFormatted = PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.valueOf(playerClassName));
+        String playerClassFormatted = PlayerClassConverter.playerClassToCapitalString(PlayerClass.valueOf(playerClassName));
         List<String> loreList = new ArrayList<String>();
         loreList.add(playerClassFormatted);
         itemMeta.setLore(loreList);

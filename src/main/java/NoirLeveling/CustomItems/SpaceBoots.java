@@ -19,7 +19,7 @@ public class SpaceBoots implements ICustomItem {
         ItemStack item = new ItemStack(Material.IRON_BOOTS, 1);
         ItemMeta meta = item.getItemMeta();
         List<String> loreList = new ArrayList<>();
-        loreList.add(PlayerClassConverter.PlayerClassToCapitalString(PlayerClass.GENERAL));
+        loreList.add(PlayerClassConverter.playerClassToCapitalString(PlayerClass.GENERAL));
         meta.setDisplayName(ChatColor.DARK_BLUE + "Space Boots");
         loreList.add("For spacious encounters");
         meta.setLore(loreList);

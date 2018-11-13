@@ -205,12 +205,12 @@ public final class PlayerCallbacks {
             }
 
             if (isPlayerVerboseEnabled(player.getBukkitPlayer())) {
-                player.getBukkitPlayer().sendMessage("+" + xpGained + " " + PlayerClassConverter.PlayerClassToString(playerClass));
+                player.getBukkitPlayer().sendMessage("+" + xpGained + " " + PlayerClassConverter.playerClassToString(playerClass));
             }
 
             if (playerClass != PlayerClass.GENERAL) {
                 if (player.isLevelUp(currentClassXp, newClassXp)) {
-                    player.getBukkitPlayer().sendMessage("Your " + PlayerClassConverter.PlayerClassToString(playerClass) + " level just " +
+                    player.getBukkitPlayer().sendMessage("Your " + PlayerClassConverter.playerClassToString(playerClass) + " level just " +
                             "increased to " + ChatColor.GOLD + newClassLevel + ChatColor.WHITE + "!");
                 }
             }
