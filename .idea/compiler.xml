@@ -9,8 +9,5 @@
         <module name="NoirLeveling" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="NoirLeveling" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>
