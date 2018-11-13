@@ -13,8 +13,6 @@ import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,9 +24,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Crops;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import javax.xml.crypto.Data;
-import java.io.File;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -70,18 +65,18 @@ public class BlockEvents implements Listener {
         try {
             playerClass = PlayerClass.valueOf((String) resultSet.get(0).get("playerClass"));
             if (playerClass == PlayerClass.GENERAL) {
-                playerXp = PlayerCallbacks.GetPlayerTotalXp(player.getUniqueId().toString());
+                playerXp = PlayerCallbacks.getPlayerTotalXp(player.getUniqueId().toString());
             }
             else {
-                playerXp = PlayerCallbacks.GetPlayerXpForClass(player.getUniqueId().toString(), playerClass);
+                playerXp = PlayerCallbacks.getPlayerXpForClass(player.getUniqueId().toString(), playerClass);
             }
 
-            playerLevel = PlayerCallbacks.GetLevelFromXp(playerXp);
+            playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
         }
         catch (IllegalArgumentException e) {
             playerClass = PlayerClass.GENERAL;
-            playerXp = PlayerCallbacks.GetPlayerTotalXp(player.getUniqueId().toString());
-            playerLevel = PlayerCallbacks.GetLevelFromXp(playerXp);
+            playerXp = PlayerCallbacks.getPlayerTotalXp(player.getUniqueId().toString());
+            playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
         }
 
         if (playerLevel < reqLevel) {
@@ -202,18 +197,18 @@ public class BlockEvents implements Listener {
         try {
             playerClass = PlayerClass.valueOf((String) resultSet.get(0).get("playerClass"));
             if (playerClass == PlayerClass.GENERAL) {
-                playerXp = PlayerCallbacks.GetPlayerTotalXp(player.getUniqueId().toString());
+                playerXp = PlayerCallbacks.getPlayerTotalXp(player.getUniqueId().toString());
             }
             else {
-                playerXp = PlayerCallbacks.GetPlayerXpForClass(player.getUniqueId().toString(), playerClass);
+                playerXp = PlayerCallbacks.getPlayerXpForClass(player.getUniqueId().toString(), playerClass);
             }
 
-            playerLevel = PlayerCallbacks.GetLevelFromXp(playerXp);
+            playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
         }
         catch (IllegalArgumentException e) {
             playerClass = PlayerClass.GENERAL;
-            playerXp = PlayerCallbacks.GetPlayerTotalXp(player.getUniqueId().toString());
-            playerLevel = PlayerCallbacks.GetLevelFromXp(playerXp);
+            playerXp = PlayerCallbacks.getPlayerTotalXp(player.getUniqueId().toString());
+            playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
         }
 
         if (playerLevel < reqLevel) {

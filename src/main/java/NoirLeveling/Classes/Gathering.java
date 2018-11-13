@@ -1,7 +1,6 @@
 package NoirLeveling.Classes;
 
 import NoirLeveling.Callbacks.PlayerCallbacks;
-import NoirLeveling.Constants.PlayerClass;
 import NoirLeveling.Interfaces.INoirProfession;
 
 public class Gathering implements INoirProfession {
@@ -26,19 +25,19 @@ public class Gathering implements INoirProfession {
     @Override
     public void setXp(int xp) {
         this.xp = xp;
-        this.level = PlayerCallbacks.GetLevelFromXp(this.xp);
+        this.level = PlayerCallbacks.getLevelFromXp(this.xp);
     }
 
     @Override
     public void addXp(int xp) {
         this.xp += xp;
-        this.level = PlayerCallbacks.GetLevelFromXp(this.xp);
+        this.level = PlayerCallbacks.getLevelFromXp(this.xp);
     }
 
     @Override
     public boolean isLevelUp(int oldxp, int newxp) {
-        int oldLevel = PlayerCallbacks.GetLevelFromXp(oldxp);
-        int newLevel = PlayerCallbacks.GetLevelFromXp(newxp);
+        int oldLevel = PlayerCallbacks.getLevelFromXp(oldxp);
+        int newLevel = PlayerCallbacks.getLevelFromXp(newxp);
 
         if (newLevel > oldLevel) {
             return true;

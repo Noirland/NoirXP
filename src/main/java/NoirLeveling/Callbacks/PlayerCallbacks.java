@@ -8,18 +8,12 @@ import NoirLeveling.Interfaces.INoirProfession;
 import NoirLeveling.Main;
 import NoirLeveling.SQLProcedures.SQLProcedures;
 import NoirLeveling.Structs.PlayerXpClassPair;
-import org.apache.commons.lang.NotImplementedException;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.File;
 import java.sql.Connection;
@@ -31,12 +25,12 @@ import java.util.*;
 
 public final class PlayerCallbacks {
 
-    public static int GetPlayerLevel(String playerId) {
+    public static int getPlayerLevel(String playerId) {
         NoirPlayer player = Main.players.get(playerId);
         return player.getLevel();
     }
 
-    public static int GetPlayerXpForClass(String playerId, PlayerClass playerClass) {
+    public static int getPlayerXpForClass(String playerId, PlayerClass playerClass) {
         NoirPlayer player = Main.players.get(playerId);
         switch (playerClass) {
             case MINING:
@@ -67,19 +61,19 @@ public final class PlayerCallbacks {
         }
     }
 
-    public static int GetPlayerTotalXp(String playerId) {
+    public static int getPlayerTotalXp(String playerId) {
         int totalXp = Main.players.get(playerId).getXp();
         return totalXp;
     }
 
-    public static List<HashMap> GetPlayerXpClasses(Player player) {
+    public static List<HashMap> getPlayerXpClasses(Player player) {
         String playerXpSql = SQLProcedures.getPlayerXpClasses(player.getUniqueId().toString());
         List<HashMap> xpClasses = Database.executeSQLGet(playerXpSql);
         return xpClasses;
     }
 
 
-    public static int GetLevelFromXp(int xp) {
+    public static int getLevelFromXp(int xp) {
         // The formula for xp is (8x^3/3 + 8x^2 - 32x/3)
         if (xp < 32) {
             return 1;
@@ -171,10 +165,10 @@ public final class PlayerCallbacks {
      */
     public static void xpGained(String playerId, PlayerClass playerClass, int xpGained) {
         NoirPlayer player = Main.players.get(playerId);
-        int currentClassXp = PlayerCallbacks.GetPlayerXpForClass(playerId, playerClass);
+        int currentClassXp = PlayerCallbacks.getPlayerXpForClass(playerId, playerClass);
         int newClassXp = currentClassXp + xpGained;
 
-        int newClassLevel = PlayerCallbacks.GetLevelFromXp(newClassXp);
+        int newClassLevel = PlayerCallbacks.getLevelFromXp(newClassXp);
 
         if (newClassLevel <= 50) {
             switch (playerClass) {

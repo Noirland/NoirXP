@@ -2,7 +2,6 @@ package NoirLeveling.Events;
 
 import NoirLeveling.Callbacks.CraftCallbacks;
 import NoirLeveling.Callbacks.PlayerCallbacks;
-import NoirLeveling.Constants.ITEM_CONSTANTS;
 import NoirLeveling.Constants.PlayerClass;
 import NoirLeveling.Database.Database;
 import NoirLeveling.Helpers.Datamaps;
@@ -10,17 +9,13 @@ import NoirLeveling.Helpers.PlayerClassConverter;
 import NoirLeveling.Main;
 import NoirLeveling.SQLProcedures.SQLProcedures;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.Wood;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -65,18 +60,18 @@ public class CraftEvents implements Listener {
         try {
             playerClass = PlayerClass.valueOf((String) resultSet.get(0).get("playerClass"));
             if (playerClass == PlayerClass.GENERAL) {
-                playerXp = PlayerCallbacks.GetPlayerTotalXp(player.getUniqueId().toString());
+                playerXp = PlayerCallbacks.getPlayerTotalXp(player.getUniqueId().toString());
             }
             else {
-                playerXp = PlayerCallbacks.GetPlayerXpForClass(player.getUniqueId().toString(), playerClass);
+                playerXp = PlayerCallbacks.getPlayerXpForClass(player.getUniqueId().toString(), playerClass);
             }
 
-            playerLevel = PlayerCallbacks.GetLevelFromXp(playerXp);
+            playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
         }
         catch (IllegalArgumentException e) {
             playerClass = PlayerClass.GENERAL;
-            playerXp = PlayerCallbacks.GetPlayerTotalXp(player.getUniqueId().toString());
-            playerLevel = PlayerCallbacks.GetLevelFromXp(playerXp);
+            playerXp = PlayerCallbacks.getPlayerTotalXp(player.getUniqueId().toString());
+            playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
         }
 
         if (playerLevel < reqLevel) {
