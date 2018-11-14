@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityTameEvent;
@@ -19,7 +20,7 @@ import java.util.*;
 
 public class TameBreedEvents implements Listener {
     private Set<LivingEntity> currentlyBreeding = new HashSet<>();
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onTame(EntityTameEvent event) {
         if (!(event.getOwner() instanceof Player)) {
             return;
@@ -37,7 +38,7 @@ public class TameBreedEvents implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onBreed(EntityBreedEvent event) {
         if (!(event.getBreeder() instanceof Player)) {
             return;
