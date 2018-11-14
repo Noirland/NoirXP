@@ -82,30 +82,10 @@ public class CraftEvents implements Listener {
         }
 
         int createXp = (int) resultSet.get(0).get("createXp");
-        int currentAmount = 0;
-        ItemStack[] currentItems = player.getInventory().getContents();
-        for (ItemStack item : currentItems) {
-            if (CraftCallbacks.isItemStackEqual(item, itemStack)) {
-                currentAmount += item.getAmount();
-            }
-        }
 
-        PlayerClass finalPlayerClass = playerClass;
-        int finalCurrentAmount = currentAmount;
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                int newAmount = 0;
-                ItemStack[] currentItems = player.getInventory().getContents();
-                for (ItemStack item : currentItems) {
-                    if (CraftCallbacks.isItemStackEqual(item, itemStack)) {
-                        newAmount += item.getAmount();
-                    }
-                }
-                PlayerCallbacks.xpGained(player.getUniqueId().toString(), finalPlayerClass, createXp * (newAmount - finalCurrentAmount));
+        PlayerCallbacks.xpGained(player.getUniqueId().toString(), playerClass, createXp * itemStack.getAmount());
 
-            }
-        }.runTaskLater(Main.plugin, 20 * 1);
+
     }
 
     @EventHandler(ignoreCancelled = true)
