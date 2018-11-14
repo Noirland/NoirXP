@@ -76,12 +76,14 @@ public class SQLProcedures {
     public static String createBlockDataTable() {
         return "CREATE TABLE IF NOT EXISTS `PlacedBlockData` (\n" +
                 "  `id` int(11) NOT NULL AUTO_INCREMENT,\n" +
+                "  `playerId` varchar(128) DEFAULT NULL,\n" +
                 "  `world` varchar(128) NOT NULL,\n" +
                 "  `x` float NOT NULL,\n" +
                 "  `y` float NOT NULL,\n" +
                 "  `z` float NOT NULL,\n" +
+                "  `ownsBlock` bit(1) DEFAULT NULL,\n" +
                 "  PRIMARY KEY (`id`)\n" +
-                ") ENGINE=InnoDB AUTO_INCREMENT=16149 DEFAULT CHARSET=latin1;\n";
+                ") ENGINE=InnoDB AUTO_INCREMENT=79393 DEFAULT CHARSET=latin1;\n";
     }
 
 
@@ -89,6 +91,23 @@ public class SQLProcedures {
         return String.format("SELECT world, x, y, z FROM PlacedBlockData WHERE world = '%s' AND x = %s AND y = %s AND z = %s;",
                 location.getWorld().getName(),
                 location.getX(), location.getY(), location.getZ());
+    }
+
+    public static String getBlockDataLog(Location location, String playerId) {
+        return String.format("SELECT world, x, y, z FROM PlacedBlockData WHERE world = '%s' AND playerId = '%s' AND x = %s AND y = %s AND z = %s;",
+                playerId,
+                location.getWorld().getName(),
+                location.getX(), location.getY(), location.getZ());
+    }
+
+    public static String getBlockDataLog(Location location, String playerId, boolean ownsBlock) {
+        return String.format("SELECT world, x, y, z FROM PlacedBlockData WHERE world = '%s' AND playerId = '%s' AND x = %s AND y = %s AND z = %s AND ownsBlock = '%b';",
+                playerId,
+                location.getWorld().getName(),
+                location.getX(),
+                location.getY(),
+                location.getZ(),
+                ownsBlock);
     }
 
     public static String getTorchPlacedData(Location location) {
@@ -112,11 +131,14 @@ public class SQLProcedures {
         return "SELECT * FROM TorchPlacedData";
     }
 
-    public static String insertIntoBlockDataLogTable(Location location) {
-        return String.format("INSERT INTO PlacedBlockData (world, x, y, z) VALUES ('%s', %.2f, %.2f, %.2f)",
+    public static String insertIntoBlockDataLogTable(Location location, String playerId, boolean ownsBlock) {
+        return String.format("INSERT INTO PlacedBlockData (playerId, world, x, y, z, ownsBlock) VALUES ('%s', '%s', %.2f, %.2f, %.2f, %b)",
+                playerId,
                 location.getWorld().getName(),
                 location.getX(),
-                location.getY(), location.getZ());
+                location.getY(),
+                location.getZ(),
+                ownsBlock);
     }
 
     public static String deleteFromBlockDataTable(Location location) {

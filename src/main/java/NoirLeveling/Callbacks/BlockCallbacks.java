@@ -1,6 +1,7 @@
 package NoirLeveling.Callbacks;
 
 import NoirLeveling.Classes.NoirPlayer;
+import NoirLeveling.Classes.PlacedBlock;
 import NoirLeveling.Constants.PlayerClass;
 import NoirLeveling.Database.Database;
 import NoirLeveling.Helpers.Datamaps;
@@ -94,13 +95,31 @@ public class BlockCallbacks {
         }
     }
 
+    public static PlacedBlock getPlacedBlock(Location location) {
+        String locationSql = SQLProcedures.getBlockDataLog(location);
+        List<HashMap> result = Database.executeSQLGet(locationSql);
+        if (result.size() > 0) {
+            String playerId = (String) result.get(0).get("playerId");
+            String world = (String) result.get(0).get("world");
+            float x = (float) result.get(0).get("x");
+            float y = (float) result.get(0).get("y");
+            float z = (float) result.get(0).get("z");
+            boolean ownsBlock = (boolean) result.get(0).get("ownsBlock");
+            Location location1 = new Location(Main.server.getWorld(world), x, y, z);
+            return new PlacedBlock(playerId, location, ownsBlock);
+        }
+        else {
+            return null;
+        }
+    }
+
     /**
      * Adds a location to the block location table in the database.
      * @param location The location to add.
      * @return True if the location was added successfully, false otherwise.
      */
-    public static boolean addBlockLocationToLogTable(Location location) {
-        String sql = SQLProcedures.insertIntoBlockDataLogTable(location);
+    public static boolean addBlockLocationToLogTable(Location location, String playerId, boolean ownsBlock) {
+        String sql = SQLProcedures.insertIntoBlockDataLogTable(location, playerId, ownsBlock);
         try {
             Database.executeSQLUpdateDelete(sql);
             return true;

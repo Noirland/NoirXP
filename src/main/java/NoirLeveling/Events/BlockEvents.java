@@ -127,7 +127,13 @@ public class BlockEvents implements Listener {
             return;
         }
         Location location = event.getBlockPlaced().getLocation();
-        BlockCallbacks.addBlockLocationToLogTable(location);
+        if (event.getBlockPlaced().getType() == Material.BREWING_STAND) {
+            BlockCallbacks.addBlockLocationToLogTable(location, event.getPlayer().getUniqueId().toString(), true);
+        }
+        else {
+            BlockCallbacks.addBlockLocationToLogTable(location, event.getPlayer().getUniqueId().toString(), false);
+        }
+
         if (event.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
             Datamaps.torchSet.add(location);
             if (event.getBlockReplacedState().getType() == Material.SNOW) {
