@@ -2,6 +2,8 @@ package NoirLeveling.Database;
 
 import NoirLeveling.Main;
 import NoirLeveling.SQLProcedures.SQLProcedures;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,13 +37,22 @@ public class Database {
         }
     }
 
-    public static int executeSQLUpdateDelete(String sql) throws SQLException {
-        Connection conn = DriverManager.getConnection(Main.url, Main.username, Main.password);
-        PreparedStatement statement = conn.prepareStatement(sql);
+    public static void executeSQLUpdateDelete(String sql) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                try {
+                    Connection conn = DriverManager.getConnection(Main.url, Main.username, Main.password);
+                    PreparedStatement statement = conn.prepareStatement(sql);
+                    int result = statement.executeUpdate(sql);
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
 
-        int result = statement.executeUpdate(sql);
-        conn.close();
-        return result;
+            }
+        }.runTaskAsynchronously(Main.plugin);
+
 
     }
 

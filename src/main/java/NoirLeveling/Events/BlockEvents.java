@@ -98,14 +98,9 @@ public class BlockEvents implements Listener {
 
         int breakXp = (int) resultSet.get(0).get("breakXp");
         if (BlockCallbacks.hasBlockGivenXp(location)) {
-            try {
-                Database.executeSQLUpdateDelete(SQLProcedures.deleteFromBlockDataTable(location));
-                if (!isCrop) {
-                    breakXp = 0;
-                }
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
+            Database.executeSQLUpdateDelete(SQLProcedures.deleteFromBlockDataTable(location));
+            if (!isCrop) {
+                breakXp = 0;
             }
 
         }

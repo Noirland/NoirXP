@@ -35,12 +35,10 @@ public class PlayerEvents implements Listener {
             NoirPlayer noirPlayer = new NoirPlayer(player.getUniqueId().toString());
             noirPlayer.setUsername(player.getName());
             Main.players.put(player.getUniqueId().toString(), noirPlayer);
-            try {
-                Database.executeSQLUpdateDelete(SQLProcedures.insertIntoPlayerTable(player.getUniqueId().toString()));
-            }
-            catch (SQLException e) {
-                event.getPlayer().getServer().getConsoleSender().sendMessage(Color.RED + "PlayerJoinEvent error.");
-            }
+            Database.executeSQLUpdateDelete(SQLProcedures.insertIntoPlayerTable(player.getUniqueId().toString()));
+
+            event.getPlayer().getServer().getConsoleSender().sendMessage(Color.RED + "PlayerJoinEvent error.");
+
         }
 
         NoirPlayer noirPlayer = Main.players.get(player.getUniqueId().toString());

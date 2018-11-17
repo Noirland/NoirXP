@@ -23,12 +23,8 @@ public class ResetLevelCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         String sql = SQLProcedures.resetPlayerXp(player.getUniqueId().toString());
-        try {
-            Database.executeSQLUpdateDelete(sql);
-            player.sendMessage("Successfully reset xp.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Database.executeSQLUpdateDelete(sql);
+        player.sendMessage("Successfully reset xp.");
         return true;
     }
 }
