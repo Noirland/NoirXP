@@ -4,8 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.Noir</groupId>
-    <artifactId>NoirLeveling</artifactId>
+    <groupId>nz.co.noirland</groupId>
+    <artifactId>noirxp</artifactId>
+    <name>NoirLevelling</name>
     <version>1.0</version>
     <scm>
         <connection>scm:git:git://github.com/Noirland/NoirXP.git</connection>
@@ -53,7 +54,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
     </properties>
     <build>
-        <finalName>${project.artifactId}-${project.version}-${buildNumber}</finalName>
+        <finalName>${project.name}-${project.version}-${buildNumber}</finalName>
         <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>
