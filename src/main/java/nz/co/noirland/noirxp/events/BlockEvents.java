@@ -6,7 +6,7 @@ import nz.co.noirland.noirxp.constants.PlayerClass;
 import nz.co.noirland.noirxp.database.Database;
 import nz.co.noirland.noirxp.helpers.Datamaps;
 import nz.co.noirland.noirxp.helpers.PlayerClassConverter;
-import nz.co.noirland.noirxp.Main;
+import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.sqlprocedures.SQLProcedures;
 import org.bukkit.ChatColor;
 import org.bukkit.CropState;
@@ -156,7 +156,7 @@ public class BlockEvents implements Listener {
                         }
                     }
 
-                }.runTaskLater(Main.plugin, 20 * 60 * 5);
+                }.runTaskLater(NoirXP.plugin, 20 * 60 * 5);
             }
             else {
                 new BukkitRunnable() {
@@ -169,7 +169,7 @@ public class BlockEvents implements Listener {
                         }
                     }
 
-                }.runTaskLater(Main.plugin, 20 * 60 * 60);
+                }.runTaskLater(NoirXP.plugin, 20 * 60 * 60);
             }
         }
         Player player = event.getPlayer();

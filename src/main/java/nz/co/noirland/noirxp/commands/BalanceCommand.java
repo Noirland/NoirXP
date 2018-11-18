@@ -1,6 +1,6 @@
 package nz.co.noirland.noirxp.commands;
 
-import nz.co.noirland.noirxp.Main;
+import nz.co.noirland.noirxp.NoirXP;
 import net.ess3.api.IEssentials;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -22,7 +22,7 @@ public class BalanceCommand implements CommandExecutor {
             return false;
         }
 
-        IEssentials essentials = (IEssentials) Main.server.getPluginManager().getPlugin("Essentials");
+        IEssentials essentials = (IEssentials) NoirXP.server.getPluginManager().getPlugin("Essentials");
         if (essentials == null) {
             return false;
         }

@@ -5,7 +5,7 @@ import nz.co.noirland.noirxp.constants.PlayerClass;
 import nz.co.noirland.noirxp.database.Database;
 import nz.co.noirland.noirxp.helpers.PlayerClassConverter;
 import nz.co.noirland.noirxp.interfaces.INoirProfession;
-import nz.co.noirland.noirxp.Main;
+import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.sqlprocedures.SQLProcedures;
 import nz.co.noirland.noirxp.struct.PlayerXpClassPair;
 import org.apache.commons.lang.math.NumberUtils;
@@ -22,12 +22,12 @@ import java.util.*;
 public final class PlayerCallbacks {
 
     public static int getPlayerLevel(String playerId) {
-        NoirPlayer player = Main.players.get(playerId);
+        NoirPlayer player = NoirXP.players.get(playerId);
         return player.getLevel();
     }
 
     public static int getPlayerXpForClass(String playerId, PlayerClass playerClass) {
-        NoirPlayer player = Main.players.get(playerId);
+        NoirPlayer player = NoirXP.players.get(playerId);
         switch (playerClass) {
             case MINING:
                 return player.mining.getXp();
@@ -58,7 +58,7 @@ public final class PlayerCallbacks {
     }
 
     public static int getPlayerTotalXp(String playerId) {
-        int totalXp = Main.players.get(playerId).getXp();
+        int totalXp = NoirXP.players.get(playerId).getXp();
         return totalXp;
     }
 
@@ -156,7 +156,7 @@ public final class PlayerCallbacks {
      * @param xpGained The amount of xp the player is about to gain
      */
     public static void xpGained(String playerId, PlayerClass playerClass, int xpGained) {
-        NoirPlayer player = Main.players.get(playerId);
+        NoirPlayer player = NoirXP.players.get(playerId);
         int currentClassXp = PlayerCallbacks.getPlayerXpForClass(playerId, playerClass);
         int newClassXp = currentClassXp + xpGained;
 
@@ -226,7 +226,7 @@ public final class PlayerCallbacks {
     }
 
     public static boolean isPlayerLevelingEnabled(Player player) {
-        File file = new File(Main.userdataFilePath);
+        File file = new File(NoirXP.userdataFilePath);
         YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
         ConfigurationSection section = configuration.getConfigurationSection(player.getUniqueId().toString());
         if (section.getBoolean("leveling") == false) {
@@ -237,7 +237,7 @@ public final class PlayerCallbacks {
     }
 
     public static boolean isPlayerVerboseEnabled(Player player) {
-        File file = new File(Main.userdataFilePath);
+        File file = new File(NoirXP.userdataFilePath);
         YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
         ConfigurationSection section = configuration.getConfigurationSection(player.getUniqueId().toString());
         if (section.getBoolean("verbose") == true) {
@@ -273,14 +273,14 @@ public final class PlayerCallbacks {
             player.taming.setXp((int)map.get("tamingXp"));
             player.setXp((int)map.get("totalXp"));
 
-            Main.players.put(playerId, player);
+            NoirXP.players.put(playerId, player);
 
         }
 
     }
 
     public static NoirPlayer getNoirPlayerByName(String username) {
-        for (NoirPlayer player : Main.players.values()) {
+        for (NoirPlayer player : NoirXP.players.values()) {
             if (player.getUsername().equalsIgnoreCase(username)) {
                 return player;
             }
@@ -293,7 +293,7 @@ public final class PlayerCallbacks {
     }
 
     public static String[] getTopTenPlayers() {
-        List<NoirPlayer> playerList = new ArrayList<NoirPlayer>(Main.players.values());
+        List<NoirPlayer> playerList = new ArrayList<NoirPlayer>(NoirXP.players.values());
         playerList.sort(Collections.reverseOrder(Comparator.comparing(NoirPlayer::getLevel)));
         playerList = playerList.subList(0, playerList.size() < 10 ? playerList.size() : 10);
         String[] formattedList = new String[playerList.size()];
@@ -308,7 +308,7 @@ public final class PlayerCallbacks {
     }
 
     public static String[] getTopTenPlayersForProfession(String professionName) {
-        List<NoirPlayer> playerList = new ArrayList<NoirPlayer>(Main.players.values());
+        List<NoirPlayer> playerList = new ArrayList<NoirPlayer>(NoirXP.players.values());
 
         playerList.sort(Collections.reverseOrder(Comparator.comparing(x -> getProfessionFromString(x, professionName.toLowerCase()).getXp())));
         playerList = playerList.subList(0, playerList.size() < 10 ? playerList.size() : 10);
@@ -352,7 +352,7 @@ public final class PlayerCallbacks {
     }
 
     public static void setPlayerMaxHealth(String playerId, float maxHealth) {
-        Player player = Main.server.getPlayer(UUID.fromString(playerId));
+        Player player = NoirXP.server.getPlayer(UUID.fromString(playerId));
         if (player == null) {
             return;
         }

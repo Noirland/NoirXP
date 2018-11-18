@@ -3,7 +3,7 @@ package nz.co.noirland.noirxp.events;
 import nz.co.noirland.noirxp.callbacks.BlockCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.database.Database;
-import nz.co.noirland.noirxp.Main;
+import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.sqlprocedures.SQLProcedures;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -28,23 +28,23 @@ public class PlayerEvents implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void playerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (!Main.players.containsKey(player.getUniqueId().toString())) {
+        if (!NoirXP.players.containsKey(player.getUniqueId().toString())) {
             NoirPlayer noirPlayer = new NoirPlayer(player.getUniqueId().toString());
             noirPlayer.setUsername(player.getName());
-            Main.players.put(player.getUniqueId().toString(), noirPlayer);
+            NoirXP.players.put(player.getUniqueId().toString(), noirPlayer);
             Database.executeSQLUpdateDelete(SQLProcedures.insertIntoPlayerTable(player.getUniqueId().toString()));
 
             event.getPlayer().getServer().getConsoleSender().sendMessage(Color.RED + "PlayerJoinEvent error.");
 
         }
 
-        NoirPlayer noirPlayer = Main.players.get(player.getUniqueId().toString());
+        NoirPlayer noirPlayer = NoirXP.players.get(player.getUniqueId().toString());
         noirPlayer.setUsername(player.getName());
         noirPlayer.setBukkitPlayer(event.getPlayer());
         BlockCallbacks.setPlayerChatColor(noirPlayer);
 
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(noirPlayer.getMaxHealth());
-        File file = new File(Main.userdataFilePath);
+        File file = new File(NoirXP.userdataFilePath);
 
         YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
         ConfigurationSection section;
@@ -74,7 +74,7 @@ public class PlayerEvents implements Listener {
         Player player = event.getPlayer();
         if (!player.getWorld().getName().equalsIgnoreCase("space")) {
             if (player.getLocation().getY() > 2000) {
-                player.teleport(Main.plugin.getServer().getWorld("space").getSpawnLocation());
+                player.teleport(NoirXP.plugin.getServer().getWorld("space").getSpawnLocation());
             }
         }
     }
@@ -85,7 +85,7 @@ public class PlayerEvents implements Listener {
             return;
         }
 
-        NoirPlayer player = Main.players.get(event.getPlayer().getUniqueId().toString());
+        NoirPlayer player = NoirXP.players.get(event.getPlayer().getUniqueId().toString());
 
         String blockName;
 

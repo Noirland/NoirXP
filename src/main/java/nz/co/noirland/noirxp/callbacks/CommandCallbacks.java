@@ -1,7 +1,7 @@
 package nz.co.noirland.noirxp.callbacks;
 
 import nz.co.noirland.noirxp.classes.NoirPlayer;
-import nz.co.noirland.noirxp.Main;
+import nz.co.noirland.noirxp.NoirXP;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -14,8 +14,8 @@ public class CommandCallbacks {
      * @param playerId The player UUID to disable.
      */
     public static void disablePlayerLeveling(String playerId) {
-        NoirPlayer noirPlayer = Main.players.get(playerId);
-        File file = new File(Main.userdataFilePath);
+        NoirPlayer noirPlayer = NoirXP.players.get(playerId);
+        File file = new File(NoirXP.userdataFilePath);
         YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
         Boolean currentCmdValue = configuration.getConfigurationSection(noirPlayer.getUniqueId()).getBoolean("leveling");
         configuration.getConfigurationSection(noirPlayer.getUniqueId()).set("leveling", !currentCmdValue);
@@ -39,7 +39,7 @@ public class CommandCallbacks {
      * @param player The player to enable it for.
      */
     public static void enablePlayerVerbose(Player player) {
-        File file = new File(Main.userdataFilePath);
+        File file = new File(NoirXP.userdataFilePath);
         YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
         configuration.getConfigurationSection(player.getUniqueId().toString()).set("verbose", true);
         try {
@@ -55,7 +55,7 @@ public class CommandCallbacks {
      * @param player The player to enable it for.
      */
     public static void disablePlayerVerbose(Player player) {
-        File file = new File(Main.userdataFilePath);
+        File file = new File(NoirXP.userdataFilePath);
         YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
         configuration.getConfigurationSection(player.getUniqueId().toString()).set("verbose", false);
         try {
@@ -71,7 +71,7 @@ public class CommandCallbacks {
      * @param playerId The player UUID to reset.
      */
     public static void resetAllXp(String playerId) {
-        NoirPlayer player = Main.players.get(playerId);
+        NoirPlayer player = NoirXP.players.get(playerId);
         player.setXp(0);
         player.alchemy.setXp(0);
         player.building.setXp(0);

@@ -4,7 +4,7 @@ import nz.co.noirland.noirxp.callbacks.BlockCallbacks;
 import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.Main;
+import nz.co.noirland.noirxp.NoirXP;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.FurnaceExtractEvent;
@@ -15,7 +15,7 @@ import java.util.List;
 public class FurnaceEvents implements Listener {
     @EventHandler
     public void onFurnaceExtract(FurnaceExtractEvent event) {
-        NoirPlayer noirPlayer = Main.players.get(event.getPlayer().getUniqueId().toString());
+        NoirPlayer noirPlayer = NoirXP.players.get(event.getPlayer().getUniqueId().toString());
         List<HashMap> customBlock = BlockCallbacks.getCustomBlock(event.getItemType().toString());
 
         if (customBlock == null) {

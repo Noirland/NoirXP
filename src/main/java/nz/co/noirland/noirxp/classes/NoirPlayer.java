@@ -1,7 +1,7 @@
 package nz.co.noirland.noirxp.classes;
 
 import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
-import nz.co.noirland.noirxp.Main;
+import nz.co.noirland.noirxp.NoirXP;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -33,7 +33,7 @@ public class NoirPlayer {
 
     public NoirPlayer(String playerId) {
         this.playerId = playerId;
-        this.bukkitPlayer = Main.server.getPlayer(UUID.fromString(this.playerId));
+        this.bukkitPlayer = NoirXP.server.getPlayer(UUID.fromString(this.playerId));
     }
 
     public void setCurrentHealth(float health) {

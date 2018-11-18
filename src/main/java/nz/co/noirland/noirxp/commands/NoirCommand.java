@@ -6,7 +6,7 @@ import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.constants.PlayerClassList;
 import nz.co.noirland.noirxp.interfaces.INoirProfession;
-import nz.co.noirland.noirxp.Main;
+import nz.co.noirland.noirxp.NoirXP;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.ChatColor;
@@ -24,7 +24,7 @@ public class NoirCommand implements CommandExecutor {
             return true;
         }
         Player bukkitPlayer = (Player) commandSender;
-        NoirPlayer noirPlayer = Main.players.get(bukkitPlayer.getUniqueId().toString());
+        NoirPlayer noirPlayer = NoirXP.players.get(bukkitPlayer.getUniqueId().toString());
         if (args.length == 1) {
             switch (args[0].toLowerCase()) {
                 case "level":
@@ -77,7 +77,7 @@ public class NoirCommand implements CommandExecutor {
                     commandSender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                 }
                 String playerName = args[1];
-                Player player = Main.server.getPlayer(playerName);
+                Player player = NoirXP.server.getPlayer(playerName);
                 if (player == null) {
                     bukkitPlayer.sendMessage("Player not found.");
                     return true;

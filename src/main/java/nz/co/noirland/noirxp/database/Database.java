@@ -1,6 +1,6 @@
 package nz.co.noirland.noirxp.database;
 
-import nz.co.noirland.noirxp.Main;
+import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.sqlprocedures.SQLProcedures;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -13,7 +13,7 @@ public class Database {
 
     public static List<HashMap> executeSQLGet(String sql) {
         try {
-            Connection conn = DriverManager.getConnection(Main.url, Main.username, Main.password);
+            Connection conn = DriverManager.getConnection(NoirXP.url, NoirXP.username, NoirXP.password);
             Statement statement = conn.prepareStatement(sql);
             ResultSet rs = statement.executeQuery(sql);
             ResultSetMetaData resultSetMetaData = rs.getMetaData();
@@ -42,7 +42,7 @@ public class Database {
             @Override
             public void run() {
                 try {
-                    Connection conn = DriverManager.getConnection(Main.url, Main.username, Main.password);
+                    Connection conn = DriverManager.getConnection(NoirXP.url, NoirXP.username, NoirXP.password);
                     PreparedStatement statement = conn.prepareStatement(sql);
                     int result = statement.executeUpdate(sql);
                     conn.close();
@@ -51,7 +51,7 @@ public class Database {
                 }
 
             }
-        }.runTaskAsynchronously(Main.plugin);
+        }.runTaskAsynchronously(NoirXP.plugin);
 
 
     }

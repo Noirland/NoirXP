@@ -7,9 +7,7 @@ import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.commands.BalanceCommand;
 import nz.co.noirland.noirxp.commands.NoirCommand;
 import nz.co.noirland.noirxp.commands.XpTabCompleter;
-import noirxp.customitems.*;
 import nz.co.noirland.noirxp.database.Database;
-import noirxp.events.*;
 import nz.co.noirland.noirxp.customitems.ChainBoots;
 import nz.co.noirland.noirxp.customitems.ChainChest;
 import nz.co.noirland.noirxp.customitems.ChainHelmet;
@@ -37,6 +35,7 @@ import nz.co.noirland.noirxp.events.PickupEvents;
 import nz.co.noirland.noirxp.events.PlayerEvents;
 import nz.co.noirland.noirxp.events.TameBreedEvents;
 import nz.co.noirland.noirxp.events.WeatherEvents;
+import nz.co.noirland.zephcore.Debug;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -52,7 +51,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Main extends JavaPlugin{
+public class NoirXP extends JavaPlugin {
+
+    private static NoirXP inst;
+    private static Debug debug;
+
     public static JavaPlugin plugin;
     public static String url;
     public static String urlNoDb;
@@ -62,10 +65,23 @@ public class Main extends JavaPlugin{
     public static String userdataFilePath;
     public static Server server;
     public static HashMap<String, NoirPlayer> players;
+
     public static void main(String[] args){
     }
+
+    public static NoirXP inst() {
+        return inst;
+    }
+
+    public static Debug debug() {
+        return debug;
+    }
+
     @Override
     public void onEnable(){
+        inst = this;
+        debug = new Debug(this);
+
         players = new HashMap<>();
         server = getServer();
         plugin = this;
@@ -129,7 +145,7 @@ public class Main extends JavaPlugin{
     public void savePlayerData() {
         try {
             Connection conn;
-            conn = DriverManager.getConnection(Main.url, Main.username, Main.password);
+            conn = DriverManager.getConnection(NoirXP.url, NoirXP.username, NoirXP.password);
             String sql = "UPDATE Player SET username = ?, alchemyXp = ?, buildingXp = ?, " +
                     "cookingXp = ?, farmingXp = ?, fishingXp = ?, gatheringXp = ?, huntingXp = ?, miningXp = ?, " +
                     "smithingXp = ?, tamingXp = ?, totalXp = ?, currentHealth = ?, maxHealth = ? WHERE playerId = ?";

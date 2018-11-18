@@ -5,7 +5,7 @@ import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.classes.TameBreedEntity;
 import nz.co.noirland.noirxp.constants.PlayerClass;
 import nz.co.noirland.noirxp.helpers.Datamaps;
-import nz.co.noirland.noirxp.Main;
+import nz.co.noirland.noirxp.NoirXP;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,7 +27,7 @@ public class TameBreedEvents implements Listener {
         Player player = (Player) event.getOwner();
         if (Datamaps.tameBreedEntityMap.containsKey(event.getEntityType())) {
             TameBreedEntity entity = Datamaps.tameBreedEntityMap.get(event.getEntityType());
-            NoirPlayer noirPlayer = Main.players.get(player.getUniqueId().toString());
+            NoirPlayer noirPlayer = NoirXP.players.get(player.getUniqueId().toString());
             if (noirPlayer.farming.getLevel() < entity.getLevelToTame()) {
                 player.sendMessage("Level " + entity.getLevelToTame() + " farming required.");
                 event.setCancelled(true);
@@ -46,7 +46,7 @@ public class TameBreedEvents implements Listener {
 
         if (Datamaps.tameBreedEntityMap.containsKey(event.getEntityType())) {
             TameBreedEntity entity = Datamaps.tameBreedEntityMap.get(event.getEntityType());
-            NoirPlayer noirPlayer = Main.players.get(player.getUniqueId().toString());
+            NoirPlayer noirPlayer = NoirXP.players.get(player.getUniqueId().toString());
 
             if (noirPlayer.farming.getLevel() < entity.getLevelToBreed()) {
                 if (!currentlyBreeding.contains(event.getFather()) && !currentlyBreeding.contains(event.getMother())) {
@@ -57,7 +57,7 @@ public class TameBreedEvents implements Listener {
                         public void run() {
                             currentlyBreeding.remove(event.getFather());
                         }
-                    }.runTaskLater(Main.plugin, 20 * 20);
+                    }.runTaskLater(NoirXP.plugin, 20 * 20);
                 }
                 event.setCancelled(true);
             }

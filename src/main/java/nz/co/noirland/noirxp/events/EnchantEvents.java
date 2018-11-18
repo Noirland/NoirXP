@@ -3,7 +3,7 @@ package nz.co.noirland.noirxp.events;
 import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.Main;
+import nz.co.noirland.noirxp.NoirXP;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
@@ -15,7 +15,7 @@ public class EnchantEvents implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPrepareEnchant(PrepareItemEnchantEvent event) {
-        NoirPlayer noirPlayer = Main.players.get(event.getEnchanter().getUniqueId().toString());
+        NoirPlayer noirPlayer = NoirXP.players.get(event.getEnchanter().getUniqueId().toString());
         if (noirPlayer.alchemy.getLevel() < 20) {
             event.setCancelled(true);
             return;
@@ -50,7 +50,7 @@ public class EnchantEvents implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onItemEnchant(EnchantItemEvent event) {
         int highestLevel = Collections.max(event.getEnchantsToAdd().values());
-        NoirPlayer noirPlayer = Main.players.get(event.getEnchanter().getUniqueId().toString());
+        NoirPlayer noirPlayer = NoirXP.players.get(event.getEnchanter().getUniqueId().toString());
         if (highestLevel == 1) {
             PlayerCallbacks.xpGained(noirPlayer.getUniqueId(), PlayerClass.ALCHEMY, 50);
         }

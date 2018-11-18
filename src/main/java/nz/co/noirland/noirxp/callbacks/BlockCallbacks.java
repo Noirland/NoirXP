@@ -4,7 +4,7 @@ import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.classes.PlacedBlock;
 import nz.co.noirland.noirxp.database.Database;
 import nz.co.noirland.noirxp.helpers.Datamaps;
-import nz.co.noirland.noirxp.Main;
+import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.sqlprocedures.SQLProcedures;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.ChatColor;
@@ -103,7 +103,7 @@ public class BlockCallbacks {
             float y = (float) result.get(0).get("y");
             float z = (float) result.get(0).get("z");
             boolean ownsBlock = (boolean) result.get(0).get("ownsBlock");
-            Location location1 = new Location(Main.server.getWorld(world), x, y, z);
+            Location location1 = new Location(NoirXP.server.getWorld(world), x, y, z);
             return new PlacedBlock(playerId, location, ownsBlock);
         }
         else {
@@ -137,7 +137,7 @@ public class BlockCallbacks {
             float x = (float) hashMap.get("x");
             float y = (float) hashMap.get("y");
             float z = (float) hashMap.get("z");
-            Location location = new Location(Main.server.getWorld(worldName), x, y, z);
+            Location location = new Location(NoirXP.server.getWorld(worldName), x, y, z);
             Datamaps.torchSet.add(location);
 
         }
@@ -150,7 +150,7 @@ public class BlockCallbacks {
         try {
             Database.executeSQLUpdateDelete(SQLProcedures.deleteTorchData());
             Connection conn;
-            conn = DriverManager.getConnection(Main.url, Main.username, Main.password);
+            conn = DriverManager.getConnection(NoirXP.url, NoirXP.username, NoirXP.password);
             String sql = "INSERT INTO TorchPlacedData (world, x, y, z) VALUES (?, ?, ?, ?);";
             PreparedStatement stmt = conn.prepareStatement(sql);
             for (Location location : Datamaps.torchSet) {
