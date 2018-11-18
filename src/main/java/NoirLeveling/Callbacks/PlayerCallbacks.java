@@ -363,45 +363,4 @@ public final class PlayerCallbacks {
         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHealth);
     }
 
-    public static void startUpdatePlayerTableTimer() {
-        Main.server.getScheduler().scheduleSyncRepeatingTask(Main.plugin, new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Connection conn;
-                    conn = DriverManager.getConnection(Main.url, Main.username, Main.password);
-                    String sql = "UPDATE Player SET username = ?, alchemyXp = ?, buildingXp = ?, " +
-                            "cookingXp = ?, farmingXp = ?, fishingXp = ?, gatheringXp = ?, huntingXp = ?, miningXp = ?, " +
-                            "smithingXp = ?, tamingXp = ?, totalXp = ?, currentHealth = ?, maxHealth = ? WHERE playerId = ?";
-                    PreparedStatement stmt = conn.prepareStatement(sql);
-                    for (NoirPlayer player : Main.players.values()) {
-                        stmt.setString(1, player.getUsername());
-                        stmt.setInt(2, player.alchemy.getXp());
-                        stmt.setInt(3, player.building.getXp());
-                        stmt.setInt(4, player.cooking.getXp());
-                        stmt.setInt(5, player.farming.getXp());
-                        stmt.setInt(6, player.fishing.getXp());
-                        stmt.setInt(7, player.gathering.getXp());
-                        stmt.setInt(8, player.hunting.getXp());
-                        stmt.setInt(9, player.mining.getXp());
-                        stmt.setInt(10, player.smithing.getXp());
-                        stmt.setInt(11, player.taming.getXp());
-                        stmt.setInt(12, player.getXp());
-                        stmt.setFloat(13, player.getCurrentHealth());
-                        stmt.setFloat(14, player.getMaxHealth());
-                        stmt.setString(15, player.getUniqueId());
-                        stmt.addBatch();
-
-                    }
-                    stmt.executeBatch();
-                    stmt.close();
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, 0L, 20L * 60L * 10L);
-
-    }
-
 }

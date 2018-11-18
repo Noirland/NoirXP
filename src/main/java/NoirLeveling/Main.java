@@ -13,6 +13,7 @@ import NoirLeveling.Events.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,13 +82,24 @@ public class Main extends JavaPlugin{
         BlockCallbacks.addTorchDataToMap();
         EntityCallbacks.addTameBreedDataToMap();
 
+        new BukkitRunnable() {
 
+            @Override
+            public void run() {
+                savePlayerData();
+            }
+
+        }.runTaskTimerAsynchronously(this, 20 * 60 * 10, 20 * 60 * 10); // Run backup every 10 mins (tick time)
 
     }
 
     @Override
     public void onDisable() {
         BlockCallbacks.replaceTorchDataTable();
+        savePlayerData();
+    }
+
+    public void savePlayerData() {
         try {
             Connection conn;
             conn = DriverManager.getConnection(Main.url, Main.username, Main.password);
