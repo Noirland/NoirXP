@@ -118,21 +118,10 @@ public class BlockCallbacks {
      * @param location The location to add.
      * @return True if the location was added successfully, false otherwise.
      */
-<<<<<<< Updated upstream
     public static boolean addBlockLocationToLogTable(Location location, String playerId, boolean ownsBlock) {
         String sql = SQLProcedures.insertIntoBlockDataLogTable(location, playerId, ownsBlock);
-        try {
-            Database.executeSQLUpdateDelete(sql);
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-=======
-    public static void addBlockLocationToLogTable(Location location) {
-        String sql = SQLProcedures.insertIntoBlockDataLogTable(location);
         Database.executeSQLUpdateDelete(sql);
->>>>>>> Stashed changes
+        return true;
     }
 
     /**
