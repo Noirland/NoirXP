@@ -24,8 +24,8 @@ public class Schema1 implements Schema {
     }
 
     private void createSchemaTable() throws SQLException {
-        new XPQuery("CREATE TABLE `schema` (`version` TINYINT UNSIGNED);").execute();
-        new XPQuery("INSERT INTO `schema` VALUES(1);").execute();
+        new XPQuery("CREATE TABLE `{PREFIX}_schema` (`version` TINYINT UNSIGNED);").execute();
+        new XPQuery("INSERT INTO `{PREFIX}_schema` VALUES(1);").execute();
     }
 
     private void createDatabase() throws SQLException {
