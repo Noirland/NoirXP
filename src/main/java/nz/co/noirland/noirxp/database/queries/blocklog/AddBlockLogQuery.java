@@ -8,7 +8,7 @@ import java.util.UUID;
 public class AddBlockLogQuery extends XPQuery {
 
     public AddBlockLogQuery(Location location, UUID player, boolean ownsBlock) {
-        super(6, "INSERT INTO PlacedBlockData (playerId, world, x, y, z, ownsBlock) VALUES (?, ?, ?, ?, ?, ?)");
+        super(6, "INSERT INTO PlacedBlockData (world, x, y, z, playerId, ownsBlock) VALUES (?, ?, ?, ?, ?, ?)");
 
         setValue(1, location.getWorld().getName());
         setValue(2, location.getBlockX());

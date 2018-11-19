@@ -17,7 +17,7 @@ import nz.co.noirland.noirxp.database.queries.player.GetPlayersQuery;
 import nz.co.noirland.noirxp.database.queries.player.ResetPlayerQuery;
 import nz.co.noirland.noirxp.database.queries.player.UpdatePlayerQuery;
 import nz.co.noirland.noirxp.database.queries.torch.AddTorchQuery;
-import nz.co.noirland.noirxp.database.queries.torch.DeleteTorchesQuery;
+import nz.co.noirland.noirxp.database.queries.torch.DeleteTorchQuery;
 import nz.co.noirland.noirxp.database.queries.torch.GetTorchesQuery;
 import nz.co.noirland.noirxp.database.schema.Schema1;
 import nz.co.noirland.noirxp.struct.ItemXPData;
@@ -88,19 +88,15 @@ public class XPDatabase extends MySQLDatabase {
     public boolean hasBeenPlaced(Location location) {
         try {
             List<Map<String, Object>> result = new CheckBlockLogQuery(location).executeQuery();
-            return ((float) result.get(0).get("COUNT")) > 0;
+            return ((long) result.get(0).get("COUNT")) > 0;
         } catch (Exception e) {
-            debug().warning("Failed to query DB:", e);
+            debug().warning("Failed to query DB", e);
             return false;
         }
     }
 
-    public void replaceTorches(Set<Location> torchSet) {
-        new DeleteTorchesQuery().executeAsync();
-
-        for(Location torch : torchSet) {
-            new AddTorchQuery(torch).executeAsync();
-        }
+    public void removeTorch(Location location) {
+        new DeleteTorchQuery(location).executeAsync();
     }
 
     public Set<Location> getTorches() {
@@ -155,9 +151,9 @@ public class XPDatabase extends MySQLDatabase {
         int levelToPlace = (int) data.get("levelToPlace");
         int levelToCreate = (int) data.get("levelToCreate");
         int levelToUse = (int) data.get("levelToUse");
-        int placeXP = (int) data.get("placeXP");
-        int breakXP = (int) data.get("breakXP");
-        int createXP = (int) data.get("createXP");
+        int placeXP = (int) data.get("placeXp");
+        int breakXP = (int) data.get("breakXp");
+        int createXP = (int) data.get("createXp");
         PlayerClass classType = PlayerClass.valueOf((String) data.get("playerClass"));
 
         return Optional.of(new ItemXPData(blockType, levelToBreak, levelToPlace, levelToCreate, levelToUse, placeXP, breakXP, createXP, classType));
@@ -230,5 +226,9 @@ public class XPDatabase extends MySQLDatabase {
         for (NoirPlayer player : data.values()) {
             new UpdatePlayerQuery(player).executeAsync();
         }
+    }
+
+    public void addTorch(Location location) {
+        new AddTorchQuery(location).executeAsync();
     }
 }

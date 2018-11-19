@@ -45,7 +45,7 @@ public class BlockEvents implements Listener {
 
         Location location = event.getBlock().getLocation();
 
-        Datamaps.torchSet.remove(location);
+        Datamaps.removeTorch(location);
 
         Player player = event.getPlayer();
         Optional<ItemXPData> xp = XPDatabase.inst().getCustomBlock(event.getBlock().getType());
@@ -104,17 +104,17 @@ public class BlockEvents implements Listener {
         }
 
         if (event.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
-            Datamaps.torchSet.add(location);
+            Datamaps.addTorch(location);
             if (event.getBlockReplacedState().getType() == Material.SNOW) {
                 event.getBlockPlaced().breakNaturally();
-                Datamaps.torchSet.remove(location);
+                Datamaps.removeTorch(location);
                 return;
             }
             if (event.getPlayer().getWorld().hasStorm()) {
                 if (location.getWorld().getHighestBlockYAt(location) == location.getBlockY()) {
                     if (location.getBlock().getType() == Material.TORCH || location.getBlock().getType() == Material.WALL_TORCH) {
                         location.getBlock().breakNaturally();
-                        Datamaps.torchSet.remove(location);
+                        Datamaps.removeTorch(location);
                     }
                 }
                 return;
@@ -126,7 +126,7 @@ public class BlockEvents implements Listener {
                     public void run() {
                         if (location.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
                             location.getBlock().breakNaturally();
-                            Datamaps.torchSet.remove(location);
+                            Datamaps.removeTorch(location);
 
                         }
                     }
@@ -140,7 +140,7 @@ public class BlockEvents implements Listener {
                     public void run() {
                         if (location.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
                             location.getBlock().breakNaturally();
-                            Datamaps.torchSet.remove(location);
+                            Datamaps.removeTorch(location);
                         }
                     }
 

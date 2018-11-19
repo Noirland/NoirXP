@@ -4,7 +4,6 @@ import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.commands.BalanceCommand;
 import nz.co.noirland.noirxp.commands.NoirCommand;
 import nz.co.noirland.noirxp.commands.XpTabCompleter;
-import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.customitems.ChainBoots;
 import nz.co.noirland.noirxp.customitems.ChainChest;
 import nz.co.noirland.noirxp.customitems.ChainHelmet;
@@ -78,7 +77,6 @@ public class NoirXP extends JavaPlugin {
             @Override
             public void run() {
                 XPDatabase.inst().saveUserData(players);
-                UserdataConfig.inst().save();
             }
 
         }.runTaskTimer(this, 20 * 60 * 10, 20 * 60 * 10); // Run backup every 10 mins (tick time)
@@ -87,7 +85,6 @@ public class NoirXP extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        XPDatabase.inst().replaceTorches(Datamaps.torchSet);
         XPDatabase.inst().saveUserData(players);
     }
 
