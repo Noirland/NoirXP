@@ -33,6 +33,10 @@ import nz.co.noirland.noirxp.events.TameBreedEvents;
 import nz.co.noirland.noirxp.events.WeatherEvents;
 import nz.co.noirland.noirxp.helpers.Datamaps;
 import nz.co.noirland.zephcore.Debug;
+import nz.co.noirland.zephcore.ZephCore;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -40,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class NoirXP extends JavaPlugin {
+public class NoirXP extends JavaPlugin implements Listener {
 
     private static NoirXP inst;
     private static Debug debug;
@@ -76,11 +80,19 @@ public class NoirXP extends JavaPlugin {
         new BukkitRunnable() {
             @Override
             public void run() {
+                debug().warning("Backing up player data...");
                 XPDatabase.inst().saveUserData(players);
             }
 
         }.runTaskTimer(this, 20 * 60 * 10, 20 * 60 * 10); // Run backup every 10 mins (tick time)
+    }
 
+    @EventHandler
+    public void onZephCoreDisabled(PluginDisableEvent event) {
+        if(event.getPlugin() == ZephCore.inst()) {
+            XPDatabase.inst().saveUserData(players);
+            debug().disable("ZephCore is being disabled, backing up data disabling this plugin also.");
+        }
     }
 
     @Override
@@ -116,6 +128,7 @@ public class NoirXP extends JavaPlugin {
     }
 
     private void enableEventHooks() {
+        getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new PlayerEvents(), this);
         getServer().getPluginManager().registerEvents(new BlockEvents(), this);
         getServer().getPluginManager().registerEvents(new PickupEvents(), this);
