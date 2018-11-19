@@ -25,7 +25,7 @@ public class SpacePants implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "spacepants");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "spacepants");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("#C#", "#N#", "#A#");
         recipe.setIngredient('#', Material.PHANTOM_MEMBRANE);

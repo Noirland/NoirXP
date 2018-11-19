@@ -25,7 +25,7 @@ public class SpaceBoots implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "spaceboots");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "spaceboots");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("#A#", "PAP", "IAI");
         recipe.setIngredient('#', Material.PHANTOM_MEMBRANE);

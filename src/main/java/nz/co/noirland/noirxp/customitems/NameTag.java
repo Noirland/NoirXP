@@ -22,7 +22,7 @@ public class NameTag implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "nametag");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "nametag");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("#", "L", "P");
         recipe.setIngredient('#', Material.STRING);

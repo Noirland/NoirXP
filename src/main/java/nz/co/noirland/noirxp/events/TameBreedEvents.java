@@ -57,7 +57,7 @@ public class TameBreedEvents implements Listener {
                         public void run() {
                             currentlyBreeding.remove(event.getFather());
                         }
-                    }.runTaskLater(NoirXP.plugin, 20 * 20);
+                    }.runTaskLater(NoirXP.inst(), 20 * 20);
                 }
                 event.setCancelled(true);
             }

@@ -1,51 +1,50 @@
 package nz.co.noirland.noirxp.helpers;
 
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.database.Database;
-import nz.co.noirland.noirxp.sqlprocedures.SQLProcedures;
+import nz.co.noirland.noirxp.database.XPDatabase;
+import nz.co.noirland.noirxp.struct.ItemXPData;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class LoreHelper {
-    public static void addLoreToItem(ItemStack item) {
-        if (item == null || item.getType() == Material.AIR) {
-            return;
+    public static boolean addLoreToItem(ItemStack itemStack) {
+        if (itemStack == null || itemStack.getType() == Material.AIR) {
+            return false;
         }
-        ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta.hasLore()) {
-            return;
-        }
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null || itemMeta.hasLore()) return false;
 
-        String blockName;
+        String blockName = itemStack.getType().toString();
 
         if (itemMeta.hasDisplayName()) {
             blockName = ChatColor.stripColor(itemMeta.getDisplayName());
         }
-        else {
-            blockName = item.getType().toString();
-        }
-        String sql = SQLProcedures.getCustomBlock(blockName);
 
-        String playerClassName;
+        Optional<ItemXPData> xp = XPDatabase.inst().getCustomBlock(blockName);
 
-        List<HashMap> resultSet = Database.executeSQLGet(sql);
-        if (resultSet == null || resultSet.size() == 0) {
-            playerClassName = "GENERAL";
-        }
-        else {
-            playerClassName = (String) resultSet.get(0).get("playerClass");
+        PlayerClass classType = PlayerClass.GENERAL;
+        if(xp.isPresent()) {
+            classType = xp.get().type;
         }
 
-        String playerClassFormatted = PlayerClassConverter.playerClassToCapitalString(PlayerClass.valueOf(playerClassName));
-        List<String> loreList = new ArrayList<String>();
+        String playerClassFormatted = PlayerClassConverter.playerClassToCapitalString(classType);
+        List<String> loreList = new ArrayList<>();
         loreList.add(playerClassFormatted);
+        if (Datamaps.armourItems.containsKey(itemStack.getType())) {
+            int durability = Datamaps.armourItems.get(itemStack.getType());
+            String durabilityLore = String.format("%1$d/%1$d", durability);
+            loreList.add(durabilityLore);
+        }
+
         itemMeta.setLore(loreList);
-        item.setItemMeta(itemMeta);
+        itemStack.setItemMeta(itemMeta);
+        return true;
     }
+
 }

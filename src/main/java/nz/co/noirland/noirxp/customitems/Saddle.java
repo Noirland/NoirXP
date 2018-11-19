@@ -22,7 +22,7 @@ public class Saddle implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "leather");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "leather");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("###", "SAS");
         recipe.setIngredient('#', Material.LEATHER);

@@ -25,7 +25,7 @@ public class SpaceHelmet implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "spacehelmet");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "spacehelmet");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("#N#", "PCP", "PPP");
         recipe.setIngredient('#', Material.GHAST_TEAR);

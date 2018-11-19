@@ -33,7 +33,7 @@ public class NoirPlayer {
 
     public NoirPlayer(String playerId) {
         this.playerId = playerId;
-        this.bukkitPlayer = NoirXP.server.getPlayer(UUID.fromString(this.playerId));
+        this.bukkitPlayer = NoirXP.inst().getServer().getPlayer(UUID.fromString(this.playerId));
     }
 
     public void setCurrentHealth(float health) {

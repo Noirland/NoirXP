@@ -1,13 +1,13 @@
 package nz.co.noirland.noirxp.events;
 
-import nz.co.noirland.noirxp.callbacks.BlockCallbacks;
+import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
+import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.database.Database;
+import nz.co.noirland.noirxp.database.XPDatabase;
 import nz.co.noirland.noirxp.helpers.Datamaps;
 import nz.co.noirland.noirxp.helpers.PlayerClassConverter;
-import nz.co.noirland.noirxp.NoirXP;
-import nz.co.noirland.noirxp.sqlprocedures.SQLProcedures;
+import nz.co.noirland.noirxp.struct.ItemXPData;
 import org.bukkit.ChatColor;
 import org.bukkit.CropState;
 import org.bukkit.Location;
@@ -24,7 +24,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Crops;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
 
 public class BlockEvents implements Listener {
     HashSet<Biome> snowBiomes = new HashSet<Biome>();
@@ -40,43 +41,23 @@ public class BlockEvents implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void OnBlockBreak(BlockBreakEvent event) {
 
-        if (!PlayerCallbacks.isPlayerLevelingEnabled(event.getPlayer())) {
-            return;
-        }
+        if (!UserdataConfig.inst().isLevelling(event.getPlayer().getUniqueId())) return;
 
         Location location = event.getBlock().getLocation();
 
         Datamaps.torchSet.remove(location);
 
         Player player = event.getPlayer();
-        String blockName = event.getBlock().getType().toString();
-        String sql = SQLProcedures.getCustomBlock(blockName);
+        Optional<ItemXPData> xp = XPDatabase.inst().getCustomBlock(event.getBlock().getType());
 
+        if(!xp.isPresent()) return;
 
-        List<HashMap> resultSet = Database.executeSQLGet(sql);
-        if (resultSet.size() == 0) {
-            return;
-        }
-        int reqLevel = (int) resultSet.get(0).get("levelToBreak");
-        PlayerClass playerClass;
-        int playerXp;
-        int playerLevel;
-        try {
-            playerClass = PlayerClass.valueOf((String) resultSet.get(0).get("playerClass"));
-            if (playerClass == PlayerClass.GENERAL) {
-                playerXp = PlayerCallbacks.getPlayerTotalXp(player.getUniqueId().toString());
-            }
-            else {
-                playerXp = PlayerCallbacks.getPlayerXpForClass(player.getUniqueId().toString(), playerClass);
-            }
+        int reqLevel = xp.get().levelToBreak;
+        PlayerClass playerClass = xp.get().type;
 
-            playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
-        }
-        catch (IllegalArgumentException e) {
-            playerClass = PlayerClass.GENERAL;
-            playerXp = PlayerCallbacks.getPlayerTotalXp(player.getUniqueId().toString());
-            playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
-        }
+        int playerXp = PlayerCallbacks.getPlayerXpForClass(player.getUniqueId().toString(), playerClass);
+
+        int playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
 
         if (playerLevel < reqLevel) {
             event.setCancelled(true);
@@ -95,37 +76,31 @@ public class BlockEvents implements Listener {
         }
 
 
-        int breakXp = (int) resultSet.get(0).get("breakXp");
-        if (BlockCallbacks.hasBlockGivenXp(location)) {
-            Database.executeSQLUpdateDelete(SQLProcedures.deleteFromBlockDataTable(location));
+        int breakXp = xp.get().breakXP;
+        if (XPDatabase.inst().hasBeenPlaced(location)) {
+            XPDatabase.inst().removeBlockLog(location);
             if (!isCrop) {
                 breakXp = 0;
             }
 
         }
 
-
         String playerId = event.getPlayer().getUniqueId().toString();
 
         PlayerCallbacks.xpGained(playerId, playerClass, breakXp);
-
-
-
-
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void OnBlockPlace(BlockPlaceEvent event) {
 
-        if (!PlayerCallbacks.isPlayerLevelingEnabled(event.getPlayer())) {
-            return;
-        }
+        if (!UserdataConfig.inst().isLevelling(event.getPlayer().getUniqueId())) return;
+
         Location location = event.getBlockPlaced().getLocation();
         if (event.getBlockPlaced().getType() == Material.BREWING_STAND) {
-            BlockCallbacks.addBlockLocationToLogTable(location, event.getPlayer().getUniqueId().toString(), true);
+            XPDatabase.inst().addBlockLog(location, event.getPlayer().getUniqueId(), true);
         }
         else {
-            BlockCallbacks.addBlockLocationToLogTable(location, event.getPlayer().getUniqueId().toString(), false);
+            XPDatabase.inst().addBlockLog(location, event.getPlayer().getUniqueId(), false);
         }
 
         if (event.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
@@ -156,7 +131,7 @@ public class BlockEvents implements Listener {
                         }
                     }
 
-                }.runTaskLater(NoirXP.plugin, 20 * 60 * 5);
+                }.runTaskLater(NoirXP.inst(), 20 * 60 * 5);
             }
             else {
                 new BukkitRunnable() {
@@ -169,12 +144,10 @@ public class BlockEvents implements Listener {
                         }
                     }
 
-                }.runTaskLater(NoirXP.plugin, 20 * 60 * 60);
+                }.runTaskLater(NoirXP.inst(), 20 * 60 * 60);
             }
         }
         Player player = event.getPlayer();
-        String blockName = event.getBlock().getType().toString();
-        String sql = SQLProcedures.getCustomBlock(blockName);
 
         ItemStack stack = event.getItemInHand();
         ItemMeta meta = stack.getItemMeta();
@@ -185,31 +158,15 @@ public class BlockEvents implements Listener {
         }
 
 
-        List<HashMap> resultSet = Database.executeSQLGet(sql);
-        if (resultSet.size() == 0) {
-            return;
-        }
+        Optional<ItemXPData> xp = XPDatabase.inst().getCustomBlock(event.getBlock().getType());
+        if(!xp.isPresent()) return;
 
-        int reqLevel = (int) resultSet.get(0).get("levelToPlace");
-        PlayerClass playerClass;
-        int playerXp;
-        int playerLevel;
-        try {
-            playerClass = PlayerClass.valueOf((String) resultSet.get(0).get("playerClass"));
-            if (playerClass == PlayerClass.GENERAL) {
-                playerXp = PlayerCallbacks.getPlayerTotalXp(player.getUniqueId().toString());
-            }
-            else {
-                playerXp = PlayerCallbacks.getPlayerXpForClass(player.getUniqueId().toString(), playerClass);
-            }
+        int reqLevel = xp.get().levelToPlace;
+        PlayerClass playerClass = xp.get().type;
 
-            playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
-        }
-        catch (IllegalArgumentException e) {
-            playerClass = PlayerClass.GENERAL;
-            playerXp = PlayerCallbacks.getPlayerTotalXp(player.getUniqueId().toString());
-            playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
-        }
+        int playerXp = PlayerCallbacks.getPlayerXpForClass(player.getUniqueId().toString(), playerClass);
+
+        int playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
 
         if (playerLevel < reqLevel) {
             event.setCancelled(true);
@@ -218,13 +175,8 @@ public class BlockEvents implements Listener {
             return;
         }
 
-        int placeXp = (int) resultSet.get(0).get("placeXp");
-
-
         String playerId = event.getPlayer().getUniqueId().toString();
-        PlayerCallbacks.xpGained(playerId, playerClass, placeXp);
-
-
+        PlayerCallbacks.xpGained(playerId, playerClass, xp.get().placeXP);
     }
 
 }

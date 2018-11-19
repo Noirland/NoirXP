@@ -4,6 +4,7 @@ import nz.co.noirland.noirxp.callbacks.CommandCallbacks;
 import nz.co.noirland.noirxp.callbacks.InventoryCallbacks;
 import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
+import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClassList;
 import nz.co.noirland.noirxp.interfaces.INoirProfession;
 import nz.co.noirland.noirxp.NoirXP;
@@ -38,13 +39,15 @@ public class NoirCommand implements CommandExecutor {
                     if (!bukkitPlayer.hasPermission("NoirLeveling.op")) {
                         commandSender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     }
-                    CommandCallbacks.disablePlayerLeveling(bukkitPlayer.getUniqueId().toString());
+                    UserdataConfig.inst().setLeveling(bukkitPlayer.getUniqueId(), false);
+                    bukkitPlayer.sendMessage("Leveling has been DISABLED.");
                     return true;
                 case "enable":
                     if (!bukkitPlayer.hasPermission("NoirLeveling.op")) {
                         commandSender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                     }
-                    CommandCallbacks.disablePlayerLeveling(bukkitPlayer.getUniqueId().toString());
+                    UserdataConfig.inst().setLeveling(bukkitPlayer.getUniqueId(), true);
+                    bukkitPlayer.sendMessage("Leveling has been ENABLED.");
                     return true;
                 case "reset":
                     if (!bukkitPlayer.hasPermission("NoirLeveling.op")) {
@@ -57,10 +60,12 @@ public class NoirCommand implements CommandExecutor {
                     InventoryCallbacks.addTagsToPlayerInventory(bukkitPlayer);
                     return true;
                 case "show":
-                    CommandCallbacks.enablePlayerVerbose(bukkitPlayer);
+                    UserdataConfig.inst().setVerbose(bukkitPlayer.getUniqueId(), true);
+                    bukkitPlayer.sendMessage("Verbose mode ENABLED.");
                     return true;
                 case "hide":
-                    CommandCallbacks.disablePlayerVerbose(bukkitPlayer);
+                    UserdataConfig.inst().setVerbose(bukkitPlayer.getUniqueId(), false);
+                    bukkitPlayer.sendMessage("Verbose mode DISABLED.");
                     return true;
                 default:
                     return false;
@@ -77,7 +82,7 @@ public class NoirCommand implements CommandExecutor {
                     commandSender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                 }
                 String playerName = args[1];
-                Player player = NoirXP.server.getPlayer(playerName);
+                Player player = NoirXP.inst().getServer().getPlayer(playerName);
                 if (player == null) {
                     bukkitPlayer.sendMessage("Player not found.");
                     return true;

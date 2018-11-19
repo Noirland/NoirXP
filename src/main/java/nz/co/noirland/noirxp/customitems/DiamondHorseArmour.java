@@ -22,7 +22,7 @@ public class DiamondHorseArmour implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "diamondhorsearmour");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "diamondhorsearmour");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("###", "#S#");
         recipe.setIngredient('#', Material.DIAMOND);

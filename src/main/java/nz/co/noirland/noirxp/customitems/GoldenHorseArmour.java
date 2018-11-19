@@ -22,7 +22,7 @@ public class GoldenHorseArmour implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "goldenhorsearmour");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "goldenhorsearmour");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("ggg", "gSg");
         recipe.setIngredient('g', Material.GOLD_INGOT);

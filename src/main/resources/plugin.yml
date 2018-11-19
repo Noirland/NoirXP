@@ -4,6 +4,7 @@ author: Libor
 main: NoirLeveling.Main
 api-version: 1.13
 softdepend: [Essentials]
+depend: [ZephCore]
 
 commands:
   noir:

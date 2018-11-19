@@ -24,7 +24,7 @@ public class ChainHelmet implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "chainhelmet");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "chainhelmet");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("###", "#G#");
         recipe.setIngredient('#', Material.EMERALD);

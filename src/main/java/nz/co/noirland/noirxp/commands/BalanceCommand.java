@@ -22,7 +22,7 @@ public class BalanceCommand implements CommandExecutor {
             return false;
         }
 
-        IEssentials essentials = (IEssentials) NoirXP.server.getPluginManager().getPlugin("Essentials");
+        IEssentials essentials = (IEssentials) NoirXP.inst().getServer().getPluginManager().getPlugin("Essentials");
         if (essentials == null) {
             return false;
         }

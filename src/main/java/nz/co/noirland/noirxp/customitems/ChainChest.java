@@ -24,7 +24,7 @@ public class ChainChest implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "chainchest");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "chainchest");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("#G#", "###", "###");
         recipe.setIngredient('#', Material.EMERALD);

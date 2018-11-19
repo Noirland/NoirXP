@@ -23,7 +23,7 @@ public class Lead implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "lead");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "lead");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("#", "#", "S");
         recipe.setIngredient('#', Material.LEATHER);

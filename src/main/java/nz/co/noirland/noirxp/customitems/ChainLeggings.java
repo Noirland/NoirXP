@@ -24,7 +24,7 @@ public class ChainLeggings implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "chainleggings");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "chainleggings");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("###", "#G#", "#A#");
         recipe.setIngredient('#', Material.EMERALD);

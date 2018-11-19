@@ -25,7 +25,7 @@ public class SpaceVest implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "spacevest");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "spacevest");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("#A#", "PCP", "PNP");
         recipe.setIngredient('#', Material.DRIED_KELP_BLOCK);

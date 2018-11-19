@@ -22,7 +22,7 @@ public class IronHorseArmour implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "ironhorsearmour");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "ironhorsearmour");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("iii", "iSi");
         recipe.setIngredient('i', Material.IRON_INGOT);

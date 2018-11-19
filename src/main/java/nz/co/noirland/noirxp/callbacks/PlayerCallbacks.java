@@ -1,30 +1,23 @@
 package nz.co.noirland.noirxp.callbacks;
 
+import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
+import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.database.Database;
 import nz.co.noirland.noirxp.helpers.PlayerClassConverter;
 import nz.co.noirland.noirxp.interfaces.INoirProfession;
-import nz.co.noirland.noirxp.NoirXP;
-import nz.co.noirland.noirxp.sqlprocedures.SQLProcedures;
-import nz.co.noirland.noirxp.struct.PlayerXpClassPair;
-import org.apache.commons.lang.math.NumberUtils;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 
 
 public final class PlayerCallbacks {
-
-    public static int getPlayerLevel(String playerId) {
-        NoirPlayer player = NoirXP.players.get(playerId);
-        return player.getLevel();
-    }
 
     public static int getPlayerXpForClass(String playerId, PlayerClass playerClass) {
         NoirPlayer player = NoirXP.players.get(playerId);
@@ -57,19 +50,7 @@ public final class PlayerCallbacks {
         }
     }
 
-    public static int getPlayerTotalXp(String playerId) {
-        int totalXp = NoirXP.players.get(playerId).getXp();
-        return totalXp;
-    }
-
-    public static List<HashMap> getPlayerXpClasses(Player player) {
-        String playerXpSql = SQLProcedures.getPlayerXpClasses(player.getUniqueId().toString());
-        List<HashMap> xpClasses = Database.executeSQLGet(playerXpSql);
-        return xpClasses;
-    }
-
-
-    public static int getLevelFromXp(int xp) {
+     public static int getLevelFromXp(int xp) {
         // The formula for xp is (8x^3/3 + 8x^2 - 32x/3)
         if (xp < 32) {
             return 1;
@@ -92,61 +73,6 @@ public final class PlayerCallbacks {
         }
         double result = (8 * Math.pow(level, 3)) / 3 + (8 * Math.pow(level, 2)) - ((32 * level) / 3);
         return (int)Math.round(result);
-    }
-
-
-    public static PlayerXpClassPair getHighestXpPlayerClass(Player player) {
-        String sql = SQLProcedures.getPlayerXpClasses(player.getUniqueId().toString());
-        List<HashMap> dataList = Database.executeSQLGet(sql);
-        int alchemyXp = (int)dataList.get(0).get("alchemyXp");
-        int buildingXp = (int)dataList.get(0).get("buildingXp");
-        int cookingXp = (int)dataList.get(0).get("cookingXp");
-        int farmingXp = (int)dataList.get(0).get("farmingXp");
-        int fishingXp = (int)dataList.get(0).get("fishingXp");
-        int gatheringXp = (int)dataList.get(0).get("gatheringXp");
-        int huntingXp = (int)dataList.get(0).get("huntingXp");
-        int miningXp = (int)dataList.get(0).get("miningXp");
-        int smithingXp = (int)dataList.get(0).get("smithingXp");
-        int tamingXp = (int)dataList.get(0).get("tamingXp");
-        int highest = NumberUtils.max(new int[] {alchemyXp, buildingXp, cookingXp, farmingXp, fishingXp, gatheringXp, huntingXp, miningXp, smithingXp, tamingXp});
-
-        PlayerXpClassPair playerXpClassPair = new PlayerXpClassPair();
-        playerXpClassPair.classXp = highest;
-        if (highest == 0) {
-            playerXpClassPair.playerClass = PlayerClass.GYPSY;
-        }
-        else if (highest == alchemyXp) {
-            playerXpClassPair.playerClass = PlayerClass.ALCHEMY;
-        }
-        else if (highest == buildingXp) {
-            playerXpClassPair.playerClass = PlayerClass.BUILDING;
-        }
-        else if (highest == cookingXp) {
-            playerXpClassPair.playerClass = PlayerClass.COOKING;
-        }
-        else if (highest == farmingXp) {
-            playerXpClassPair.playerClass = PlayerClass.FARMING;
-        }
-        else if (highest == fishingXp) {
-            playerXpClassPair.playerClass = PlayerClass.FISHING;
-        }
-        else if (highest == gatheringXp) {
-            playerXpClassPair.playerClass = PlayerClass.GATHERING;
-        }
-        else if (highest == huntingXp) {
-            playerXpClassPair.playerClass = PlayerClass.HUNTING;
-        }
-        else if (highest == miningXp) {
-            playerXpClassPair.playerClass = PlayerClass.MINING;
-        }
-        else if (highest == smithingXp) {
-            playerXpClassPair.playerClass = PlayerClass.SMITHING;
-        }
-        else if (highest == tamingXp) {
-            playerXpClassPair.playerClass = PlayerClass.TAMING;
-        }
-        return playerXpClassPair;
-
     }
 
     /**
@@ -200,7 +126,7 @@ public final class PlayerCallbacks {
                     break;
             }
 
-            if (isPlayerVerboseEnabled(player.getBukkitPlayer())) {
+            if (UserdataConfig.inst().isVerbose(player.getBukkitPlayer().getUniqueId())) {
                 player.getBukkitPlayer().sendMessage("+" + xpGained + " " + PlayerClassConverter.playerClassToString(playerClass));
             }
 
@@ -221,60 +147,6 @@ public final class PlayerCallbacks {
                 player.getBukkitPlayer().sendMessage("Your overall level just " +
                         "increased to " + ChatColor.GOLD + newLevel + ChatColor.WHITE + "!");
             }
-        }
-
-    }
-
-    public static boolean isPlayerLevelingEnabled(Player player) {
-        File file = new File(NoirXP.userdataFilePath);
-        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-        ConfigurationSection section = configuration.getConfigurationSection(player.getUniqueId().toString());
-        if (section.getBoolean("leveling") == false) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public static boolean isPlayerVerboseEnabled(Player player) {
-        File file = new File(NoirXP.userdataFilePath);
-        YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-        ConfigurationSection section = configuration.getConfigurationSection(player.getUniqueId().toString());
-        if (section.getBoolean("verbose") == true) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public static void addPlayersToMap() {
-
-        String sql = SQLProcedures.getAllPlayers();
-
-        List<HashMap> playerList = Database.executeSQLGet(sql);
-        if (playerList.size() == 0) {
-            return;
-        }
-        for(HashMap map : playerList ) {
-            String playerId = (String)map.get("playerId");
-            NoirPlayer player = new NoirPlayer(playerId);
-            player.setUsername((String)map.get("username"));
-            player.setCurrentHealth((float)map.get("currentHealth"));
-            player.setMaxHealth((float)map.get("maxHealth"));
-            player.alchemy.setXp((int)map.get("alchemyXp"));
-            player.building.setXp((int)map.get("buildingXp"));
-            player.cooking.setXp((int)map.get("cookingXp"));
-            player.farming.setXp((int)map.get("farmingXp"));
-            player.fishing.setXp((int)map.get("fishingXp"));
-            player.gathering.setXp((int)map.get("gatheringXp"));
-            player.hunting.setXp((int)map.get("huntingXp"));
-            player.mining.setXp((int)map.get("miningXp"));
-            player.smithing.setXp((int)map.get("smithingXp"));
-            player.taming.setXp((int)map.get("tamingXp"));
-            player.setXp((int)map.get("totalXp"));
-
-            NoirXP.players.put(playerId, player);
-
         }
 
     }
@@ -352,7 +224,7 @@ public final class PlayerCallbacks {
     }
 
     public static void setPlayerMaxHealth(String playerId, float maxHealth) {
-        Player player = NoirXP.server.getPlayer(UUID.fromString(playerId));
+        Player player = NoirXP.inst().getServer().getPlayer(UUID.fromString(playerId));
         if (player == null) {
             return;
         }

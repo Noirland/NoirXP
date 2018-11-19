@@ -24,7 +24,7 @@ public class ChainBoots implements ICustomItem {
         meta.setLore(loreList);
         item.setItemMeta(meta);
 
-        NamespacedKey key = new NamespacedKey(NoirXP.plugin, "chainboots");
+        NamespacedKey key = new NamespacedKey(NoirXP.inst(), "chainboots");
         recipe = new ShapedRecipe(key, item);
         recipe.shape("#G#", "#A#");
         recipe.setIngredient('#', Material.EMERALD);
