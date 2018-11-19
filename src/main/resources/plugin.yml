@@ -1,7 +1,7 @@
 name: NoirLeveling
 version: 1.0
 author: Libor
-main: NoirLeveling.Main
+main: nz.co.noirland.noirxp.NoirXP
 api-version: 1.13
 softdepend: [Essentials]
 depend: [ZephCore]
