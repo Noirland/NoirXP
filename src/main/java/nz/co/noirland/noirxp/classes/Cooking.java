@@ -39,10 +39,7 @@ public class Cooking implements INoirProfession {
         int oldLevel = PlayerCallbacks.getLevelFromXp(oldxp);
         int newLevel = PlayerCallbacks.getLevelFromXp(newxp);
 
-        if (newLevel > oldLevel) {
-            return true;
-        }
-        return false;
+        return newLevel > oldLevel;
     }
     @Override
     public String getLowercaseName() {

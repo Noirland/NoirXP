@@ -11,6 +11,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class BalanceCommand implements CommandExecutor {
     @Override
@@ -29,7 +30,7 @@ public class BalanceCommand implements CommandExecutor {
 
         List<BigDecimal> moneyList = new ArrayList<>();
         File userDataFolder = new File(essentials.getDataFolder(), "userdata");
-        for (File file : userDataFolder.listFiles()) {
+        for (File file : Objects.requireNonNull(userDataFolder.listFiles())) {
             YamlConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             if (configuration.contains("money")) {
                 BigDecimal money = new BigDecimal(configuration.getString("money"));
@@ -37,9 +38,9 @@ public class BalanceCommand implements CommandExecutor {
             }
 
         }
-        Double result = moneyList.stream().mapToDouble(BigDecimal::doubleValue).average().orElse(0.0);
+        double result = moneyList.stream().mapToDouble(BigDecimal::doubleValue).average().orElse(0.0);
 
-        sender.sendMessage(result.toString());
+        sender.sendMessage(Double.toString(result));
         return true;
 
 

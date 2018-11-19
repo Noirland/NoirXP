@@ -11,8 +11,8 @@ public class InventoryCallbacks {
      */
     public static void addTagsToPlayerInventory(Player player) {
         ItemStack[] contents = player.getInventory().getContents();
-        for (int i = 0; i < contents.length; i++) {
-            LoreHelper.addLoreToItem(contents[i]);
+        for (ItemStack content : contents) {
+            LoreHelper.addLoreToItem(content);
         }
     }
 }

@@ -24,7 +24,7 @@ public class XpTabCompleter implements TabCompleter {
             add("cooking");
         }};
 
-        List<String> newArgList = new ArrayList<String>();
+        List<String> newArgList = new ArrayList<>();
 
         for (String item : validArgs) {
             if (item.toLowerCase().startsWith(args[0].toLowerCase())) {

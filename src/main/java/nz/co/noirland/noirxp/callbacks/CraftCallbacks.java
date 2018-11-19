@@ -29,9 +29,7 @@ public class CraftCallbacks {
             }
         }
         if (stack1meta.hasLore()) {
-            if (!stack1meta.getLore().equals(stack2meta.getLore())) {
-                return false;
-            }
+            return stack1meta.getLore().equals(stack2meta.getLore());
         }
         return true;
 

@@ -17,7 +17,7 @@ public class Lead implements ICustomItem {
     public Lead() {
         ItemStack item = new ItemStack(Material.LEAD, 1);
         ItemMeta meta = item.getItemMeta();
-        List<String> loreList = new ArrayList<String>();
+        List<String> loreList = new ArrayList<>();
         loreList.add(PlayerClassConverter.playerClassToCapitalString(PlayerClass.FARMING));
 
         meta.setLore(loreList);

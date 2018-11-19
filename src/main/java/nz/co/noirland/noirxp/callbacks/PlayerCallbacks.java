@@ -56,7 +56,7 @@ public final class PlayerCallbacks {
             return 1;
         }
         int levelCounter = 2;
-        double result = 0;
+        double result;
         while (true) {
             result = (8 * Math.pow(levelCounter, 3)) / 3 + (8 * Math.pow(levelCounter, 2)) - ((32 * levelCounter) / 3);
             if (result > xp) {
@@ -165,7 +165,7 @@ public final class PlayerCallbacks {
     }
 
     public static String[] getTopTenPlayers() {
-        List<NoirPlayer> playerList = new ArrayList<NoirPlayer>(NoirXP.players.values());
+        List<NoirPlayer> playerList = new ArrayList<>(NoirXP.players.values());
         playerList.sort(Collections.reverseOrder(Comparator.comparing(NoirPlayer::getLevel)));
         playerList = playerList.subList(0, playerList.size() < 10 ? playerList.size() : 10);
         String[] formattedList = new String[playerList.size()];
@@ -180,7 +180,7 @@ public final class PlayerCallbacks {
     }
 
     public static String[] getTopTenPlayersForProfession(String professionName) {
-        List<NoirPlayer> playerList = new ArrayList<NoirPlayer>(NoirXP.players.values());
+        List<NoirPlayer> playerList = new ArrayList<>(NoirXP.players.values());
 
         playerList.sort(Collections.reverseOrder(Comparator.comparing(x -> getProfessionFromString(x, professionName.toLowerCase()).getXp())));
         playerList = playerList.subList(0, playerList.size() < 10 ? playerList.size() : 10);

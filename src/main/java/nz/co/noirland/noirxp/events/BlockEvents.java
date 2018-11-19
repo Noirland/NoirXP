@@ -28,7 +28,7 @@ import java.util.HashSet;
 import java.util.Optional;
 
 public class BlockEvents implements Listener {
-    HashSet<Biome> snowBiomes = new HashSet<Biome>();
+    HashSet<Biome> snowBiomes = new HashSet<>();
 
     public BlockEvents() {
         snowBiomes.add(Biome.SNOWY_BEACH);

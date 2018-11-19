@@ -169,7 +169,7 @@ public class XPDatabase extends MySQLDatabase {
 
     public Map<String, NoirPlayer> getAllPlayers() {
         Map<String, NoirPlayer> ret = Maps.newHashMap();
-        List<Map<String, Object>> result = null;
+        List<Map<String, Object>> result;
         try {
             result = new GetPlayersQuery().executeQuery();
         } catch (SQLException e) {
