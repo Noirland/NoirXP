@@ -38,6 +38,7 @@ public class NoirCommand implements CommandExecutor {
                 case "disable":
                     if (!bukkitPlayer.hasPermission("NoirLeveling.op")) {
                         commandSender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                        return true;
                     }
                     UserdataConfig.inst().setLeveling(bukkitPlayer.getUniqueId(), false);
                     bukkitPlayer.sendMessage("Leveling has been DISABLED.");
@@ -45,6 +46,7 @@ public class NoirCommand implements CommandExecutor {
                 case "enable":
                     if (!bukkitPlayer.hasPermission("NoirLeveling.op")) {
                         commandSender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                        return true;
                     }
                     UserdataConfig.inst().setLeveling(bukkitPlayer.getUniqueId(), true);
                     bukkitPlayer.sendMessage("Leveling has been ENABLED.");
@@ -52,6 +54,7 @@ public class NoirCommand implements CommandExecutor {
                 case "reset":
                     if (!bukkitPlayer.hasPermission("NoirLeveling.op")) {
                         commandSender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
+                        return true;
                     }
                     CommandCallbacks.resetAllXp(noirPlayer.getUniqueId());
                     bukkitPlayer.sendMessage("Success!");
