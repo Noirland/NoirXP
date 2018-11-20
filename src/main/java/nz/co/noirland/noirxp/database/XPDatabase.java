@@ -222,7 +222,11 @@ public class XPDatabase extends MySQLDatabase {
 
     public void saveUserData(Map<String, NoirPlayer> data) {
         for (NoirPlayer player : data.values()) {
-            new UpdatePlayerQuery(player).executeAsync();
+            try {
+                new UpdatePlayerQuery(player).execute();
+            } catch (SQLException e) {
+                debug().warning("Unable to save user data! " + e.getMessage(), e);
+            }
         }
     }
 
