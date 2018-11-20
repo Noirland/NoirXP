@@ -1,5 +1,5 @@
 name: NoirLeveling
-version: 1.0
+version: ${version}
 author: Libor
 main: nz.co.noirland.noirxp.NoirXP
 api-version: 1.13
