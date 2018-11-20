@@ -3,7 +3,7 @@ package nz.co.noirland.noirxp.events;
 import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.database.XPDatabase;
+import nz.co.noirland.noirxp.helpers.Datamaps;
 import nz.co.noirland.noirxp.helpers.LoreHelper;
 import nz.co.noirland.noirxp.helpers.PlayerClassConverter;
 import nz.co.noirland.noirxp.struct.ItemXPData;
@@ -39,7 +39,7 @@ public class CraftEvents implements Listener {
             blockName = itemStack.getType().toString();
         }
 
-        Optional<ItemXPData> xp = XPDatabase.inst().getCustomBlock(blockName);
+        Optional<ItemXPData> xp = Datamaps.getCustomBlock(blockName);
         if(!xp.isPresent()) return;
 
         int reqLevel = xp.get().levelToCreate;

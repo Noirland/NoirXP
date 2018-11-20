@@ -76,6 +76,7 @@ public class NoirXP extends JavaPlugin implements Listener {
 
         Datamaps.torchSet.addAll(XPDatabase.inst().getTorches());
         Datamaps.tameBreedEntityMap.putAll(XPDatabase.inst().getTamingData());
+        Datamaps.customBlocks.putAll(XPDatabase.inst().loadCustomBlocks());
 
         new BukkitRunnable() {
             @Override

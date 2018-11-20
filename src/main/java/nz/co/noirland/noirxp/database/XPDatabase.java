@@ -7,7 +7,7 @@ import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.classes.TameBreedEntity;
 import nz.co.noirland.noirxp.config.XPConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.database.queries.ItemXPDataQuery;
+import nz.co.noirland.noirxp.database.queries.GetCustomBlocksQuery;
 import nz.co.noirland.noirxp.database.queries.TameDataQuery;
 import nz.co.noirland.noirxp.database.queries.blocklog.AddBlockLogQuery;
 import nz.co.noirland.noirxp.database.queries.blocklog.CheckBlockLogQuery;
@@ -24,13 +24,11 @@ import nz.co.noirland.noirxp.struct.ItemXPData;
 import nz.co.noirland.zephcore.Debug;
 import nz.co.noirland.zephcore.database.mysql.MySQLDatabase;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -130,33 +128,33 @@ public class XPDatabase extends MySQLDatabase {
         new AddPlayerQuery(player).executeAsync();
     }
 
-    public Optional<ItemXPData> getCustomBlock(Material type) {
-        return getCustomBlock(type.toString());
-    }
+    public Map<String, ItemXPData> loadCustomBlocks() {
+        Map<String, ItemXPData> ret = Maps.newHashMap();
 
-    public Optional<ItemXPData> getCustomBlock(String type) {
         List<Map<String, Object>> result;
         try {
-            result = new ItemXPDataQuery(type).executeQuery();
+            result = new GetCustomBlocksQuery().executeQuery();
         } catch (SQLException e) {
-            debug().warning("Unable to query DB:", e);
-            return Optional.empty();
+            debug().warning("Unable to query custom blocks:", e);
+            return ret;
         }
 
-        if(result.size() == 0) return Optional.empty();
+        for(Map<String, Object> data : result) {
+            String blockType = (String) data.get("name");
+            int levelToBreak = (int) data.get("levelToBreak");
+            int levelToPlace = (int) data.get("levelToPlace");
+            int levelToCreate = (int) data.get("levelToCreate");
+            int levelToUse = (int) data.get("levelToUse");
+            int placeXP = (int) data.get("placeXp");
+            int breakXP = (int) data.get("breakXp");
+            int createXP = (int) data.get("createXp");
+            PlayerClass classType = PlayerClass.valueOf((String) data.get("playerClass"));
 
-        Map<String, Object> data = result.get(0);
-        String blockType = (String) data.get("name");
-        int levelToBreak = (int) data.get("levelToBreak");
-        int levelToPlace = (int) data.get("levelToPlace");
-        int levelToCreate = (int) data.get("levelToCreate");
-        int levelToUse = (int) data.get("levelToUse");
-        int placeXP = (int) data.get("placeXp");
-        int breakXP = (int) data.get("breakXp");
-        int createXP = (int) data.get("createXp");
-        PlayerClass classType = PlayerClass.valueOf((String) data.get("playerClass"));
+            ret.put(blockType,
+                    new ItemXPData(blockType, levelToBreak, levelToPlace, levelToCreate, levelToUse, placeXP, breakXP, createXP, classType));
+        }
 
-        return Optional.of(new ItemXPData(blockType, levelToBreak, levelToPlace, levelToCreate, levelToUse, placeXP, breakXP, createXP, classType));
+        return ret;
     }
 
     public void resetPlayer(UUID player) {

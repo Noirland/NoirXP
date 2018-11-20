@@ -3,6 +3,7 @@ package nz.co.noirland.noirxp.helpers;
 import nz.co.noirland.noirxp.classes.TameBreedEntity;
 import nz.co.noirland.noirxp.constants.ITEM_CONSTANTS;
 import nz.co.noirland.noirxp.database.XPDatabase;
+import nz.co.noirland.noirxp.struct.ItemXPData;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -13,6 +14,7 @@ public class Datamaps {
     public static Set<Location> torchSet = new HashSet<>();
     public static HashMap<EntityType, TameBreedEntity> tameBreedEntityMap = new HashMap<>();
     public static Map<Material, Integer> armourItems = new HashMap<>();
+    public static Map<String, ItemXPData> customBlocks = new HashMap<>();
 
     static {
         armourItems.put(Material.GOLDEN_HELMET, (int)(Material.IRON_HELMET.getMaxDurability() * ITEM_CONSTANTS.GOLDEN_DURABILITY_MODIFIER));
@@ -32,5 +34,13 @@ public class Datamaps {
 
     public static void addTorch(Location location) {
         if(Datamaps.torchSet.add(location)) XPDatabase.inst().addTorch(location);
+    }
+
+    public static Optional<ItemXPData> getCustomBlock(String material) {
+        return Optional.ofNullable(customBlocks.get(material));
+    }
+
+    public static Optional<ItemXPData> getCustomBlock(Material material) {
+        return getCustomBlock(material.toString());
     }
 }

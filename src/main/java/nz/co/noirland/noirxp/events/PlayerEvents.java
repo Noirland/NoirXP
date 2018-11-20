@@ -4,6 +4,7 @@ import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.callbacks.BlockCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.database.XPDatabase;
+import nz.co.noirland.noirxp.helpers.Datamaps;
 import nz.co.noirland.noirxp.struct.ItemXPData;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -69,7 +70,7 @@ public class PlayerEvents implements Listener {
         }
 
 
-        Optional<ItemXPData> xp = XPDatabase.inst().getCustomBlock(blockName);
+        Optional<ItemXPData> xp = Datamaps.getCustomBlock(blockName);
         if(!xp.isPresent()) return;
 
 

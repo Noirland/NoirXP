@@ -48,7 +48,7 @@ public class BlockEvents implements Listener {
         Datamaps.removeTorch(location);
 
         Player player = event.getPlayer();
-        Optional<ItemXPData> xp = XPDatabase.inst().getCustomBlock(event.getBlock().getType());
+        Optional<ItemXPData> xp = Datamaps.getCustomBlock(event.getBlock().getType());
 
         if(!xp.isPresent()) return;
 
@@ -158,7 +158,7 @@ public class BlockEvents implements Listener {
         }
 
 
-        Optional<ItemXPData> xp = XPDatabase.inst().getCustomBlock(event.getBlock().getType());
+        Optional<ItemXPData> xp = Datamaps.getCustomBlock(event.getBlock().getType());
         if(!xp.isPresent()) return;
 
         int reqLevel = xp.get().levelToPlace;

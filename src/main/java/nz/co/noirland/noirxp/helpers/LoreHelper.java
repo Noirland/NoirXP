@@ -1,7 +1,6 @@
 package nz.co.noirland.noirxp.helpers;
 
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.database.XPDatabase;
 import nz.co.noirland.noirxp.struct.ItemXPData;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -26,7 +25,7 @@ public class LoreHelper {
             blockName = ChatColor.stripColor(itemMeta.getDisplayName());
         }
 
-        Optional<ItemXPData> xp = XPDatabase.inst().getCustomBlock(blockName);
+        Optional<ItemXPData> xp = Datamaps.getCustomBlock(blockName);
 
         PlayerClass classType = PlayerClass.GENERAL;
         if(xp.isPresent()) {
