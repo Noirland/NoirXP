@@ -39,9 +39,11 @@ public class NoirCommand implements CommandExecutor {
                 case "level":
                     int level = noirPlayer.getLevel();
                     int currentXp = noirPlayer.getXp();
+                    int currentLevelXp = PlayerCallbacks.GetXpFromLevel(level);
                     int nextLevelXp = PlayerCallbacks.GetXpFromLevel(level + 1);
-                    int percentage = (int)(((float)currentXp / (float)nextLevelXp) * 100);
-                    bukkitPlayer.sendMessage(String.format("Level: %d - %d%% [%dXP Required]", level, percentage, nextLevelXp - currentXp));
+                    int requiredXp = nextLevelXp - currentXp;
+                    int percentageProgress = (int)(100 - ((requiredXp / (nextLevelXp - currentLevelXp)) * 100));
+                    bukkitPlayer.sendMessage(String.format("Level: %d - %d%% [%dXP Required]", level, percentageProgress, requiredXp));
                     return true;
                 case "disable":
                     if (!bukkitPlayer.hasPermission("NoirLeveling.op")) {
@@ -100,10 +102,12 @@ public class NoirCommand implements CommandExecutor {
                 INoirProfession profession = PlayerCallbacks.getProfessionFromString(noirPlayer, args[1]);
                 int level = profession.getLevel();
                 int currentXp = profession.getXp();
+                int currentLevelXp = PlayerCallbacks.GetXpFromLevel(level);
                 int nextLevelXp = PlayerCallbacks.GetXpFromLevel(level + 1);
-                int percentage = (int)(((float)currentXp / (float)nextLevelXp) * 100);
+                int requiredXp = nextLevelXp - currentXp;
+                int percentageProgress = (int)(100 - ((requiredXp / (nextLevelXp - currentLevelXp)) * 100));
 
-                bukkitPlayer.sendMessage(String.format("Level %d %s - %d%% [%dXP Required]", level, profession.getFirstLetterUppercase(), percentage, nextLevelXp - currentXp));
+                bukkitPlayer.sendMessage(String.format("Level %d %s - %d%% [%dXP Required]", level, profession.getFirstLetterUppercase(), percentageProgress, requiredXp));
                 return true;
             }
         }
