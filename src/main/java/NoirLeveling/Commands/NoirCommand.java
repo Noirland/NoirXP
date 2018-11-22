@@ -42,7 +42,7 @@ public class NoirCommand implements CommandExecutor {
                     int currentLevelXp = PlayerCallbacks.GetXpFromLevel(level);
                     int nextLevelXp = PlayerCallbacks.GetXpFromLevel(level + 1);
                     int requiredXp = nextLevelXp - currentXp;
-                    int percentageProgress = (int)(100 - ((requiredXp / (nextLevelXp - currentLevelXp)) * 100));
+                    int percentageProgress = (int)(100 - (((float)requiredXp / ((float)nextLevelXp - (float)currentLevelXp)) * 100));
                     bukkitPlayer.sendMessage(String.format("Level: %d - %d%% [%dXP Required]", level, percentageProgress, requiredXp));
                     return true;
                 case "disable":
@@ -105,7 +105,7 @@ public class NoirCommand implements CommandExecutor {
                 int currentLevelXp = PlayerCallbacks.GetXpFromLevel(level);
                 int nextLevelXp = PlayerCallbacks.GetXpFromLevel(level + 1);
                 int requiredXp = nextLevelXp - currentXp;
-                int percentageProgress = (int)(100 - ((requiredXp / (nextLevelXp - currentLevelXp)) * 100));
+                int percentageProgress = (int)(100 - (((float)requiredXp / ((float)nextLevelXp - (float)currentLevelXp)) * 100));
 
                 bukkitPlayer.sendMessage(String.format("Level %d %s - %d%% [%dXP Required]", level, profession.getFirstLetterUppercase(), percentageProgress, requiredXp));
                 return true;
