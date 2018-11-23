@@ -8,11 +8,15 @@ import nz.co.noirland.noirxp.helpers.LoreHelper;
 import nz.co.noirland.noirxp.helpers.PlayerClassConverter;
 import nz.co.noirland.noirxp.struct.ItemXPData;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.CraftItemEvent;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -26,9 +30,15 @@ public class CraftEvents implements Listener {
         if (event.getWhoClicked() instanceof Player && !UserdataConfig.inst().isLevelling(event.getWhoClicked().getUniqueId())) return;
 
         ItemStack itemStack = event.getRecipe().getResult();
-        if (itemStack == null) {
-            return;
+
+        if(event.getAction() == InventoryAction.NOTHING ||  itemStack == null || itemStack.getType().equals(Material.AIR)) return;
+
+        int craftAmount = itemStack.getAmount();
+
+        if(event.getClick() == ClickType.SHIFT_LEFT || event.getClick() == ClickType.SHIFT_RIGHT) {
+            craftAmount *= getShiftCraftAmount(event.getInventory());
         }
+
         Player player = (Player) event.getWhoClicked();
         ItemMeta itemMeta = itemStack.getItemMeta();
         String blockName;
@@ -56,7 +66,7 @@ public class CraftEvents implements Listener {
             return;
         }
 
-        PlayerCallbacks.xpGained(player.getUniqueId().toString(), playerClass, xp.get().createXP * itemStack.getAmount());
+        PlayerCallbacks.xpGained(player.getUniqueId().toString(), playerClass, xp.get().createXP * craftAmount);
 
 
     }
@@ -69,5 +79,23 @@ public class CraftEvents implements Listener {
         ItemStack itemStack = event.getInventory().getResult();
 
         if(LoreHelper.addLoreToItem(itemStack)) event.getInventory().setResult(itemStack);
+    }
+
+    private int getShiftCraftAmount(CraftingInventory inv) {
+        boolean first = true;
+        int maxAmount = 1;
+
+        for(ItemStack item : inv.getMatrix()) {
+            if(item == null || item.getType().equals(Material.AIR)) continue;
+
+            if(first) {
+                maxAmount = item.getAmount();
+                first = false;
+            } else {
+                maxAmount = Math.min(maxAmount, item.getAmount());
+            }
+        }
+
+        return maxAmount;
     }
 }
