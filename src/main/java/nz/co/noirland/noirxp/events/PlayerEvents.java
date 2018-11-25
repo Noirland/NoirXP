@@ -3,6 +3,7 @@ package nz.co.noirland.noirxp.events;
 import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.callbacks.BlockCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
+import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.database.XPDatabase;
 import nz.co.noirland.noirxp.helpers.Datamaps;
 import nz.co.noirland.noirxp.struct.ItemXPData;
@@ -54,9 +55,7 @@ public class PlayerEvents implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent event) {
-        if (!event.hasItem()) {
-            return;
-        }
+        if (!event.hasItem() || !UserdataConfig.inst().isLevelling(event.getPlayer().getUniqueId())) return;
 
         NoirPlayer player = NoirXP.players.get(event.getPlayer().getUniqueId().toString());
 

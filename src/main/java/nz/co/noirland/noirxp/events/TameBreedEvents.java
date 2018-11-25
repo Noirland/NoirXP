@@ -3,6 +3,7 @@ package nz.co.noirland.noirxp.events;
 import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.classes.TameBreedEntity;
+import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
 import nz.co.noirland.noirxp.helpers.Datamaps;
 import nz.co.noirland.noirxp.NoirXP;
@@ -21,6 +22,8 @@ public class TameBreedEvents implements Listener {
     private Set<LivingEntity> currentlyBreeding = new HashSet<>();
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onTame(EntityTameEvent event) {
+        if (!UserdataConfig.inst().isLevelling(event.getOwner().getUniqueId())) return;
+
         if (!(event.getOwner() instanceof Player)) {
             return;
         }
@@ -43,6 +46,8 @@ public class TameBreedEvents implements Listener {
             return;
         }
         Player player = (Player) event.getBreeder();
+
+        if (!UserdataConfig.inst().isLevelling(player.getUniqueId())) return;
 
         if (Datamaps.tameBreedEntityMap.containsKey(event.getEntityType())) {
             TameBreedEntity entity = Datamaps.tameBreedEntityMap.get(event.getEntityType());
