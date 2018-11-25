@@ -1,6 +1,7 @@
 package nz.co.noirland.noirxp.database.queries.player;
 
 import nz.co.noirland.noirxp.classes.NoirPlayer;
+import nz.co.noirland.noirxp.constants.PlayerClass;
 import nz.co.noirland.noirxp.database.queries.XPQuery;
 
 import java.util.Collection;
@@ -21,20 +22,20 @@ public class UpdatePlayerQuery extends XPQuery {
 
         for(NoirPlayer player : players) {
             setValue(1, player.getUsername());
-            setValue(2, player.alchemy.getXp());
-            setValue(3, player.building.getXp());
-            setValue(4, player.cooking.getXp());
-            setValue(5, player.farming.getXp());
-            setValue(6, player.fishing.getXp());
-            setValue(7, player.gathering.getXp());
-            setValue(8, player.hunting.getXp());
-            setValue(9, player.mining.getXp());
-            setValue(10, player.smithing.getXp());
-            setValue(11, player.taming.getXp());
-            setValue(12, player.getXp());
-            setValue(13, player.getCurrentHealth());
+            setValue(2, player.getXP(PlayerClass.ALCHEMY));
+            setValue(3, player.getXP(PlayerClass.BUILDING));
+            setValue(4, player.getXP(PlayerClass.COOKING));
+            setValue(5, player.getXP(PlayerClass.FARMING));
+            setValue(6, player.getXP(PlayerClass.FISHING));
+            setValue(7, player.getXP(PlayerClass.GATHERING));
+            setValue(8, player.getXP(PlayerClass.HUNTING));
+            setValue(9, player.getXP(PlayerClass.MINING));
+            setValue(10, player.getXP(PlayerClass.SMITHING));
+            setValue(11, player.getXP(PlayerClass.TAMING));
+            setValue(12, player.getXP(PlayerClass.GENERAL));
+            setValue(13, 20); // Current Health not used
             setValue(14, player.getMaxHealth());
-            setValue(15, player.getUniqueId());
+            setValue(15, player.getUniqueId().toString());
 
             batch();
         }

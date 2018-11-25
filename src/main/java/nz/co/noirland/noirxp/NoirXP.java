@@ -44,6 +44,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class NoirXP extends JavaPlugin implements Listener {
 
@@ -148,6 +149,10 @@ public class NoirXP extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new TameBreedEvents(), this);
         getServer().getPluginManager().registerEvents(new FurnaceEvents(), this);
         getServer().getPluginManager().registerEvents(new ChunkEvents(), this);
+    }
+
+    public static NoirPlayer getPlayer(UUID uuid) {
+        return players.get(uuid.toString());
     }
 
 }

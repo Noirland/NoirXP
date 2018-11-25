@@ -1,47 +1,81 @@
 package nz.co.noirland.noirxp.classes;
 
-import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.NoirXP;
-import org.bukkit.Server;
+import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
+import nz.co.noirland.noirxp.config.UserdataConfig;
+import nz.co.noirland.noirxp.constants.PlayerClass;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class NoirPlayer {
     private Player bukkitPlayer;
     private String username;
-    private String playerId;
-    public Alchemy alchemy = new Alchemy();
-    public Building building = new Building();
-    public Cooking cooking = new Cooking();
-    public Farming farming = new Farming();
-    public Fishing fishing = new Fishing();
-    public Gathering gathering = new Gathering();
-    public Hunting hunting = new Hunting();
-    public Mining mining = new Mining();
-    public Smithing smithing = new Smithing();
-    public Taming taming = new Taming();
-    private float currentHealth = 20;
+    private UUID playerUUID;
     private float maxHealth = 20;
-    private int level = 1;
-    private int xp;
 
-    public NoirPlayer(String playerId, Server server) {
-        this.playerId = playerId;
-        this.bukkitPlayer = server.getPlayer(UUID.fromString(this.playerId));
+    private Map<PlayerClass, Integer> classXP = new HashMap<>();
+
+    public NoirPlayer(UUID playerId) {
+        this.bukkitPlayer = NoirXP.inst().getServer().getPlayer(playerId);
+        this.playerUUID = playerId;
     }
 
-    public NoirPlayer(String playerId) {
-        this.playerId = playerId;
-        this.bukkitPlayer = NoirXP.inst().getServer().getPlayer(UUID.fromString(this.playerId));
+    public int getXP(PlayerClass playerClass) {
+        return classXP.get(playerClass);
     }
 
-    public void setCurrentHealth(float health) {
-        this.currentHealth = health;
+    public int getLevel(PlayerClass playerClass) {
+        return PlayerCallbacks.getLevelFromXp(classXP.get(playerClass));
     }
 
-    public float getCurrentHealth() {
-        return this.currentHealth;
+    public Map<PlayerClass, Integer> getXP() {
+        return Collections.unmodifiableMap(classXP);
+    }
+
+    public void giveXP(PlayerClass playerClass, int xp) {
+        if(!UserdataConfig.inst().isLevelling(playerUUID)) return;
+
+        int oldXP = classXP.get(playerClass);
+        int newXP = oldXP + xp;
+        int newLevel = PlayerCallbacks.getLevelFromXp(newXP);
+
+        if (UserdataConfig.inst().isVerbose(playerUUID)) {
+            getBukkitPlayer().sendMessage("+" + xp + " " + playerClass.getFormattedLower());
+        }
+
+        if(playerClass != PlayerClass.GENERAL) {
+            if(PlayerCallbacks.getLevelFromXp(newXP) <= PlayerCallbacks.MAX_LEVEL) classXP.put(playerClass, newXP);
+
+            if (isLevelUp(oldXP, newXP)) {
+                getBukkitPlayer().sendMessage("Your " + playerClass.getTitleLower() + " level just increased to "
+                        + ChatColor.GOLD + newLevel + ChatColor.WHITE + "!");
+            }
+        }
+
+        int oldOverallXP = classXP.get(PlayerClass.GENERAL);
+        int newOverallXP = oldOverallXP + xp;
+
+        if(PlayerCallbacks.getLevelFromXp(newOverallXP) <= PlayerCallbacks.MAX_LEVEL) classXP.put(PlayerClass.GENERAL, newOverallXP);
+
+        if (isLevelUp(oldOverallXP, newOverallXP)) {
+            getBukkitPlayer().sendMessage("Your overall level just increased to " +
+                    ChatColor.GOLD + newLevel + ChatColor.WHITE + "!");
+        }
+
+    }
+
+    public void setXP(PlayerClass playerClass, int xp) {
+        classXP.put(playerClass, xp);
+        if(playerClass == PlayerClass.GENERAL) {
+            int level = PlayerCallbacks.getLevelFromXp(xp);
+            this.maxHealth = PlayerCallbacks.getHealthFromLevel(level);
+            PlayerCallbacks.setPlayerMaxHealth(this.playerUUID, this.maxHealth);
+        }
     }
 
     public void setMaxHealth(float health) {
@@ -60,38 +94,13 @@ public class NoirPlayer {
         this.bukkitPlayer = bukkitPlayer;
     }
 
-    public String getUniqueId() {
-        return this.playerId;
+    public UUID getUniqueId() {
+        return this.playerUUID;
     }
 
 
-    public int getLevel() {
-        return this.level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-        this.xp = PlayerCallbacks.GetXpFromLevel(this.level);
-        this.maxHealth = PlayerCallbacks.getHealthFromLevel(this.level);
-        PlayerCallbacks.setPlayerMaxHealth(this.getUniqueId(), this.maxHealth);
-    }
-
-    public int getXp() {
-        return this.xp;
-    }
-
-    public void setXp(int xp) {
-        this.xp = xp;
-        this.level = PlayerCallbacks.getLevelFromXp(this.xp);
-        this.maxHealth = PlayerCallbacks.getHealthFromLevel(this.level);
-        PlayerCallbacks.setPlayerMaxHealth(this.getUniqueId(), this.maxHealth);
-    }
-
-    public void addXp(int xp) {
-        this.xp += xp;
-        this.level = PlayerCallbacks.getLevelFromXp(this.xp);
-        this.maxHealth = PlayerCallbacks.getHealthFromLevel(this.level);
-        PlayerCallbacks.setPlayerMaxHealth(this.getUniqueId(), this.maxHealth);
+    public int getOverallLevel() {
+        return PlayerCallbacks.getLevelFromXp(classXP.get(PlayerClass.GENERAL));
     }
 
     public boolean isLevelUp(int oldxp, int newxp) {
@@ -107,6 +116,14 @@ public class NoirPlayer {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void resetLevels() {
+        for(PlayerClass playerClass : PlayerClass.values()) {
+            classXP.put(playerClass, 0);
+        }
+        this.maxHealth = 20;
+        PlayerCallbacks.setPlayerMaxHealth(this.playerUUID, this.maxHealth);
     }
 
 }

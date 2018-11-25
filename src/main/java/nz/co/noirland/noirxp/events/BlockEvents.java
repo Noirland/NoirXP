@@ -1,6 +1,8 @@
 package nz.co.noirland.noirxp.events;
 
+import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
+import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
 import nz.co.noirland.noirxp.helpers.Datamaps;
@@ -49,7 +51,7 @@ public class BlockEvents implements Listener {
         int reqLevel = xp.get().levelToBreak;
         PlayerClass playerClass = xp.get().type;
 
-        int playerXp = PlayerCallbacks.getPlayerXpForClass(player.getUniqueId().toString(), playerClass);
+        int playerXp = NoirXP.getPlayer(player.getUniqueId()).getXP(playerClass);
 
         int playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
 
@@ -80,7 +82,7 @@ public class BlockEvents implements Listener {
 
         String playerId = event.getPlayer().getUniqueId().toString();
 
-        PlayerCallbacks.xpGained(playerId, playerClass, breakXp);
+        NoirXP.players.get(playerId).giveXP(playerClass, breakXp);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -154,9 +156,9 @@ public class BlockEvents implements Listener {
         int reqLevel = xp.get().levelToPlace;
         PlayerClass playerClass = xp.get().type;
 
-        int playerXp = PlayerCallbacks.getPlayerXpForClass(player.getUniqueId().toString(), playerClass);
+        NoirPlayer noirPlayer = NoirXP.getPlayer(player.getUniqueId());
 
-        int playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
+        int playerLevel = noirPlayer.getLevel(playerClass);
 
         if (playerLevel < reqLevel) {
             event.setCancelled(true);
@@ -165,7 +167,7 @@ public class BlockEvents implements Listener {
         }
 
         String playerId = event.getPlayer().getUniqueId().toString();
-        PlayerCallbacks.xpGained(playerId, playerClass, xp.get().placeXP);
+        NoirXP.players.get(playerId).giveXP(playerClass, xp.get().placeXP);
     }
 
 }

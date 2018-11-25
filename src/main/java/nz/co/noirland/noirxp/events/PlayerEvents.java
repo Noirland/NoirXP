@@ -4,6 +4,7 @@ import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.callbacks.BlockCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.config.UserdataConfig;
+import nz.co.noirland.noirxp.constants.PlayerClass;
 import nz.co.noirland.noirxp.database.XPDatabase;
 import nz.co.noirland.noirxp.helpers.Datamaps;
 import nz.co.noirland.noirxp.struct.ItemXPData;
@@ -26,7 +27,7 @@ public class PlayerEvents implements Listener {
     public void playerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         if (!NoirXP.players.containsKey(player.getUniqueId().toString())) {
-            NoirPlayer noirPlayer = new NoirPlayer(player.getUniqueId().toString());
+            NoirPlayer noirPlayer = new NoirPlayer(player.getUniqueId());
             noirPlayer.setUsername(player.getName());
             NoirXP.players.put(player.getUniqueId().toString(), noirPlayer);
             XPDatabase.inst().addPlayer(player.getUniqueId());
@@ -75,7 +76,7 @@ public class PlayerEvents implements Listener {
 
         int levelToUse = xp.get().levelToUse;
 
-        if (player.getLevel() < levelToUse) {
+        if (player.getLevel(PlayerClass.GENERAL) < levelToUse) {
             event.getPlayer().sendMessage("Level " + levelToUse + " required to use.");
             event.setCancelled(true);
         }

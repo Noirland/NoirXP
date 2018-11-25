@@ -2,6 +2,10 @@ package nz.co.noirland.noirxp.constants;
 
 import org.bukkit.ChatColor;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 public enum PlayerClass {
     ALCHEMY("Alchemy", ChatColor.DARK_PURPLE),
     BUILDING("Building", ChatColor.RED),
@@ -13,7 +17,19 @@ public enum PlayerClass {
     MINING("Mining", ChatColor.DARK_BLUE),
     SMITHING("Smithing", ChatColor.DARK_GRAY),
     TAMING("Taming", ChatColor.DARK_AQUA),
-    GENERAL("General", ChatColor.YELLOW);
+    GENERAL("Overall", ChatColor.YELLOW);
+
+    private static final Map<String, PlayerClass> nameMapping = new HashMap<>();
+
+    static {
+        for(PlayerClass playerClass : PlayerClass.values()) {
+            nameMapping.put(playerClass.name.toUpperCase(), playerClass);
+        }
+    }
+
+    public static Optional<PlayerClass> fromName(String name) {
+        return Optional.ofNullable(nameMapping.get(name.toUpperCase()));
+    }
 
     private final String name;
     private final ChatColor color;

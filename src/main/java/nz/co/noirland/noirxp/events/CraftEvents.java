@@ -1,6 +1,8 @@
 package nz.co.noirland.noirxp.events;
 
+import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
+import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
 import nz.co.noirland.noirxp.helpers.Datamaps;
@@ -54,9 +56,9 @@ public class CraftEvents implements Listener {
         int reqLevel = xp.get().levelToCreate;
         PlayerClass playerClass = xp.get().type;
 
-        int playerXp = PlayerCallbacks.getPlayerXpForClass(player.getUniqueId().toString(), playerClass);
+        NoirPlayer noirPlayer = NoirXP.getPlayer(player.getUniqueId());
 
-        int playerLevel = PlayerCallbacks.getLevelFromXp(playerXp);
+        int playerLevel = noirPlayer.getLevel(playerClass);
 
         if (playerLevel < reqLevel) {
             event.setCancelled(true);
@@ -64,9 +66,7 @@ public class CraftEvents implements Listener {
             return;
         }
 
-        PlayerCallbacks.xpGained(player.getUniqueId().toString(), playerClass, xp.get().createXP * craftAmount);
-
-
+        NoirXP.getPlayer(player.getUniqueId()).giveXP(playerClass, xp.get().createXP * craftAmount);
     }
 
     @EventHandler(ignoreCancelled = true)

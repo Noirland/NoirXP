@@ -167,21 +167,20 @@ public class XPDatabase extends MySQLDatabase {
 
         for (Map<String, Object> map : result) {
             String playerId = (String)map.get("playerId");
-            NoirPlayer player = new NoirPlayer(playerId);
+            NoirPlayer player = new NoirPlayer(UUID.fromString(playerId));
             player.setUsername((String)map.get("username"));
-            player.setCurrentHealth((float)map.get("currentHealth"));
             player.setMaxHealth((float)map.get("maxHealth"));
-            player.alchemy.setXp((int)map.get("alchemyXp"));
-            player.building.setXp((int)map.get("buildingXp"));
-            player.cooking.setXp((int)map.get("cookingXp"));
-            player.farming.setXp((int)map.get("farmingXp"));
-            player.fishing.setXp((int)map.get("fishingXp"));
-            player.gathering.setXp((int)map.get("gatheringXp"));
-            player.hunting.setXp((int)map.get("huntingXp"));
-            player.mining.setXp((int)map.get("miningXp"));
-            player.smithing.setXp((int)map.get("smithingXp"));
-            player.taming.setXp((int)map.get("tamingXp"));
-            player.setXp((int)map.get("totalXp"));
+            player.setXP(PlayerClass.ALCHEMY, (int)map.get("alchemyXp"));
+            player.setXP(PlayerClass.BUILDING, (int)map.get("buildingXp"));
+            player.setXP(PlayerClass.COOKING, (int)map.get("cookingXp"));
+            player.setXP(PlayerClass.FARMING, (int)map.get("farmingXp"));
+            player.setXP(PlayerClass.FISHING, (int)map.get("fishingXp"));
+            player.setXP(PlayerClass.GATHERING, (int)map.get("gatheringXp"));
+            player.setXP(PlayerClass.HUNTING, (int)map.get("huntingXp"));
+            player.setXP(PlayerClass.MINING, (int)map.get("miningXp"));
+            player.setXP(PlayerClass.SMITHING, (int)map.get("smithingXp"));
+            player.setXP(PlayerClass.TAMING, (int)map.get("tamingXp"));
+            player.setXP(PlayerClass.GENERAL, (int)map.get("totalXp"));
 
             ret.put(playerId, player);
         }

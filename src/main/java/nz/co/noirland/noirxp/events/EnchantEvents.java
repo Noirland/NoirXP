@@ -1,7 +1,6 @@
 package nz.co.noirland.noirxp.events;
 
 import nz.co.noirland.noirxp.NoirXP;
-import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
@@ -21,7 +20,7 @@ public class EnchantEvents implements Listener {
 
         NoirPlayer noirPlayer = NoirXP.players.get(event.getEnchanter().getUniqueId().toString());
 
-        int alchemyLevel = noirPlayer.alchemy.getLevel();
+        int alchemyLevel = noirPlayer.getLevel(PlayerClass.ALCHEMY);
         int maxEnchant = 0;
         if(alchemyLevel >= 20) maxEnchant = 1;
         if(alchemyLevel >= 30) maxEnchant = 2;
@@ -41,16 +40,14 @@ public class EnchantEvents implements Listener {
         int highestLevel = Collections.max(event.getEnchantsToAdd().values());
         NoirPlayer noirPlayer = NoirXP.players.get(event.getEnchanter().getUniqueId().toString());
         if (highestLevel == 1) {
-            PlayerCallbacks.xpGained(noirPlayer.getUniqueId(), PlayerClass.ALCHEMY, 50);
+            noirPlayer.giveXP(PlayerClass.ALCHEMY, 50);
         }
         else if (highestLevel == 2) {
-            PlayerCallbacks.xpGained(noirPlayer.getUniqueId(), PlayerClass.ALCHEMY, 70);
+            noirPlayer.giveXP(PlayerClass.ALCHEMY, 70);
         }
         else if (highestLevel == 3) {
-            PlayerCallbacks.xpGained(noirPlayer.getUniqueId(), PlayerClass.ALCHEMY, 85);
+            noirPlayer.giveXP(PlayerClass.ALCHEMY, 85);
         }
-
-
     }
 
 

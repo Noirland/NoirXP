@@ -19,6 +19,6 @@ public class FurnaceEvents implements Listener {
         Optional<ItemXPData> xp = Datamaps.getCustomBlock(event.getItemType());
         if (!xp.isPresent()) return;
 
-        PlayerCallbacks.xpGained(noirPlayer.getUniqueId(), xp.get().type, xp.get().createXP * event.getItemAmount());
+        noirPlayer.giveXP(xp.get().type, xp.get().createXP * event.getItemAmount());
     }
 }

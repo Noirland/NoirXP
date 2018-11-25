@@ -1,20 +1,21 @@
 package nz.co.noirland.noirxp.commands;
 
-import nz.co.noirland.noirxp.callbacks.CommandCallbacks;
+import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.callbacks.InventoryCallbacks;
 import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.config.UserdataConfig;
-import nz.co.noirland.noirxp.constants.PlayerClassList;
-import nz.co.noirland.noirxp.interfaces.INoirProfession;
-import nz.co.noirland.noirxp.NoirXP;
+import nz.co.noirland.noirxp.constants.PlayerClass;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.Optional;
 
 public class NoirCommand implements CommandExecutor {
 
@@ -29,11 +30,7 @@ public class NoirCommand implements CommandExecutor {
         if (args.length == 1) {
             switch (args[0].toLowerCase()) {
                 case "level":
-                    int level = noirPlayer.getLevel();
-                    int currentXp = noirPlayer.getXp();
-                    int nextLevelXp = PlayerCallbacks.GetXpFromLevel(level + 1);
-                    int percentage = (int)(((float)currentXp / (float)nextLevelXp) * 100);
-                    bukkitPlayer.sendMessage(String.format("Level: %d - %d%% [%dXP Required]", level, percentage, nextLevelXp - currentXp));
+                    bukkitPlayer.sendMessage(getRemainingXPString(PlayerClass.GENERAL, noirPlayer));
                     return true;
                 case "disable":
                     if (!bukkitPlayer.hasPermission("NoirLeveling.op")) {
@@ -56,7 +53,7 @@ public class NoirCommand implements CommandExecutor {
                         commandSender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                         return true;
                     }
-                    CommandCallbacks.resetAllXp(noirPlayer.getUniqueId());
+                    noirPlayer.resetLevels();
                     bukkitPlayer.sendMessage("Success!");
                     return true;
                 case "convert":
@@ -85,30 +82,26 @@ public class NoirCommand implements CommandExecutor {
                     commandSender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                 }
                 String playerName = args[1];
-                Player player = NoirXP.inst().getServer().getPlayer(playerName);
-                if (player == null) {
-                    bukkitPlayer.sendMessage("Player not found.");
-                    return true;
-                }
-                CommandCallbacks.resetAllXp(player.getUniqueId().toString());
+                OfflinePlayer player = NoirXP.inst().getServer().getOfflinePlayer(playerName);
+                NoirXP.getPlayer(player.getUniqueId()).resetLevels();
                 bukkitPlayer.sendMessage("Success!");
                 return true;
             }
 
-            if (args[0].equalsIgnoreCase("class") && PlayerClassList.playerClassList.contains(args[1])) {
-                INoirProfession profession = PlayerCallbacks.getProfessionFromString(noirPlayer, args[1]);
-                int level = profession.getLevel();
-                int currentXp = profession.getXp();
-                int nextLevelXp = PlayerCallbacks.GetXpFromLevel(level + 1);
-                int percentage = (int)(((float)currentXp / (float)nextLevelXp) * 100);
+            if (args[0].equalsIgnoreCase("class")) {
+                Optional<PlayerClass> optClass = PlayerClass.fromName(args[1]);
+                if(!optClass.isPresent()) return false;
 
-                bukkitPlayer.sendMessage(String.format("Level %d %s - %d%% [%dXP Required]", level, profession.getFirstLetterUppercase(), percentage, nextLevelXp - currentXp));
+                bukkitPlayer.sendMessage(getRemainingXPString(optClass.get(), noirPlayer));
                 return true;
             }
         }
 
         else if (args.length == 3) {
-            if (args[0].equalsIgnoreCase("reset") && PlayerClassList.playerClassList.contains(args[2])) {
+            if (args[0].equalsIgnoreCase("reset")) {
+                Optional<PlayerClass> optClass = PlayerClass.fromName(args[2]);
+                if(!optClass.isPresent()) return false;
+
                 if (!bukkitPlayer.hasPermission("NoirLeveling.op")) {
                     commandSender.sendMessage(ChatColor.RED + "You do not have permission to use this command.");
                 }
@@ -119,14 +112,15 @@ public class NoirCommand implements CommandExecutor {
                     return true;
                 }
 
-                INoirProfession profession = PlayerCallbacks.getProfessionFromString(player, args[2]);
-                profession.setXp(0);
+                noirPlayer.setXP(optClass.get(), 0);
                 bukkitPlayer.sendMessage("Success!");
                 return true;
             }
 
-            if (args[0].equalsIgnoreCase("class") && PlayerClassList.playerClassList.contains(args[1]) && args[2].equalsIgnoreCase("top")) {
-                bukkitPlayer.sendMessage(PlayerCallbacks.getTopTenPlayersForProfession(args[1]));
+            if (args[0].equalsIgnoreCase("class") && args[2].equalsIgnoreCase("top")) {
+                Optional<PlayerClass> optClass = PlayerClass.fromName(args[1]);
+                if(!optClass.isPresent()) return false;
+                for(String message : PlayerCallbacks.getTopTenPlayersForProfession(optClass.get())) bukkitPlayer.sendMessage(message);
                 return true;
             }
 
@@ -152,7 +146,7 @@ public class NoirCommand implements CommandExecutor {
                     amount = 0;
                 }
 
-                player.setXp(amount);
+                player.setXP(PlayerClass.GENERAL, amount);
                 bukkitPlayer.sendMessage("Success!");
                 return true;
             }
@@ -162,7 +156,10 @@ public class NoirCommand implements CommandExecutor {
         }
 
         else if (args.length == 4) {
-            if (args[0].equalsIgnoreCase("set") && PlayerClassList.playerClassList.contains(args[3])) {
+            if (args[0].equalsIgnoreCase("set")) {
+                Optional<PlayerClass> optClass = PlayerClass.fromName(args[3]);
+                if(!optClass.isPresent()) return false;
+
                 NoirPlayer player = PlayerCallbacks.getNoirPlayerByName(args[1]);
                 if (player == null) {
                     bukkitPlayer.sendMessage("Player not found.");
@@ -180,12 +177,7 @@ public class NoirCommand implements CommandExecutor {
                     amount = 0;
                 }
 
-                INoirProfession profession = PlayerCallbacks.getProfessionFromString(player, args[3]);
-                if (profession == null) {
-                    return false;
-                }
-
-                profession.setXp(amount);
+                noirPlayer.setXP(optClass.get(), amount);
                 bukkitPlayer.sendMessage("Success!");
                 return true;
             }
@@ -193,5 +185,25 @@ public class NoirCommand implements CommandExecutor {
 
         return false;
 
+    }
+
+    private static String getRemainingXPString(PlayerClass playerClass, NoirPlayer player) {
+        int currentLevel = player.getLevel(playerClass);
+        int currentXp = player.getXP(playerClass);
+
+        int currentLevelXp = PlayerCallbacks.getXpFromLevel(currentLevel);
+        int nextLevelXp = PlayerCallbacks.getXpFromLevel(currentLevel + 1);
+
+        int requiredXp = nextLevelXp - currentXp;
+
+        double progress = (double) requiredXp / (nextLevelXp - currentLevelXp);
+
+        int remaining = (int) ((1 - progress) * 100);
+
+        return String.format("Level %d %s - %d%% [%dXP Required]",
+                currentLevel,
+                playerClass.getTitle(),
+                remaining,
+                requiredXp);
     }
 }
