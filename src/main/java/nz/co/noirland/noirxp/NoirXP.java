@@ -22,6 +22,7 @@ import nz.co.noirland.noirxp.customitems.SpacePants;
 import nz.co.noirland.noirxp.customitems.SpaceVest;
 import nz.co.noirland.noirxp.database.XPDatabase;
 import nz.co.noirland.noirxp.events.BlockEvents;
+import nz.co.noirland.noirxp.events.ChunkEvents;
 import nz.co.noirland.noirxp.events.CraftEvents;
 import nz.co.noirland.noirxp.events.DamageEvents;
 import nz.co.noirland.noirxp.events.EnchantEvents;
@@ -86,19 +87,30 @@ public class NoirXP extends JavaPlugin implements Listener {
             }
 
         }.runTaskTimer(this, 20 * 60 * 10, 20 * 60 * 10); // Run backup every 10 mins (tick time)
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                debug().warning("Saving and reloading block log...");
+                XPDatabase.inst().pruneBlockLog();
+            }
+        }.runTaskTimerAsynchronously(this, 20 * 60 * 10, 20 * 60 * 10);
     }
 
     @EventHandler
     public void onZephCoreDisabled(PluginDisableEvent event) {
         if(event.getPlugin() == ZephCore.inst()) {
+            debug().warning("ZephCore is being disabled, backing up data and then disabling this plugin also.");
             XPDatabase.inst().saveUserData(players);
-            debug().disable("ZephCore is being disabled, backing up data disabling this plugin also.");
+            XPDatabase.inst().saveBlockLog();
+            getServer().getPluginManager().disablePlugin(this);
         }
     }
 
     @Override
     public void onDisable() {
         XPDatabase.inst().saveUserData(players);
+        XPDatabase.inst().saveBlockLog();
     }
 
 
@@ -140,6 +152,7 @@ public class NoirXP extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new EnchantEvents(), this);
         getServer().getPluginManager().registerEvents(new TameBreedEvents(), this);
         getServer().getPluginManager().registerEvents(new FurnaceEvents(), this);
+        getServer().getPluginManager().registerEvents(new ChunkEvents(), this);
     }
 
 }

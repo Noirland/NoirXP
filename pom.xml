@@ -7,7 +7,7 @@
     <groupId>nz.co.noirland</groupId>
     <artifactId>noirxp</artifactId>
     <name>NoirLevelling</name>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <scm>
         <connection>scm:git:git://github.com/Noirland/NoirXP.git</connection>
     </scm>
@@ -38,7 +38,7 @@
         <dependency>
             <groupId>nz.co.noirland</groupId>
             <artifactId>zephcore</artifactId>
-            <version>4.0.0</version>
+            <version>4.1.0</version>
         </dependency>
     </dependencies>
 
