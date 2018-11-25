@@ -49,7 +49,7 @@ public class BlockCallbacks {
             command = ChatColor.DARK_RED;
         }
         else if (highest == miningXp) {
-            command = ChatColor.GOLD;
+            command = ChatColor.DARK_BLUE;
         }
         else if (highest == smithingXp) {
             command = ChatColor.DARK_GRAY;

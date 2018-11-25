@@ -1,7 +1,6 @@
 package nz.co.noirland.noirxp.customitems;
 
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.helpers.PlayerClassConverter;
 import nz.co.noirland.noirxp.NoirXP;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -18,7 +17,7 @@ public class Lead implements ICustomItem {
         ItemStack item = new ItemStack(Material.LEAD, 1);
         ItemMeta meta = item.getItemMeta();
         List<String> loreList = new ArrayList<>();
-        loreList.add(PlayerClassConverter.playerClassToCapitalString(PlayerClass.FARMING));
+        loreList.add(PlayerClass.FARMING.getFormattedTitle());
 
         meta.setLore(loreList);
         item.setItemMeta(meta);

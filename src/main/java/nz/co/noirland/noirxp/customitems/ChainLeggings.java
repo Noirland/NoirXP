@@ -1,7 +1,6 @@
 package nz.co.noirland.noirxp.customitems;
 
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.helpers.PlayerClassConverter;
 import nz.co.noirland.noirxp.NoirXP;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -18,7 +17,7 @@ public class ChainLeggings implements ICustomItem {
         ItemStack item = new ItemStack(Material.CHAINMAIL_LEGGINGS, 1);
         ItemMeta meta = item.getItemMeta();
         List<String> loreList = new ArrayList<>();
-        loreList.add(PlayerClassConverter.playerClassToCapitalString(PlayerClass.GENERAL));
+        loreList.add(PlayerClass.GENERAL.getFormattedTitle());
         loreList.add("382/382");
 
         meta.setLore(loreList);

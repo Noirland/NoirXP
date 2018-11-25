@@ -4,9 +4,7 @@ import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
 import nz.co.noirland.noirxp.helpers.Datamaps;
-import nz.co.noirland.noirxp.helpers.PlayerClassConverter;
 import nz.co.noirland.noirxp.struct.ItemXPData;
-import org.bukkit.ChatColor;
 import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.block.Biome;
@@ -57,8 +55,7 @@ public class BlockEvents implements Listener {
 
         if (playerLevel < reqLevel) {
             event.setCancelled(true);
-            player.sendMessage("Level " + reqLevel + ChatColor.WHITE + " " +
-                    PlayerClassConverter.playerClassToString(playerClass) + " required.");
+            player.sendMessage("Level " + reqLevel + " " + playerClass.getTitleLower() + " required.");
             return;
         }
 
@@ -163,8 +160,7 @@ public class BlockEvents implements Listener {
 
         if (playerLevel < reqLevel) {
             event.setCancelled(true);
-            player.sendMessage("Level " + reqLevel + ChatColor.WHITE + " " +
-                    PlayerClassConverter.playerClassToString(playerClass) + " required.");
+            player.sendMessage("Level " + reqLevel + " " + playerClass.getTitleLower() + " required.");
             return;
         }
 

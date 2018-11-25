@@ -32,9 +32,8 @@ public class LoreHelper {
             classType = xp.get().type;
         }
 
-        String playerClassFormatted = PlayerClassConverter.playerClassToCapitalString(classType);
         List<String> loreList = new ArrayList<>();
-        loreList.add(playerClassFormatted);
+        loreList.add(classType.getFormattedTitle());
         if (Datamaps.armourItems.containsKey(itemStack.getType())) {
             int durability = Datamaps.armourItems.get(itemStack.getType());
             String durabilityLore = String.format("%1$d/%1$d", durability);

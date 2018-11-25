@@ -1,7 +1,6 @@
 package nz.co.noirland.noirxp.customitems;
 
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.helpers.PlayerClassConverter;
 import nz.co.noirland.noirxp.NoirXP;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -19,7 +18,7 @@ public class SpacePants implements ICustomItem {
         ItemStack item = new ItemStack(Material.IRON_LEGGINGS, 1);
         ItemMeta meta = item.getItemMeta();
         List<String> loreList = new ArrayList<>();
-        loreList.add(PlayerClassConverter.playerClassToCapitalString(PlayerClass.GENERAL));
+        loreList.add(PlayerClass.GENERAL.getFormattedTitle());
         loreList.add("and space shorts");
         meta.setDisplayName(ChatColor.DARK_BLUE + "SPACE PANTS");
         meta.setLore(loreList);
