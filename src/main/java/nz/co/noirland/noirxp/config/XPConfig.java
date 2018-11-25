@@ -35,4 +35,6 @@ public class XPConfig extends Config {
     public int    getDBPort()     { return config.getInt   ("port", 3306); }
     public String getDBHost()     { return config.getString("host", "localhost"); }
 
+    public int getBlockLogLimit() { return config.getInt("blocklog-limit", 50000); }
+
 }

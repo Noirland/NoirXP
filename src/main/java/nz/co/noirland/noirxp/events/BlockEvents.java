@@ -77,8 +77,8 @@ public class BlockEvents implements Listener {
 
 
         int breakXp = xp.get().breakXP;
-        if (XPDatabase.inst().hasBeenPlaced(location)) {
-            XPDatabase.inst().removeBlockLog(location);
+        if (Datamaps.isPlaced(location)) {
+            Datamaps.removeBlock(location);
             if (!isCrop) {
                 breakXp = 0;
             }
@@ -96,12 +96,7 @@ public class BlockEvents implements Listener {
         if (!UserdataConfig.inst().isLevelling(event.getPlayer().getUniqueId())) return;
 
         Location location = event.getBlockPlaced().getLocation();
-        if (event.getBlockPlaced().getType() == Material.BREWING_STAND) {
-            XPDatabase.inst().addBlockLog(location, event.getPlayer().getUniqueId(), true);
-        }
-        else {
-            XPDatabase.inst().addBlockLog(location, event.getPlayer().getUniqueId(), false);
-        }
+        Datamaps.addBlock(location);
 
         if (event.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
             Datamaps.addTorch(location);
