@@ -84,17 +84,12 @@ public class NoirXP extends JavaPlugin implements Listener {
             public void run() {
                 debug().warning("Backing up player data...");
                 XPDatabase.inst().saveUserData(players);
-            }
-
-        }.runTaskTimer(this, 20 * 60 * 10, 20 * 60 * 10); // Run backup every 10 mins (tick time)
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
                 debug().warning("Saving and reloading block log...");
                 XPDatabase.inst().pruneBlockLog();
+                debug().warning("Backup complete!");
             }
-        }.runTaskTimerAsynchronously(this, 20 * 60 * 10, 20 * 60 * 10);
+
+        }.runTaskTimerAsynchronously(this, 20 * 60 * 10, 20 * 60 * 10); // Run backup every 10 mins (tick time)
     }
 
     @EventHandler
