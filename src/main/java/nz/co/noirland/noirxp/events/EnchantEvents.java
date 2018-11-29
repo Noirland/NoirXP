@@ -1,10 +1,10 @@
 package nz.co.noirland.noirxp.events;
 
+import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.NoirXP;
 import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,9 +23,9 @@ public class EnchantEvents implements Listener {
 
         int alchemyLevel = noirPlayer.alchemy.getLevel();
         int maxEnchant = 0;
-        if(alchemyLevel > 20) maxEnchant = 1;
-        if(alchemyLevel > 30) maxEnchant = 2;
-        if(alchemyLevel > 40) maxEnchant = 3;
+        if(alchemyLevel >= 20) maxEnchant = 1;
+        if(alchemyLevel >= 30) maxEnchant = 2;
+        if(alchemyLevel >= 40) maxEnchant = 3;
 
         for(int i = 0; i < event.getOffers().length; i++) {
             EnchantmentOffer offer = event.getOffers()[i];
