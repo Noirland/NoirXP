@@ -14,11 +14,44 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.UUID;
 
 
 public final class PlayerCallbacks {
+
+    public static final int MAX_LEVEL = 55;
+
+    /**
+     * Mapping from level, to the total XP required to reach that level
+     */
+    private static final Map<Integer, Integer> levelToXpMap = new HashMap<>();
+    private static final SortedMap<Integer, Integer> xpToLevelMap = new TreeMap<>();
+
+    // Calculate these once on startup, rather than all the time
+    static {
+        levelToXpMap.put(1, 0);
+        xpToLevelMap.put(0, 1);
+        for(int lvl = 2; lvl <= MAX_LEVEL; lvl++) {
+
+            double result;
+            if(lvl <= 50) {
+                // The formula for xp is (8x^3/3 + 8x^2 - 32x/3)
+                result = (8 * Math.pow(lvl, 3)) / 3 + (8 * Math.pow(lvl, 2)) - ((32 * lvl) / 3);
+            } else {
+                result = levelToXpMap.get(lvl-1)*2;
+            }
+
+            int xpRequired = (int) Math.round(result);
+
+            levelToXpMap.put(lvl, xpRequired);
+            xpToLevelMap.put(xpRequired, lvl);
+        }
+    }
 
     public static int getPlayerXpForClass(String playerId, PlayerClass playerClass) {
         NoirPlayer player = NoirXP.players.get(playerId);
@@ -51,29 +84,16 @@ public final class PlayerCallbacks {
         }
     }
 
-     public static int getLevelFromXp(int xp) {
-        // The formula for xp is (8x^3/3 + 8x^2 - 32x/3)
-        if (xp < 32) {
-            return 1;
-        }
-        int levelCounter = 2;
-        double result;
-        while (true) {
-            result = (8 * Math.pow(levelCounter, 3)) / 3 + (8 * Math.pow(levelCounter, 2)) - ((32 * levelCounter) / 3);
-            if (result > xp) {
-                break;
-            }
-            levelCounter++;
-        }
-        return levelCounter - 1;
+    public static int getLevelFromXp(int xp) {
+        SortedMap<Integer, Integer> levelsLesser = xpToLevelMap.headMap(xp+1); // Search for all levels which are less than or equal to current XP
+        if(levelsLesser.size() == 0) throw new IllegalArgumentException("No XP mapping found for the given XP amount!");
+
+        return levelsLesser.get(levelsLesser.lastKey());
     }
 
     public static int GetXpFromLevel(int level) {
-        if (level <= 2) {
-            return 32;
-        }
-        double result = (8 * Math.pow(level, 3)) / 3 + (8 * Math.pow(level, 2)) - ((32 * level) / 3);
-        return (int)Math.round(result);
+        if(level > MAX_LEVEL) throw new IllegalArgumentException("Invalid level requested!");
+        return levelToXpMap.get(level);
     }
 
     /**
@@ -89,7 +109,7 @@ public final class PlayerCallbacks {
 
         int newClassLevel = PlayerCallbacks.getLevelFromXp(newClassXp);
 
-        if (newClassLevel <= 50) {
+        if (newClassLevel <= MAX_LEVEL) {
             switch (playerClass) {
                 case ALCHEMY:
                     player.alchemy.addXp(xpGained);
@@ -142,7 +162,7 @@ public final class PlayerCallbacks {
         }
         int currentLevel = player.getLevel();
 
-        if (currentLevel < 50) {
+        if (currentLevel < MAX_LEVEL) {
             player.addXp(xpGained);
             int newLevel = player.getLevel();
 
