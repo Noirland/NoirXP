@@ -6,6 +6,7 @@ import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
 import nz.co.noirland.noirxp.helpers.PlayerClassConverter;
 import nz.co.noirland.noirxp.interfaces.INoirProfession;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
@@ -134,6 +135,8 @@ public final class PlayerCallbacks {
                 if (player.isLevelUp(currentClassXp, newClassXp)) {
                     player.getBukkitPlayer().sendMessage("Your " + PlayerClassConverter.playerClassToString(playerClass) + " level just " +
                             "increased to " + ChatColor.GOLD + newClassLevel + ChatColor.WHITE + "!");
+                    Bukkit.getConsoleSender().sendMessage(String.format("[NOIRXP] %s level increased to %s for %s", player.getUsername(),
+                            newClassLevel, playerClass.toString()));
                 }
             }
         }
@@ -146,6 +149,8 @@ public final class PlayerCallbacks {
             if (newLevel > currentLevel) {
                 player.getBukkitPlayer().sendMessage("Your overall level just " +
                         "increased to " + ChatColor.GOLD + newLevel + ChatColor.WHITE + "!");
+                Bukkit.getConsoleSender().sendMessage(String.format("[NOIRXP] %s overall level increased to %s ", player.getUsername(),
+                        newLevel));
             }
         }
 
