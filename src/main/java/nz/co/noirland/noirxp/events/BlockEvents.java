@@ -1,17 +1,14 @@
 package nz.co.noirland.noirxp.events;
 
-import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.database.XPDatabase;
 import nz.co.noirland.noirxp.helpers.Datamaps;
 import nz.co.noirland.noirxp.helpers.PlayerClassConverter;
 import nz.co.noirland.noirxp.struct.ItemXPData;
 import org.bukkit.ChatColor;
 import org.bukkit.CropState;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -22,7 +19,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Crops;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -45,7 +41,7 @@ public class BlockEvents implements Listener {
 
         Location location = event.getBlock().getLocation();
 
-        Datamaps.removeTorch(location);
+        // Datamaps.removeTorch(location); // TODO Re-enable
 
         Player player = event.getPlayer();
         Optional<ItemXPData> xp = Datamaps.getCustomBlock(event.getBlock().getType());
@@ -97,7 +93,7 @@ public class BlockEvents implements Listener {
 
         Location location = event.getBlockPlaced().getLocation();
         Datamaps.addBlock(location);
-
+        /* TODO Re-enable
         if (event.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
             Datamaps.addTorch(location);
             if (event.getBlockReplacedState().getType() == Material.SNOW) {
@@ -142,6 +138,8 @@ public class BlockEvents implements Listener {
                 }.runTaskLater(NoirXP.inst(), 20 * 60 * 60);
             }
         }
+        */
+
         Player player = event.getPlayer();
 
         ItemStack stack = event.getItemInHand();

@@ -75,7 +75,7 @@ public class NoirXP extends JavaPlugin implements Listener {
         enableCommandHooks();
         enableCustomRecipes();
 
-        Datamaps.torchSet.addAll(XPDatabase.inst().getTorches());
+        // Datamaps.torchSet.addAll(XPDatabase.inst().getTorches()); // TODO Re-enable
         Datamaps.tameBreedEntityMap.putAll(XPDatabase.inst().getTamingData());
         Datamaps.customBlocks.putAll(XPDatabase.inst().loadCustomBlocks());
 
