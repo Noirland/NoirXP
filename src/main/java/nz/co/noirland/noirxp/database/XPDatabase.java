@@ -2,7 +2,6 @@ package nz.co.noirland.noirxp.database;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.ListenableFuture;
 import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
@@ -27,13 +26,13 @@ import nz.co.noirland.noirxp.database.schema.Schema1;
 import nz.co.noirland.noirxp.database.schema.Schema2;
 import nz.co.noirland.noirxp.helpers.Datamaps;
 import nz.co.noirland.noirxp.struct.ItemXPData;
-import nz.co.noirland.zephcore.Callback;
 import nz.co.noirland.zephcore.Debug;
 import nz.co.noirland.zephcore.database.mysql.MySQLDatabase;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -42,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 public class XPDatabase extends MySQLDatabase {
@@ -281,24 +281,35 @@ public class XPDatabase extends MySQLDatabase {
 
     public void loadBlockLog(Chunk chunk) {
         ListenableFuture<List<Map<String, Object>>> future = new GetBlockLogQuery(chunk).executeQueryAsync();
-        Callback.addSyncCallback(future, new FutureCallback<List<Map<String, Object>>>() {
+        //TODO: Fix to be an sync callback
+        new BukkitRunnable() {
             @Override
-            public void onSuccess(List<Map<String, Object>> result) {
+            public void run() {
+                if(future.isCancelled()) this.cancel();
+
+                if(!future.isDone()) return;
+
+                List<Map<String, Object>> result;
+                try {
+                    result = future.get();
+                } catch (InterruptedException | ExecutionException e) {
+                    debug().warning("Chunk Load Failed!", e);
+                    this.cancel();
+                    return;
+                }
+
                 Set<Location> ret = new HashSet<>();
                 for (Map<String, Object> entry : result) {
                     Location loc = constructLocation(entry);
-                    Chunk c = loc.getChunk();
                     ret.add(loc);
                 }
 
                 Datamaps.loadChunk(chunk, ret);
-            }
+                debug().debug(String.format("Loaded Chunk %s %s %s", chunk.getWorld().getName(), chunk.getX(), chunk.getZ()));
 
-            @Override
-            public void onFailure(Throwable t) {
-                debug().warning("Unable to pull block log for chunk! " + t.getMessage(), t);
+                this.cancel();
             }
-        });
+        }.runTaskTimer(NoirXP.inst(), 1L, 1L);
     }
 
     private Location constructLocation(Map<String, Object> entry) {
