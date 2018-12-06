@@ -30,7 +30,7 @@ public final class PlayerClassConverter {
             case TAMING:
                 return ChatColor.DARK_AQUA + "Tamer" + ChatColor.WHITE;
             case MINING:
-                return ChatColor.GOLD + "Miner" + ChatColor.WHITE;
+                return ChatColor.DARK_BLUE + "Miner" + ChatColor.WHITE;
             case GYPSY:
                 return ChatColor.LIGHT_PURPLE + "Gypsy" + ChatColor.WHITE;
             case GENERAL:
@@ -66,7 +66,7 @@ public final class PlayerClassConverter {
             case TAMING:
                 return ChatColor.DARK_AQUA + "taming" + ChatColor.WHITE;
             case MINING:
-                return ChatColor.GOLD + "mining" + ChatColor.WHITE;
+                return ChatColor.DARK_BLUE + "mining" + ChatColor.WHITE;
             case GYPSY:
                 return ChatColor.LIGHT_PURPLE + "gypsy" + ChatColor.WHITE;
             case GENERAL:
@@ -102,7 +102,7 @@ public final class PlayerClassConverter {
             case TAMING:
                 return ChatColor.DARK_AQUA + "Taming" + ChatColor.WHITE;
             case MINING:
-                return ChatColor.GOLD + "Mining" + ChatColor.WHITE;
+                return ChatColor.DARK_BLUE + "Mining" + ChatColor.WHITE;
             case GYPSY:
                 return ChatColor.LIGHT_PURPLE + "Gypsy" + ChatColor.WHITE;
             case GENERAL:
