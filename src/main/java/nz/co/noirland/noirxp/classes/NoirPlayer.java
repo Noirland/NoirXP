@@ -44,38 +44,31 @@ public class NoirPlayer {
         int newXP = oldXP + xp;
         int newLevel = PlayerCallbacks.getLevelFromXp(newXP);
 
-        if (UserdataConfig.inst().isVerbose(playerUUID)) {
+        if (UserdataConfig.inst().isVerbose(playerUUID) && playerClass != PlayerClass.GENERAL) {
             getBukkitPlayer().sendMessage("+" + xp + " " + playerClass.getFormattedLower());
         }
 
-        if(playerClass != PlayerClass.GENERAL) {
-            if(PlayerCallbacks.getLevelFromXp(newXP) <= PlayerCallbacks.MAX_LEVEL) classXP.put(playerClass, newXP);
+        if(PlayerCallbacks.getLevelFromXp(newXP) <= PlayerCallbacks.MAX_LEVEL) classXP.put(playerClass, newXP);
 
-            if (isLevelUp(oldXP, newXP)) {
-                getBukkitPlayer().sendMessage("Your " + playerClass.getTitleLower() + " level just increased to "
-                        + ChatColor.GOLD + newLevel + ChatColor.WHITE + "!");
-            }
+        if (isLevelUp(oldXP, newXP)) {
+            getBukkitPlayer().sendMessage("Your " + playerClass.getTitleLower() + " level just increased to "
+                    + ChatColor.GOLD + newLevel + ChatColor.WHITE + "!");
         }
 
-        int oldOverallXP = classXP.get(PlayerClass.GENERAL);
-        int newOverallXP = oldOverallXP + xp;
-
-        if(PlayerCallbacks.getLevelFromXp(newOverallXP) <= PlayerCallbacks.MAX_LEVEL) classXP.put(PlayerClass.GENERAL, newOverallXP);
-
-        if (isLevelUp(oldOverallXP, newOverallXP)) {
-            getBukkitPlayer().sendMessage("Your overall level just increased to " +
-                    ChatColor.GOLD + newLevel + ChatColor.WHITE + "!");
-        }
-
+        if(playerClass != PlayerClass.GENERAL) giveXP(PlayerClass.GENERAL, xp); // Give General XP as well
     }
 
     public void setXP(PlayerClass playerClass, int xp) {
         classXP.put(playerClass, xp);
-        if(playerClass == PlayerClass.GENERAL) {
-            int level = PlayerCallbacks.getLevelFromXp(xp);
-            this.maxHealth = PlayerCallbacks.getHealthFromLevel(level);
-            PlayerCallbacks.setPlayerMaxHealth(this.playerUUID, this.maxHealth);
+
+        if(playerClass != PlayerClass.GENERAL) {
+            int xpDiff = xp - getXP(playerClass);
+            classXP.computeIfPresent(PlayerClass.GENERAL, (c, genXP) -> genXP - xpDiff);
         }
+
+        int level = PlayerCallbacks.getLevelFromXp(xp);
+        setMaxHealth(PlayerCallbacks.getHealthFromLevel(level));
+        PlayerCallbacks.setPlayerMaxHealth(this.playerUUID, this.maxHealth);
     }
 
     public void setMaxHealth(float health) {
@@ -122,7 +115,7 @@ public class NoirPlayer {
         for(PlayerClass playerClass : PlayerClass.values()) {
             classXP.put(playerClass, 0);
         }
-        this.maxHealth = 20;
+        setMaxHealth(20);
         PlayerCallbacks.setPlayerMaxHealth(this.playerUUID, this.maxHealth);
     }
 
