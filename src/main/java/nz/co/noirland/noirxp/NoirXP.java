@@ -84,8 +84,8 @@ public class NoirXP extends JavaPlugin implements Listener {
             public void run() {
                 debug().warning("Backing up player data...");
                 XPDatabase.inst().saveUserData(players);
-                debug().warning("Saving and reloading block log...");
-                XPDatabase.inst().pruneBlockLog();
+                //debug().warning("Saving and reloading block log...");
+                //XPDatabase.inst().pruneBlockLog();
                 debug().warning("Backup complete!");
             }
 
