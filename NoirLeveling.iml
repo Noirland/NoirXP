@@ -30,5 +30,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.13-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: net.ess3:Essentials:2.13.1" level="project" />
     <orderEntry type="library" name="Maven: nz.co.noirland:zephcore:4.1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: io.lumine.xikage:MythicMobs:4.5.0" level="project" />
   </component>
 </module>

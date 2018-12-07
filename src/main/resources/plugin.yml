@@ -4,7 +4,7 @@ author: Libor
 main: nz.co.noirland.noirxp.NoirXP
 api-version: 1.13
 softdepend: [Essentials]
-depend: [ZephCore]
+depend: [ZephCore, MythicMobs]
 
 commands:
   noir:

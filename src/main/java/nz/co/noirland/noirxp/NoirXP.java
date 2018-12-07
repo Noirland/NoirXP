@@ -27,6 +27,7 @@ import nz.co.noirland.noirxp.events.CraftEvents;
 import nz.co.noirland.noirxp.events.DamageEvents;
 import nz.co.noirland.noirxp.events.EnchantEvents;
 import nz.co.noirland.noirxp.events.FurnaceEvents;
+import nz.co.noirland.noirxp.events.HuntingEvents;
 import nz.co.noirland.noirxp.events.InventoryEvents;
 import nz.co.noirland.noirxp.events.PickupEvents;
 import nz.co.noirland.noirxp.events.PlayerEvents;
@@ -38,6 +39,7 @@ import nz.co.noirland.zephcore.ZephCore;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -137,18 +139,20 @@ public class NoirXP extends JavaPlugin implements Listener {
     }
 
     private void enableEventHooks() {
-        getServer().getPluginManager().registerEvents(this, this);
-        getServer().getPluginManager().registerEvents(new PlayerEvents(), this);
-        getServer().getPluginManager().registerEvents(new BlockEvents(), this);
-        getServer().getPluginManager().registerEvents(new PickupEvents(), this);
-        getServer().getPluginManager().registerEvents(new CraftEvents(), this);
-        getServer().getPluginManager().registerEvents(new DamageEvents(), this);
-        getServer().getPluginManager().registerEvents(new WeatherEvents(), this);
-        getServer().getPluginManager().registerEvents(new InventoryEvents(), this);
-        getServer().getPluginManager().registerEvents(new EnchantEvents(), this);
-        getServer().getPluginManager().registerEvents(new TameBreedEvents(), this);
-        getServer().getPluginManager().registerEvents(new FurnaceEvents(), this);
-        getServer().getPluginManager().registerEvents(new ChunkEvents(), this);
+        PluginManager pm = getServer().getPluginManager();
+        pm.registerEvents(this, this);
+        pm.registerEvents(new PlayerEvents(), this);
+        pm.registerEvents(new BlockEvents(), this);
+        pm.registerEvents(new PickupEvents(), this);
+        pm.registerEvents(new CraftEvents(), this);
+        pm.registerEvents(new DamageEvents(), this);
+        pm.registerEvents(new WeatherEvents(), this);
+        pm.registerEvents(new InventoryEvents(), this);
+        pm.registerEvents(new EnchantEvents(), this);
+        pm.registerEvents(new TameBreedEvents(), this);
+        pm.registerEvents(new FurnaceEvents(), this);
+        pm.registerEvents(new ChunkEvents(), this);
+        pm.registerEvents(new HuntingEvents(), this);
     }
 
     public static NoirPlayer getPlayer(UUID uuid) {

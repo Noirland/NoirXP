@@ -40,6 +40,17 @@
             <artifactId>zephcore</artifactId>
             <version>4.1.0</version>
         </dependency>
+
+        <!--
+        MUST BE INSTALLED INTO LOCAL MAVEN REPO USING
+        mvn org.apache.maven.plugins:maven-install-plugin:2.5:install-file -Dfile=/path/to/file.jar
+        -->
+        <dependency>
+            <groupId>io.lumine.xikage</groupId>
+            <artifactId>MythicMobs</artifactId>
+            <version>4.5.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <properties>
