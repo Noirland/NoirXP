@@ -25,6 +25,7 @@ public class EnchantEvents implements Listener {
         if(alchemyLevel >= 20) maxEnchant = 1;
         if(alchemyLevel >= 30) maxEnchant = 2;
         if(alchemyLevel >= 40) maxEnchant = 3;
+        if(alchemyLevel >= 50) return; // All enchants are valid
 
         for(int i = 0; i < event.getOffers().length; i++) {
             EnchantmentOffer offer = event.getOffers()[i];
