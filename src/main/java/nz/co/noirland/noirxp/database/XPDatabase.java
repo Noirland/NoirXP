@@ -175,7 +175,6 @@ public class XPDatabase extends MySQLDatabase {
             player.setXP(PlayerClass.COOKING, (int)map.get("cookingXp"));
             player.setXP(PlayerClass.FARMING, (int)map.get("farmingXp"));
             player.setXP(PlayerClass.FISHING, (int)map.get("fishingXp"));
-            player.setXP(PlayerClass.GATHERING, (int)map.get("gatheringXp"));
             player.setXP(PlayerClass.HUNTING, (int)map.get("huntingXp"));
             player.setXP(PlayerClass.MINING, (int)map.get("miningXp"));
             player.setXP(PlayerClass.SMITHING, (int)map.get("smithingXp"));

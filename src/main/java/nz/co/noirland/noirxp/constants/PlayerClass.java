@@ -12,7 +12,6 @@ public enum PlayerClass {
     COOKING("Cooking", ChatColor.YELLOW),
     FARMING("Farming", ChatColor.GREEN),
     FISHING("Fishing", ChatColor.BLUE),
-    GATHERING("Gathering", ChatColor.DARK_GREEN),
     HUNTING("Hunting", ChatColor.DARK_RED),
     MINING("Mining", ChatColor.DARK_BLUE),
     SMITHING("Smithing", ChatColor.DARK_GRAY),

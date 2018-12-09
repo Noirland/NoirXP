@@ -27,7 +27,7 @@ public class UpdatePlayerQuery extends XPQuery {
             setValue(4, player.getXP(PlayerClass.COOKING));
             setValue(5, player.getXP(PlayerClass.FARMING));
             setValue(6, player.getXP(PlayerClass.FISHING));
-            setValue(7, player.getXP(PlayerClass.GATHERING));
+            setValue(7, 0); // Unused
             setValue(8, player.getXP(PlayerClass.HUNTING));
             setValue(9, player.getXP(PlayerClass.MINING));
             setValue(10, player.getXP(PlayerClass.SMITHING));
