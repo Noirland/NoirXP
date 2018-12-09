@@ -2,6 +2,8 @@ package nz.co.noirland.noirxp.constants;
 
 import org.bukkit.ChatColor;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -57,5 +59,9 @@ public enum PlayerClass {
 
     public ChatColor getColor() {
         return color;
+    }
+
+    public static Collection<String> getNames() {
+        return Collections.unmodifiableCollection(nameMapping.keySet());
     }
 }

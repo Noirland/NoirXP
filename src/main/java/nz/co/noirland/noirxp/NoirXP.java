@@ -1,9 +1,12 @@
 package nz.co.noirland.noirxp;
 
+import nz.co.noirland.libs.acf.ACFUtil;
+import nz.co.noirland.libs.acf.BukkitCommandManager;
+import nz.co.noirland.libs.acf.InvalidCommandArgument;
+import nz.co.noirland.libs.acf.MessageKeys;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
-import nz.co.noirland.noirxp.commands.BalanceCommand;
-import nz.co.noirland.noirxp.commands.NoirCommand;
-import nz.co.noirland.noirxp.commands.XpTabCompleter;
+import nz.co.noirland.noirxp.commands.CommandNoir;
+import nz.co.noirland.noirxp.constants.PlayerClass;
 import nz.co.noirland.noirxp.customitems.ChainBoots;
 import nz.co.noirland.noirxp.customitems.ChainChest;
 import nz.co.noirland.noirxp.customitems.ChainHelmet;
@@ -46,6 +49,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 public class NoirXP extends JavaPlugin implements Listener {
@@ -133,9 +137,21 @@ public class NoirXP extends JavaPlugin implements Listener {
     }
 
     private void enableCommandHooks() {
-        getCommand("noir").setExecutor(new NoirCommand());
-        getCommand("noir").setTabCompleter(new XpTabCompleter());
-        getCommand("nbal").setExecutor(new BalanceCommand());
+        BukkitCommandManager manager = new BukkitCommandManager(this);
+        manager.enableUnstableAPI("help");
+
+        manager.getCommandContexts().registerContext(PlayerClass.class, c -> {
+            String first = c.popFirstArg();
+            Optional<PlayerClass> optClass = PlayerClass.fromName(first);
+            if(optClass.isPresent()) return optClass.get();
+            if(c.isOptional()) return null;
+
+            throw new InvalidCommandArgument(MessageKeys.PLEASE_SPECIFY_ONE_OF, "{valid}", ACFUtil.join(PlayerClass.getNames()));
+        });
+
+        manager.getCommandCompletions().registerStaticCompletion("playerclass", PlayerClass.getNames());
+
+        manager.registerCommand(new CommandNoir());
     }
 
     private void enableEventHooks() {
