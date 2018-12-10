@@ -2,12 +2,10 @@ package nz.co.noirland.noirxp.callbacks;
 
 import com.google.common.collect.Streams;
 import nz.co.noirland.noirxp.NoirXP;
-import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.constants.PlayerClass;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -62,31 +60,8 @@ public final class PlayerCallbacks {
         return levelToXpMap.get(level);
     }
 
-    public static NoirPlayer getNoirPlayerByName(String username) {
-        for (NoirPlayer player : NoirXP.players.values()) {
-            if (player.getUsername().equalsIgnoreCase(username)) {
-                return player;
-            }
-        }
-        return null;
-    }
-
     public static int getHealthFromLevel(int level) {
         return 20 + (level - 1);
-    }
-
-    public static String[] getTopTenPlayers() {
-        List<NoirPlayer> playerList = new ArrayList<>(NoirXP.players.values());
-        playerList.sort(Collections.reverseOrder(Comparator.comparing(NoirPlayer::getOverallLevel)));
-        playerList = playerList.subList(0, playerList.size() < 10 ? playerList.size() : 10);
-        String[] formattedList = new String[playerList.size()];
-
-        int index = 0;
-        for (NoirPlayer player : playerList) {
-            formattedList[index] = String.format("%d: %s %d", index + 1, player.getUsername(), player.getOverallLevel());
-            index++;
-        }
-        return formattedList;
     }
 
     public static List<String> getTopTenPlayersForProfession(PlayerClass playerClass) {

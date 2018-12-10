@@ -2,7 +2,6 @@ package nz.co.noirland.noirxp.helpers;
 
 import nz.co.noirland.noirxp.classes.TameBreedEntity;
 import nz.co.noirland.noirxp.constants.ITEM_CONSTANTS;
-import nz.co.noirland.noirxp.database.XPDatabase;
 import nz.co.noirland.noirxp.struct.ItemXPData;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -37,14 +36,6 @@ public class Datamaps {
         armourItems.put(Material.GOLDEN_PICKAXE, (int) (Material.IRON_PICKAXE.getMaxDurability() * ITEM_CONSTANTS.GOLDEN_DURABILITY_MODIFIER));
         armourItems.put(Material.GOLDEN_HOE, (int) (Material.IRON_HOE.getMaxDurability() * ITEM_CONSTANTS.GOLDEN_DURABILITY_MODIFIER));
         armourItems.put(Material.GOLDEN_AXE, (int) (Material.IRON_AXE.getMaxDurability() * ITEM_CONSTANTS.GOLDEN_DURABILITY_MODIFIER));
-    }
-
-    public static void removeTorch(Location location) {
-        if(Datamaps.torchSet.remove(location)) XPDatabase.inst().removeTorch(location);
-    }
-
-    public static void addTorch(Location location) {
-        if(Datamaps.torchSet.add(location)) XPDatabase.inst().addTorch(location);
     }
 
     public static Optional<ItemXPData> getCustomBlock(String material) {

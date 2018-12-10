@@ -60,7 +60,6 @@ public class NoirXP extends JavaPlugin implements Listener {
     private static NoirXP inst;
     private static Debug debug;
 
-    public static String userdataFilePath;
     public static Map<String, NoirPlayer> players;
 
     public static NoirXP inst() {

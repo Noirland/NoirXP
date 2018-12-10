@@ -5,7 +5,6 @@ import org.bukkit.Location;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Set;
 
 public class RemoveBlockLogQuery extends XPQuery {
 

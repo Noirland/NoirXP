@@ -1,7 +1,6 @@
 package nz.co.noirland.noirxp.events;
 
 import nz.co.noirland.noirxp.NoirXP;
-import nz.co.noirland.noirxp.callbacks.PlayerCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;

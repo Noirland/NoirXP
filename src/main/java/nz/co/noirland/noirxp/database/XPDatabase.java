@@ -1,7 +1,6 @@
 package nz.co.noirland.noirxp.database;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.ListenableFuture;
 import nz.co.noirland.noirxp.NoirXP;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
@@ -17,11 +16,7 @@ import nz.co.noirland.noirxp.database.queries.blocklog.PruneBlockLogQuery;
 import nz.co.noirland.noirxp.database.queries.blocklog.RemoveBlockLogQuery;
 import nz.co.noirland.noirxp.database.queries.player.AddPlayerQuery;
 import nz.co.noirland.noirxp.database.queries.player.GetPlayersQuery;
-import nz.co.noirland.noirxp.database.queries.player.ResetPlayerQuery;
 import nz.co.noirland.noirxp.database.queries.player.UpdatePlayerQuery;
-import nz.co.noirland.noirxp.database.queries.torch.AddTorchQuery;
-import nz.co.noirland.noirxp.database.queries.torch.DeleteTorchQuery;
-import nz.co.noirland.noirxp.database.queries.torch.GetTorchesQuery;
 import nz.co.noirland.noirxp.database.schema.Schema1;
 import nz.co.noirland.noirxp.database.schema.Schema2;
 import nz.co.noirland.noirxp.helpers.Datamaps;
@@ -96,24 +91,6 @@ public class XPDatabase extends MySQLDatabase {
         return "";
     }
 
-    public void removeTorch(Location location) {
-        new DeleteTorchQuery(location).executeAsync();
-    }
-
-    public Set<Location> getTorches() {
-        Set<Location> ret = Sets.newHashSet();
-        try {
-            List<Map<String, Object>> result = new GetTorchesQuery().executeQuery();
-
-            for(Map<String, Object> entry : result) {
-                ret.add(constructLocation(entry));
-            }
-        } catch (SQLException e) {
-            debug().warning("Failed to query DB:", e);
-        }
-        return ret;
-    }
-
     public void removeBlockLog(Location location) {
         new RemoveBlockLogQuery(location).executeAsync();
     }
@@ -149,10 +126,6 @@ public class XPDatabase extends MySQLDatabase {
         }
 
         return ret;
-    }
-
-    public void resetPlayer(UUID player) {
-        new ResetPlayerQuery(player).executeAsync();
     }
 
     public Map<String, NoirPlayer> getAllPlayers() {
@@ -218,10 +191,6 @@ public class XPDatabase extends MySQLDatabase {
         } catch (SQLException e) {
             debug().warning("Unable to save user data! " + e.getMessage(), e);
         }
-    }
-
-    public void addTorch(Location location) {
-        new AddTorchQuery(location).executeAsync();
     }
 
     /**

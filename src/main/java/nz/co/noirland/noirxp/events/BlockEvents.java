@@ -90,53 +90,6 @@ public class BlockEvents implements Listener {
 
         if (!UserdataConfig.inst().isLevelling(event.getPlayer().getUniqueId())) return;
 
-        /* TODO Re-enable
-        if (event.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
-            Datamaps.addTorch(location);
-            if (event.getBlockReplacedState().getType() == Material.SNOW) {
-                event.getBlockPlaced().breakNaturally();
-                Datamaps.removeTorch(location);
-                return;
-            }
-            if (event.getPlayer().getWorld().hasStorm()) {
-                if (location.getWorld().getHighestBlockYAt(location) == location.getBlockY()) {
-                    if (location.getBlock().getType() == Material.TORCH || location.getBlock().getType() == Material.WALL_TORCH) {
-                        location.getBlock().breakNaturally();
-                        Datamaps.removeTorch(location);
-                    }
-                }
-                return;
-            }
-            if (snowBiomes.contains(event.getBlockAgainst().getBiome())) {
-                new BukkitRunnable() {
-
-                    @Override
-                    public void run() {
-                        if (location.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
-                            location.getBlock().breakNaturally();
-                            Datamaps.removeTorch(location);
-
-                        }
-                    }
-
-                }.runTaskLater(NoirXP.inst(), 20 * 60 * 5);
-            }
-            else {
-                new BukkitRunnable() {
-
-                    @Override
-                    public void run() {
-                        if (location.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
-                            location.getBlock().breakNaturally();
-                            Datamaps.removeTorch(location);
-                        }
-                    }
-
-                }.runTaskLater(NoirXP.inst(), 20 * 60 * 60);
-            }
-        }
-        */
-
         Player player = event.getPlayer();
 
         ItemStack stack = event.getItemInHand();
