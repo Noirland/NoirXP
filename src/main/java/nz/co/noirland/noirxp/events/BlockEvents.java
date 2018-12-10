@@ -80,9 +80,9 @@ public class BlockEvents implements Listener {
 
         }
 
-        String playerId = event.getPlayer().getUniqueId().toString();
+        Datamaps.removeOwner(event.getBlock().getLocation());
 
-        NoirXP.players.get(playerId).giveXP(playerClass, breakXp);
+        NoirXP.getPlayer(event.getPlayer().getUniqueId()).giveXP(playerClass, breakXp);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -90,8 +90,6 @@ public class BlockEvents implements Listener {
 
         if (!UserdataConfig.inst().isLevelling(event.getPlayer().getUniqueId())) return;
 
-        Location location = event.getBlockPlaced().getLocation();
-        Datamaps.addBlock(location);
         /* TODO Re-enable
         if (event.getBlock().getType() == Material.TORCH || event.getBlock().getType() == Material.WALL_TORCH) {
             Datamaps.addTorch(location);
@@ -166,8 +164,16 @@ public class BlockEvents implements Listener {
             return;
         }
 
-        String playerId = event.getPlayer().getUniqueId().toString();
-        NoirXP.players.get(playerId).giveXP(playerClass, xp.get().placeXP);
+        Location location = event.getBlockPlaced().getLocation();
+        Datamaps.addBlock(location);
+
+        switch(event.getBlockPlaced().getType()) {
+            case FURNACE:
+            case BREWING_STAND:
+                Datamaps.setOwner(location, event.getPlayer().getUniqueId());
+        }
+
+        NoirXP.getPlayer(event.getPlayer().getUniqueId()).giveXP(playerClass, xp.get().placeXP);
     }
 
 }

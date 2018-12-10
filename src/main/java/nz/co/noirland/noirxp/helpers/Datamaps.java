@@ -9,7 +9,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 public class Datamaps {
     public static Set<Location> torchSet = new HashSet<>();
@@ -20,6 +25,7 @@ public class Datamaps {
     private static Map<Chunk, Set<Location>> blockLog = new HashMap<>();
     private static Map<Chunk, Set<Location>> logAddUnsynced = new HashMap<>();
     private static Map<Chunk, Set<Location>> logRemoveUnsynced = new HashMap<>();
+    private static Map<Location, UUID> playerOwnedBlocks = new HashMap<>();
 
     static {
         armourItems.put(Material.GOLDEN_HELMET, (int)(Material.IRON_HELMET.getMaxDurability() * ITEM_CONSTANTS.GOLDEN_DURABILITY_MODIFIER));
@@ -105,4 +111,21 @@ public class Datamaps {
         // No need to do DB operations here, any changes have been recorded in logAddUnsynced or logRemoveUnsynced
         blockLog.remove(chunk);
     }
+
+    public static Optional<UUID> getOwner(Location location) {
+        return Optional.ofNullable(playerOwnedBlocks.getOrDefault(location, null));
+    }
+
+    public static void setOwner(Location location, UUID owner) {
+        playerOwnedBlocks.put(location, owner);
+        //TODO: Database
+    }
+
+    public static void removeOwner(Location location) {
+        if(playerOwnedBlocks.remove(location) != null) {
+            // TODO: Database
+        }
+    }
+
+
 }
