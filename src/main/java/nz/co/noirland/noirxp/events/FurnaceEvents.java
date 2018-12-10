@@ -68,7 +68,7 @@ public class FurnaceEvents implements Listener {
 
     @EventHandler
     public void onFurnaceExtract(FurnaceExtractEvent event) {
-        NoirPlayer noirPlayer = NoirXP.players.get(event.getPlayer().getUniqueId().toString());
+        NoirPlayer noirPlayer = NoirXP.getPlayer(event.getPlayer().getUniqueId());
 
         Optional<ItemXPData> xp = Datamaps.getCustomBlock(event.getItemType());
         if (!xp.isPresent()) return;

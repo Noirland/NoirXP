@@ -18,7 +18,7 @@ public class EnchantEvents implements Listener {
     public void onPrepareEnchant(PrepareItemEnchantEvent event) {
         if(!UserdataConfig.inst().isLevelling(event.getEnchanter().getUniqueId())) return;
 
-        NoirPlayer noirPlayer = NoirXP.players.get(event.getEnchanter().getUniqueId().toString());
+        NoirPlayer noirPlayer = NoirXP.getPlayer(event.getEnchanter().getUniqueId());
 
         int alchemyLevel = noirPlayer.getLevel(PlayerClass.ALCHEMY);
         int maxEnchant = 0;
@@ -39,7 +39,7 @@ public class EnchantEvents implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onItemEnchant(EnchantItemEvent event) {
         int highestLevel = Collections.max(event.getEnchantsToAdd().values());
-        NoirPlayer noirPlayer = NoirXP.players.get(event.getEnchanter().getUniqueId().toString());
+        NoirPlayer noirPlayer = NoirXP.getPlayer(event.getEnchanter().getUniqueId());
         if (highestLevel == 1) {
             noirPlayer.giveXP(PlayerClass.ALCHEMY, 50);
         }

@@ -20,7 +20,7 @@ public class HuntingEvents implements Listener {
         Player killer = event.getEntity().getKiller();
         if(killer == null) return;
 
-        NoirPlayer noirPlayer = NoirXP.players.get(killer.getUniqueId().toString());
+        NoirPlayer noirPlayer = NoirXP.getPlayer(killer.getUniqueId());
         if(noirPlayer == null) return;
 
         int xp = 1;

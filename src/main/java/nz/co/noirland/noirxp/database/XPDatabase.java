@@ -14,7 +14,6 @@ import nz.co.noirland.noirxp.database.queries.blocklog.AddBlockLogQuery;
 import nz.co.noirland.noirxp.database.queries.blocklog.GetBlockLogQuery;
 import nz.co.noirland.noirxp.database.queries.blocklog.PruneBlockLogQuery;
 import nz.co.noirland.noirxp.database.queries.blocklog.RemoveBlockLogQuery;
-import nz.co.noirland.noirxp.database.queries.player.AddPlayerQuery;
 import nz.co.noirland.noirxp.database.queries.player.GetPlayersQuery;
 import nz.co.noirland.noirxp.database.queries.player.UpdatePlayerQuery;
 import nz.co.noirland.noirxp.database.schema.Schema1;
@@ -30,6 +29,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -95,10 +95,6 @@ public class XPDatabase extends MySQLDatabase {
         new RemoveBlockLogQuery(location).executeAsync();
     }
 
-    public void addPlayer(UUID player) {
-        new AddPlayerQuery(player).executeAsync();
-    }
-
     public Map<String, ItemXPData> loadCustomBlocks() {
         Map<String, ItemXPData> ret = Maps.newHashMap();
 
@@ -128,19 +124,18 @@ public class XPDatabase extends MySQLDatabase {
         return ret;
     }
 
-    public Map<String, NoirPlayer> getAllPlayers() {
-        Map<String, NoirPlayer> ret = Maps.newHashMap();
+    public void loadAllPlayers() {
         List<Map<String, Object>> result;
         try {
             result = new GetPlayersQuery().executeQuery();
         } catch (SQLException e) {
             debug().disable("Unable to query list of players!", e);
-            return null;
+            return;
         }
 
         for (Map<String, Object> map : result) {
             String playerId = (String)map.get("playerId");
-            NoirPlayer player = new NoirPlayer(UUID.fromString(playerId));
+            NoirPlayer player = NoirXP.getPlayer(UUID.fromString(playerId));
             player.setUsername((String)map.get("username"));
             player.setMaxHealth((float)map.get("maxHealth"));
             player.setXP(PlayerClass.ALCHEMY, (int)map.get("alchemyXp"));
@@ -153,11 +148,8 @@ public class XPDatabase extends MySQLDatabase {
             player.setXP(PlayerClass.SMITHING, (int)map.get("smithingXp"));
             player.setXP(PlayerClass.TAMING, (int)map.get("tamingXp"));
             player.setXP(PlayerClass.GENERAL, (int)map.get("totalXp"));
-
-            ret.put(playerId, player);
         }
 
-        return ret;
     }
 
     public Map<EntityType, TameBreedEntity> getTamingData() {
@@ -185,9 +177,9 @@ public class XPDatabase extends MySQLDatabase {
         return ret;
     }
 
-    public void saveUserData(Map<String, NoirPlayer> data) {
+    public void saveUserData(Collection<NoirPlayer> data) {
         try {
-            new UpdatePlayerQuery(data.values()).execute();
+            new UpdatePlayerQuery(data).execute();
         } catch (SQLException e) {
             debug().warning("Unable to save user data! " + e.getMessage(), e);
         }

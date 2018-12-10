@@ -90,7 +90,7 @@ public class TameBreedEvents implements Listener {
         Player player = (Player) event.getOwner();
         if (Datamaps.tameBreedEntityMap.containsKey(event.getEntityType())) {
             TameBreedEntity entity = Datamaps.tameBreedEntityMap.get(event.getEntityType());
-            NoirPlayer noirPlayer = NoirXP.players.get(player.getUniqueId().toString());
+            NoirPlayer noirPlayer = NoirXP.getPlayer(player.getUniqueId());
             if (noirPlayer.getLevel(PlayerClass.FARMING) < entity.getLevelToTame()) {
                 player.sendMessage("Level " + entity.getLevelToTame() + " farming required.");
                 event.setCancelled(true);
@@ -154,7 +154,7 @@ public class TameBreedEvents implements Listener {
 
         if (Datamaps.tameBreedEntityMap.containsKey(event.getEntityType())) {
             TameBreedEntity entity = Datamaps.tameBreedEntityMap.get(event.getEntityType());
-            NoirPlayer noirPlayer = NoirXP.players.get(player.getUniqueId().toString());
+            NoirPlayer noirPlayer = NoirXP.getPlayer(player.getUniqueId());
 
             // Checks were already done during onInitiateTameBreed to ensure player is correct level
             noirPlayer.giveXP(PlayerClass.FARMING, entity.getBreedXp());

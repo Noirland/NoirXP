@@ -50,6 +50,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -60,7 +63,7 @@ public class NoirXP extends JavaPlugin implements Listener {
     private static NoirXP inst;
     private static Debug debug;
 
-    public static Map<String, NoirPlayer> players;
+    private static Map<UUID, NoirPlayer> players = new HashMap<>();
 
     public static NoirXP inst() {
         return inst;
@@ -78,7 +81,7 @@ public class NoirXP extends JavaPlugin implements Listener {
         // Init the database, and ensure most current schema is applied
         XPDatabase.inst().checkSchema();
 
-        players = XPDatabase.inst().getAllPlayers();
+        XPDatabase.inst().loadAllPlayers();
 
         enableEventHooks();
         enableCommandHooks();
@@ -92,7 +95,7 @@ public class NoirXP extends JavaPlugin implements Listener {
             @Override
             public void run() {
                 debug().warning("Backing up player data...");
-                XPDatabase.inst().saveUserData(players);
+                XPDatabase.inst().saveUserData(players.values());
                 //debug().warning("Saving and reloading block log...");
                 //XPDatabase.inst().pruneBlockLog();
                 debug().warning("Backup complete!");
@@ -105,7 +108,7 @@ public class NoirXP extends JavaPlugin implements Listener {
     public void onZephCoreDisabled(PluginDisableEvent event) {
         if(event.getPlugin() == ZephCore.inst()) {
             debug().warning("ZephCore is being disabled, backing up data and then disabling this plugin also.");
-            XPDatabase.inst().saveUserData(players);
+            XPDatabase.inst().saveUserData(players.values());
             XPDatabase.inst().saveBlockLog();
             getServer().getPluginManager().disablePlugin(this);
         }
@@ -113,7 +116,7 @@ public class NoirXP extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        XPDatabase.inst().saveUserData(players);
+        XPDatabase.inst().saveUserData(players.values());
         XPDatabase.inst().saveBlockLog();
     }
 
@@ -206,7 +209,14 @@ public class NoirXP extends JavaPlugin implements Listener {
     }
 
     public static NoirPlayer getPlayer(UUID uuid) {
-        return players.get(uuid.toString());
+        if(!players.containsKey(uuid)) {
+            players.put(uuid, new NoirPlayer(uuid));
+        }
+        return players.get(uuid);
+
     }
 
+    public static Collection<NoirPlayer> getPlayers() {
+        return Collections.unmodifiableCollection(players.values());
+    }
 }

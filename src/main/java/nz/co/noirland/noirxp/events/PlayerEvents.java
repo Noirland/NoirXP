@@ -5,11 +5,9 @@ import nz.co.noirland.noirxp.callbacks.BlockCallbacks;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
-import nz.co.noirland.noirxp.database.XPDatabase;
 import nz.co.noirland.noirxp.helpers.Datamaps;
 import nz.co.noirland.noirxp.struct.ItemXPData;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,17 +24,8 @@ public class PlayerEvents implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void playerJoinEvent(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        if (!NoirXP.players.containsKey(player.getUniqueId().toString())) {
-            NoirPlayer noirPlayer = new NoirPlayer(player.getUniqueId());
-            noirPlayer.setUsername(player.getName());
-            NoirXP.players.put(player.getUniqueId().toString(), noirPlayer);
-            XPDatabase.inst().addPlayer(player.getUniqueId());
 
-            event.getPlayer().getServer().getConsoleSender().sendMessage(Color.RED + "PlayerJoinEvent error.");
-
-        }
-
-        NoirPlayer noirPlayer = NoirXP.players.get(player.getUniqueId().toString());
+        NoirPlayer noirPlayer = NoirXP.getPlayer(player.getUniqueId());
         noirPlayer.setUsername(player.getName());
         noirPlayer.setBukkitPlayer(event.getPlayer());
         BlockCallbacks.setPlayerChatColor(noirPlayer);
@@ -58,7 +47,7 @@ public class PlayerEvents implements Listener {
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (!event.hasItem() || !UserdataConfig.inst().isLevelling(event.getPlayer().getUniqueId())) return;
 
-        NoirPlayer player = NoirXP.players.get(event.getPlayer().getUniqueId().toString());
+        NoirPlayer player = NoirXP.getPlayer(event.getPlayer().getUniqueId());
 
         String blockName;
 

@@ -72,7 +72,7 @@ public final class PlayerCallbacks {
           Maps index with player, then formats the data for display
          */
         return Streams.mapWithIndex(
-                        NoirXP.players.values().stream()
+                        NoirXP.getPlayers().stream()
                         .sorted(Collections.reverseOrder(Comparator.comparing(x -> x.getXP(playerClass))))
                         .limit(10),
                 (player, index) -> {
