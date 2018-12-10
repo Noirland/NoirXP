@@ -2,13 +2,14 @@ package nz.co.noirland.noirxp.commands;
 
 import nz.co.noirland.libs.acf.BaseCommand;
 import nz.co.noirland.libs.acf.CommandHelp;
-import nz.co.noirland.libs.acf.CommandIssuer;
 import nz.co.noirland.libs.acf.annotation.CommandAlias;
 import nz.co.noirland.libs.acf.annotation.CommandCompletion;
 import nz.co.noirland.libs.acf.annotation.CommandPermission;
 import nz.co.noirland.libs.acf.annotation.Default;
 import nz.co.noirland.libs.acf.annotation.Description;
+import nz.co.noirland.libs.acf.annotation.Flags;
 import nz.co.noirland.libs.acf.annotation.HelpCommand;
+import nz.co.noirland.libs.acf.annotation.Optional;
 import nz.co.noirland.libs.acf.annotation.Subcommand;
 import nz.co.noirland.libs.acf.annotation.Syntax;
 import nz.co.noirland.noirxp.NoirXP;
@@ -18,6 +19,7 @@ import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.config.UserdataConfig;
 import nz.co.noirland.noirxp.constants.PlayerClass;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandAlias("noir")
@@ -25,14 +27,19 @@ public class CommandNoir extends BaseCommand {
 
     @Subcommand("level top")
     @Description("Get top overall players")
-    public void levelTop(CommandIssuer issuer) {
-        for(String m : PlayerCallbacks.getTopTenPlayers()) issuer.sendMessage(m);
+    @Syntax("<class>")
+    @CommandCompletion("@playerclass")
+    public void levelTop(CommandSender sender, @Default("overall") @Optional PlayerClass playerClass) {
+        for(String m : PlayerCallbacks.getTopTenPlayersForProfession(playerClass)) sender.sendMessage(m);
     }
 
     @Subcommand("level")
-    @Description("Get your overall level")
-    public void level(Player player) {
-        player.sendMessage(getRemainingXPString(PlayerClass.GENERAL, noirPlayer(player)));
+    @Description("Get a player's overall level")
+    @Syntax("<class> <player>")
+    @CommandCompletion("@playerclass @players")
+    public void level(CommandSender sender, @Default("overall") @Optional PlayerClass playerClass,
+            @Optional @Flags("defaultself") NoirPlayer player) {
+        sender.sendMessage(getRemainingXPString(playerClass, player));
     }
 
     @Subcommand("convert")
@@ -56,30 +63,14 @@ public class CommandNoir extends BaseCommand {
         player.sendMessage("Verbose mode DISABLED.");
     }
 
-    @Subcommand("class top")
-    @Description("Get top players for a class")
-    @CommandCompletion("@playerclass")
-    @Syntax("<class>")
-    public void classTop(CommandIssuer issuer, PlayerClass playerClass) {
-        for(String message : PlayerCallbacks.getTopTenPlayersForProfession(playerClass)) issuer.sendMessage(message);
-    }
-
-    @Subcommand("class")
-    @CommandCompletion("@playerclass")
-    @Description("Get a class's level")
-    @Syntax("<class>")
-    public void classInfo(Player player, PlayerClass playerClass) {
-        player.sendMessage(getRemainingXPString(playerClass, noirPlayer(player)));
-    }
-
     @Subcommand("disable")
     @CommandPermission("NoirLeveling.op")
     @CommandCompletion("@players")
     @Description("Disable levelling for a player")
     @Syntax("<player>")
-    public void disable(CommandIssuer issuer, OfflinePlayer player) {
+    public void disable(CommandSender sender, @Optional @Flags("defaultself") NoirPlayer player) {
         UserdataConfig.inst().setLeveling(player.getUniqueId(), false);
-        issuer.sendMessage("Leveling has been DISABLED.");
+        sender.sendMessage("Leveling has been DISABLED.");
     }
 
     @Subcommand("enable")
@@ -87,9 +78,9 @@ public class CommandNoir extends BaseCommand {
     @CommandCompletion("@players")
     @Description("Enable levelling for a player")
     @Syntax("<player>")
-    public void enable(CommandIssuer issuer, OfflinePlayer player) {
+    public void enable(CommandSender sender, @Optional @Flags("defaultself") NoirPlayer player) {
         UserdataConfig.inst().setLeveling(player.getUniqueId(), true);
-        issuer.sendMessage("Leveling has been ENABLED.");
+        sender.sendMessage("Leveling has been ENABLED.");
     }
 
     @Subcommand("reset")
@@ -97,9 +88,9 @@ public class CommandNoir extends BaseCommand {
     @CommandCompletion("@players")
     @Description("Reset a player's levels to 0")
     @Syntax("<player>")
-    public void reset(CommandIssuer issuer, OfflinePlayer player) {
-        NoirXP.getPlayer(player.getUniqueId()).resetLevels();
-        issuer.sendMessage("Success!");
+    public void reset(CommandSender sender, @Optional @Flags("defaultself") NoirPlayer player) {
+        player.resetLevels();
+        sender.sendMessage("Success!");
     }
 
     @Subcommand("set")
@@ -107,13 +98,13 @@ public class CommandNoir extends BaseCommand {
     @CommandPermission("NoirLeveling.op")
     @Description("Set a player's overall or skill level")
     @Syntax("<player> <xp> [class]")
-    public void set(CommandIssuer issuer, OfflinePlayer player, Integer xp,
+    public void set(CommandSender sender, @Optional @Flags("defaultself") NoirPlayer player, Integer xp,
             @Default("general") PlayerClass playerClass) {
         if (xp < 0) {
             xp = 0;
         }
-        noirPlayer(player).setXP(playerClass, xp);
-        issuer.sendMessage("Success!");
+        player.setXP(playerClass, xp);
+        sender.sendMessage("Success!");
     }
 
     @HelpCommand

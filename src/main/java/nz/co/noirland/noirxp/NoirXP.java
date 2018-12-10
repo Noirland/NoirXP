@@ -4,6 +4,7 @@ import nz.co.noirland.libs.acf.ACFUtil;
 import nz.co.noirland.libs.acf.BukkitCommandManager;
 import nz.co.noirland.libs.acf.InvalidCommandArgument;
 import nz.co.noirland.libs.acf.MessageKeys;
+import nz.co.noirland.libs.acf.MinecraftMessageKeys;
 import nz.co.noirland.noirxp.classes.NoirPlayer;
 import nz.co.noirland.noirxp.commands.CommandNoir;
 import nz.co.noirland.noirxp.constants.PlayerClass;
@@ -39,6 +40,8 @@ import nz.co.noirland.noirxp.events.WeatherEvents;
 import nz.co.noirland.noirxp.helpers.Datamaps;
 import nz.co.noirland.zephcore.Debug;
 import nz.co.noirland.zephcore.ZephCore;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -147,6 +150,38 @@ public class NoirXP extends JavaPlugin implements Listener {
             if(c.isOptional()) return null;
 
             throw new InvalidCommandArgument(MessageKeys.PLEASE_SPECIFY_ONE_OF, "{valid}", ACFUtil.join(PlayerClass.getNames()));
+        });
+
+        manager.getCommandContexts().registerIssuerAwareContext(NoirPlayer.class, c -> {
+            String name = c.popFirstArg();
+
+            if(name == null) {
+                if(c.hasFlag("defaultself") && c.isOptional()) {
+                    if(c.getIssuer().isPlayer()) {
+                        return NoirXP.getPlayer(c.getPlayer().getUniqueId());
+                    }
+
+                    throw new InvalidCommandArgument(MessageKeys.NOT_ALLOWED_ON_CONSOLE, false);
+                }
+
+                throw new InvalidCommandArgument(true);
+
+            }
+
+            UUID uuid = null;
+            if (c.hasFlag("uuid")) {
+                try {
+                    uuid = UUID.fromString(name);
+                } catch (IllegalArgumentException ignored) {}
+            }
+
+            OfflinePlayer offlinePlayer = uuid != null ? Bukkit.getOfflinePlayer(uuid) : Bukkit.getOfflinePlayer(name);
+
+            if (offlinePlayer != null && (offlinePlayer.hasPlayedBefore() || offlinePlayer.isOnline())) {
+                return NoirXP.getPlayer(offlinePlayer.getUniqueId());
+            } else {
+                throw new InvalidCommandArgument(MinecraftMessageKeys.NO_PLAYER_FOUND_OFFLINE, false, "{search}", name);
+            }
         });
 
         manager.getCommandCompletions().registerStaticCompletion("playerclass", PlayerClass.getNames());
